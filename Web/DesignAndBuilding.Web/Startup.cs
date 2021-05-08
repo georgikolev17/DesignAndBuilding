@@ -8,6 +8,7 @@
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Data.Repositories;
     using DesignAndBuilding.Data.Seeding;
+    using DesignAndBuilding.Services;
     using DesignAndBuilding.Services.Data;
     using DesignAndBuilding.Services.Mapping;
     using DesignAndBuilding.Services.Messaging;
@@ -64,7 +65,8 @@
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IBuildingsService, BuildingsService>();
+            services.AddTransient<IUsersService, UsersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

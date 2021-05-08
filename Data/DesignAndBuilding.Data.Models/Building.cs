@@ -19,10 +19,13 @@
         public string Town { get; set; }
 
         [Required]
-        public string TotalBuildUpArea { get; set; }
+        public decimal TotalBuildUpArea { get; set; }
 
         [Required]
-        public int ArchitectId { get; set; }
+        public BuildingType BuildingType { get; set; }
+
+        [Required]
+        public string ArchitectId { get; set; }
 
         public ApplicationRole Architect { get; set; }
 

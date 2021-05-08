@@ -4,14 +4,16 @@ using DesignAndBuilding.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DesignAndBuilding.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210425051925_ModifyBuildingModel")]
+    partial class ModifyBuildingModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,8 +216,10 @@ namespace DesignAndBuilding.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DesignerId")
-                        .IsRequired()
+                    b.Property<int>("DesignerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DesignerId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
@@ -234,7 +238,7 @@ namespace DesignAndBuilding.Data.Migrations
 
                     b.HasIndex("AssignmentId");
 
-                    b.HasIndex("DesignerId");
+                    b.HasIndex("DesignerId1");
 
                     b.HasIndex("IsDeleted");
 
@@ -251,8 +255,10 @@ namespace DesignAndBuilding.Data.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ArchitectId")
-                        .IsRequired()
+                    b.Property<int>("ArchitectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ArchitectId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("BuildingType")
@@ -285,7 +291,7 @@ namespace DesignAndBuilding.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("ArchitectId");
+                    b.HasIndex("ArchitectId1");
 
                     b.HasIndex("IsDeleted");
 
@@ -417,9 +423,7 @@ namespace DesignAndBuilding.Data.Migrations
 
                     b.HasOne("DesignAndBuilding.Data.Models.ApplicationUser", "Designer")
                         .WithMany("Bids")
-                        .HasForeignKey("DesignerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("DesignerId1");
 
                     b.Navigation("Assignment");
 
@@ -434,9 +438,7 @@ namespace DesignAndBuilding.Data.Migrations
 
                     b.HasOne("DesignAndBuilding.Data.Models.ApplicationRole", "Architect")
                         .WithMany()
-                        .HasForeignKey("ArchitectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ArchitectId1");
 
                     b.Navigation("Architect");
                 });

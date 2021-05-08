@@ -24,8 +24,6 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
-
         public DbSet<Assignment> Assignments { get; set; }
 
         public DbSet<Building> Buildings { get; set; }

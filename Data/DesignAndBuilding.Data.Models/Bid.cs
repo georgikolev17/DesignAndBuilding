@@ -19,7 +19,7 @@
         public Assignment Assignment { get; set; }
 
         [Required]
-        public int DesignerId { get; set; }
+        public string DesignerId { get; set; }
 
         public ApplicationUser Designer { get; set; }
     }
