@@ -12,54 +12,54 @@
     </tr>
     @foreach (var building in Model)
     {
-<tr>
-    <td>@building.Name</td>
-    <td>@building.TotalBuildUpArea</td>
-    @switch (building.BuildingType)
-    {
-        case DesignAndBuilding.Data.Models.BuildingType.Other:
-            <td>Друг</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.Hotel:
-            <td>Хотел</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.Kindergarten:
-            <td>Детска градина</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.SingleFamilyHouse:
-            <td>Еднофамилна къща</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.MultiFamiyHouse:
-            <td>Многофамилна къща</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.Hospital:
-            <td>Болница</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.Factory:
-            <td>Производствено предприятие</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.AdministrationBuilding:
-            <td>Административна сграда</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.School:
-            <td>Училище</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.University:
-            <td>Университет</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.ComercialBuilding:
-            <td>Търговска сграда</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.SportBuilding:
-            <td>Спортна сграда</td>
-            break;
-        case DesignAndBuilding.Data.Models.BuildingType.ArtAndCultureBuilding:
-            <td>Сграда за изкуство и култура</td>
-            break;
-        default:
-            <td>Неизвестен</td>
-            break;
-    }
-</tr>
+        <tr onclick="window.location.href='@Url.Action("details", "buildings", new { id = building.Id})'" role="button">
+            <td>@building.Name</td>
+            <td>@building.TotalBuildUpArea</td>
+            @switch (building.BuildingType)
+            {
+                case DesignAndBuilding.Data.Models.BuildingType.Other:
+                    <td>Друг</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.Hotel:
+                    <td>Хотел</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.Kindergarten:
+                    <td>Детска градина</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.SingleFamilyHouse:
+                    <td>Еднофамилна къща</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.MultiFamiyHouse:
+                    <td>Многофамилна къща</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.Hospital:
+                    <td>Болница</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.Factory:
+                    <td>Производствено предприятие</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.AdministrationBuilding:
+                    <td>Административна сграда</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.School:
+                    <td>Училище</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.University:
+                    <td>Университет</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.ComercialBuilding:
+                    <td>Търговска сграда</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.SportBuilding:
+                    <td>Спортна сграда</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.ArtAndCultureBuilding:
+                    <td>Сграда за изкуство и култура</td>
+                    break;
+                default:
+                    <td>Неизвестен</td>
+                    break;
+            }
+        </tr>
     }
 </table>

@@ -42,6 +42,7 @@
                 .Where(x => x.ArchitectId == id)
                 .Select(x => new MyBuildingsViewModel
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     BuildingType = x.BuildingType,
                     TotalBuildUpArea = x.TotalBuildUpArea,
@@ -49,6 +50,29 @@
                 .ToList();
 
             return buildings;
+        }
+
+        public BuildingDetailsViewModel GetBuildingById(int id)
+        {
+            var building =  this.buildingsRepository
+                .All()
+                .Where(x => x.Id == id)
+                .Select(x => new BuildingDetailsViewModel
+                {
+                    Name = x.Name,
+                    BuildingType = x.BuildingType,
+                    TotalBuildUpArea = x.TotalBuildUpArea,
+                    Assignments = x.Assignments.Select(a => new BuildingDetailsAssignmentViewModel
+                    {
+                        Id = a.Id,
+                        BasePricePerSquareMeter = a.BasePricePerSquareMeter,
+                        Description = a.Description,
+                        DesignerType = a.DesignerType,
+                        EndDate = a.EndDate,
+                    }),
+                }).FirstOrDefault();
+
+            return building;
         }
     }
 }

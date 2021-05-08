@@ -71,5 +71,10 @@
 
             return this.View(this.buildingsService.GetAllBuildingsOfCurrentUserById(user.Id));
         }
+
+        public IActionResult Details(int id)
+        {
+            return this.View(this.buildingsService.GetBuildingById(id));
+        }
     }
 }

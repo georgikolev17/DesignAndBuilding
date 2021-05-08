@@ -18,6 +18,11 @@ a {
     border-color: #1861ac;
 }
 
+.pointer {
+    cursor: pointer;
+    pointer-events: all;
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
     background-color: #1b6ec2;
