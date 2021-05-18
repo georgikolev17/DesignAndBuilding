@@ -54,11 +54,12 @@
 
         public BuildingDetailsViewModel GetBuildingById(int id)
         {
-            var building =  this.buildingsRepository
+            var building = this.buildingsRepository
                 .All()
                 .Where(x => x.Id == id)
                 .Select(x => new BuildingDetailsViewModel
                 {
+                    Id = id,
                     Name = x.Name,
                     BuildingType = x.BuildingType,
                     TotalBuildUpArea = x.TotalBuildUpArea,
