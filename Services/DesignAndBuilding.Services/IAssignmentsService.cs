@@ -8,5 +8,7 @@
     public interface IAssignmentsService
     {
         Task CreateAssignmentAsync(string description, DateTime endDate, DesignerType designerType, decimal basePricePerSquareMeter, int buildingId);
+
+        Task<Assignment> GetAssignmentById(int id);
     }
 }

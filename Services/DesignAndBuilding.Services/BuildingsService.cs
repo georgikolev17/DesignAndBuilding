@@ -9,6 +9,7 @@
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Web.ViewModels.Building;
+    using Microsoft.EntityFrameworkCore;
 
     public class BuildingsService : IBuildingsService
     {
@@ -52,26 +53,11 @@
             return buildings;
         }
 
-        public BuildingDetailsViewModel GetBuildingById(int id)
+        public async Task<Building> GetBuildingById(int id)
         {
-            var building = this.buildingsRepository
-                .All()
-                .Where(x => x.Id == id)
-                .Select(x => new BuildingDetailsViewModel
-                {
-                    Id = id,
-                    Name = x.Name,
-                    BuildingType = x.BuildingType,
-                    TotalBuildUpArea = x.TotalBuildUpArea,
-                    Assignments = x.Assignments.Select(a => new BuildingDetailsAssignmentViewModel
-                    {
-                        Id = a.Id,
-                        BasePricePerSquareMeter = a.BasePricePerSquareMeter,
-                        Description = a.Description,
-                        DesignerType = a.DesignerType,
-                        EndDate = a.EndDate,
-                    }),
-                }).FirstOrDefault();
+            var building = await this.buildingsRepository.All()
+                .Include(x => x.Assignments)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return building;
         }

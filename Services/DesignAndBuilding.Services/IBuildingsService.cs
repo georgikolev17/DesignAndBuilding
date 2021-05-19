@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Web.ViewModels.Building;
 
     public interface IBuildingsService
@@ -11,6 +11,6 @@
 
         IEnumerable<MyBuildingsViewModel> GetAllBuildingsOfCurrentUserById(string id);
 
-        BuildingDetailsViewModel GetBuildingById(int id);
+        Task<Building> GetBuildingById(int id);
     }
 }

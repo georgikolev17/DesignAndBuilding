@@ -1,5 +1,6 @@
 ﻿namespace DesignAndBuilding.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Services;
@@ -29,6 +30,32 @@
         {
             await this.assignmentsService.CreateAssignmentAsync(assignment.Description, assignment.EndDate, assignment.DesignerType, decimal.Parse(assignment.BasePricePerSquareMeter), assignment.BuildingId);
             return this.RedirectToAction("Details", "Buildings", new { id = assignment.BuildingId });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Details(int id)
+        {
+            var assignment = await this.assignmentsService.GetAssignmentById(id);
+
+            return this.View(new AssignmentViewModel()
+            {
+                BasePricePerSquareMeter = assignment.BasePricePerSquareMeter,
+                Description = assignment.Description,
+                DesignerType = assignment.DesignerType,
+                EndDate = assignment.EndDate,
+                Building = new AssignmentBuildingViewModel()
+                {
+                    TotalBuildUpArea = assignment.Building.TotalBuildUpArea,
+                    BuildingType = assignment.Building.BuildingType,
+                    Name = assignment.Building.Name,
+                },
+                Bids = assignment.Bids
+                    .Select(x => new AssignmentBidViewModel()
+                    {
+                        Price = x.Price,
+                        TimePlaced = x.TimePlaced,
+                    }).ToList(),
+            });
         }
     }
 }

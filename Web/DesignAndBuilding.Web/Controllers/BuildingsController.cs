@@ -1,5 +1,6 @@
 ﻿namespace DesignAndBuilding.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Data.Models;
@@ -72,9 +73,25 @@
             return this.View(this.buildingsService.GetAllBuildingsOfCurrentUserById(user.Id));
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return this.View(this.buildingsService.GetBuildingById(id));
+            var building = await this.buildingsService.GetBuildingById(id);
+            var buildingViewModel = new BuildingDetailsViewModel()
+            {
+                Id = id,
+                Name = building.Name,
+                BuildingType = building.BuildingType,
+                TotalBuildUpArea = building.TotalBuildUpArea,
+                Assignments = building.Assignments.Select(a => new BuildingDetailsAssignmentViewModel
+                {
+                    Id = a.Id,
+                    BasePricePerSquareMeter = a.BasePricePerSquareMeter,
+                    Description = a.Description,
+                    DesignerType = a.DesignerType,
+                    EndDate = a.EndDate,
+                }),
+            };
+            return this.View(buildingViewModel);
         }
     }
 }
