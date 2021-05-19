@@ -3,23 +3,30 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
     using DesignAndBuilding.Web.ViewModels.Assignment;
+    using DesignAndBuilding.Web.ViewModels.Bid;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     public class AssignmentsController : Controller
     {
         private readonly IAssignmentsService assignmentsService;
+        private readonly IBidsService bidsService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public AssignmentsController(IAssignmentsService assignmentsService)
+        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, UserManager<ApplicationUser> userManager)
         {
             this.assignmentsService = assignmentsService;
+            this.bidsService = bidsService;
+            this.userManager = userManager;
         }
 
         [Authorize]
         [HttpGet]
-        public IActionResult Create(int buildingId)
+        public IActionResult Create()
         {
             return this.View();
         }
@@ -54,8 +61,19 @@
                     {
                         Price = x.Price,
                         TimePlaced = x.TimePlaced,
-                    }).ToList(),
+                    })
+                    .OrderBy(x => x.Price)
+                    .ToList(),
             });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Details(PlaceBidViewModel bidViewModel)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            await this.bidsService.CreateBidAsync(user.Id, bidViewModel.Id, decimal.Parse(bidViewModel.BidPrice));
+            return this.RedirectToAction("Details", "Assignments");
         }
     }
 }

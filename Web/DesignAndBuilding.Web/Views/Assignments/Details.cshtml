@@ -1,77 +1,86 @@
 ﻿@using DesignAndBuilding.Web.ViewModels.Assignment 
 @model AssignmentViewModel
-
-<div class="container">
-    <div class="row">
-        <div class="col-3 border">
-            <br />
-            <p><b>Име на обекта: </b>@Model.Building.Name</p>
+@{ 
+    int i = 0;
+}
+<div class="container align-center">
+    <div class="row h-100 d-flex justify-content-around">
+        <div class="col-3 border my-auto table-info">
+            <h4>Обект</h4>
+            <p><b>Име: </b>@Model.Building.Name</p>
             <p><b>РЗП:</b> @Model.Building.TotalBuildUpArea</p>
             @switch (@Model.Building.BuildingType)
             {
                 case DesignAndBuilding.Data.Models.BuildingType.Other:
-                    <p><b>Тип на обекта: </b>Друг</p>
+                    <p><b>Тип: </b>Друг</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.Hotel:
-                    <p><b>Тип на обекта: </b>Хотел</p>
+                    <p><b>Тип: </b>Хотел</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.Kindergarten:
-                    <p><b>Тип на обекта: </b>Детска градина</p>
+                    <p><b>Тип: </b>Детска градина</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.SingleFamilyHouse:
-                    <p><b>Тип на обекта: </b>Еднофамилна къща</p>
+                    <p><b>Тип: </b>Еднофамилна къща</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.MultiFamiyHouse:
-                    <p><b>Тип на обекта: </b>Многофамилна къща</p>
+                    <p><b>Тип: </b>Многофамилна къща</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.Hospital:
-                    <p><b>Тип на обекта: </b>Болница</p>
+                    <p><b>Тип: </b>Болница</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.Factory:
-                    <p><b>Тип на обекта: </b>Производствено предприятие</p>
+                    <p><b>Тип: </b>Производствено предприятие</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.AdministrationBuilding:
-                    <p><b>Тип на обекта: </b>Административна сграда</p>
+                    <p><b>Тип: </b>Административна сграда</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.School:
-                    <p><b>Тип на обекта: </b>Училище</p>
+                    <p><b>Тип: </b>Училище</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.University:
-                    <p><b>Тип на обекта: </b>Университет</p>
+                    <p><b>Тип: </b>Университет</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.ComercialBuilding:
-                    <p><b>Тип на обекта: </b>Търговска сграда</p>
+                    <p><b>Тип: </b>Търговска сграда</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.SportBuilding:
-                    <p><b>Тип на обекта: </b>Спортна сграда</p>
+                    <p><b>Тип: </b>Спортна сграда</p>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.ArtAndCultureBuilding:
-                    <p><b>Тип на обекта: </b>Сграда за изкуство и култура</p>
+                    <p><b>Тип: </b>Сграда за изкуство и култура</p>
                     break;
                 default:
-                    <p><b>Тип на обекта: </b>Неизвестен</p>
+                    <p><b>Тип: </b>Неизвестен</p>
                     break;
             }
-            <br />
-            <br />
+            <h4>Задание</h4>
+            <p><b>Описание: </b>@Model.Description</p>
+            <p><b>Специалност: </b>@Model.DesignerType</p>
+            <p><b>Краен срок: </b>@Model.EndDate</p>
+            <p><b>Начална цена/кв.м.: </b>@Model.BasePricePerSquareMeter</p>
         </div>
-        <div class="col-7">
-            <p>@Model.Description</p>
-            <p>@Model.DesignerType</p>
-            <p>@Model.EndDate</p>
-            <p>@Model.BasePricePerSquareMeter</p>
-        </div>
-        <div class="col-1">
-            <h3 class="text-center">Задания</h3>
-            <table class="table table-hover">
-                @foreach (var bid in Model.Bids)
-                {
-                    <tr>
-                        <td>@bid.Price лв.</td>
-                        <td>@bid.TimePlaced</td>
-                    </tr>
-                }
+        <div class="col-4">
+            <h3 class="text-center">Наддавания</h3>
+            <table class="table table-hover text-center">
+                    @foreach (var bid in Model.Bids)
+                    { i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@bid.Price лв.</td>
+                            <td>@bid.TimePlaced</td>
+                        </tr>
+                    }
             </table>
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="@Model.BidPrice"></label>
+                    <input asp-for="@Model.BidPrice" class="form-control" />
+                    <span asp-validation-for="@Model.BidPrice" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Place bid</button>
+            </form>
         </div>
     </div>
 </div>

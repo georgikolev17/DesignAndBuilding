@@ -25,9 +25,10 @@
         [Required]
         public decimal BasePricePerSquareMeter { get; set; }
 
-
         public virtual AssignmentBuildingViewModel Building { get; set; }
 
         public virtual ICollection<AssignmentBidViewModel> Bids { get; set; }
+
+        public string BidPrice { get; set; }
     }
 }
