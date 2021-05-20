@@ -1,0 +1,52 @@
+﻿@using DesignAndBuilding.Web.ViewModels.Assignment
+@using System.Globalization;
+@model EngineerAssignmentsViewModel
+
+<div>
+    <table class="table table-hover">
+        <tr class="table-info">
+            <th>Начална цена/кв.м.</th>
+            <th>Описание</th>
+            <th>Специалност</th>
+            <th>Оставащо време</th>
+        </tr>
+        @foreach (var assignment in Model.Assignments)
+        {
+    <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button">
+        <td>@assignment.BasePricePerSquareMeter лв.</td>
+        @if (assignment.Description.Length > 10)
+        {
+            <td>@assignment.Description.Substring(0, 10)...</td>
+        }
+        else
+        {
+            <td>@assignment.Description</td>
+        }
+        @switch (assignment.DesignerType)
+        {
+            case DesignAndBuilding.Data.Models.DesignerType.Other:
+                <td>Друг</td>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.Architect:
+                <td>Архитект</td>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
+                <td>Електро</td>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
+                <td>Строителни Конструкции</td>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
+                <td>Строителни Конструкции</td>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
+                <td>Строителни Конструкции</td>
+                break;
+            default:
+                break;
+        }
+        <td>@((assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss"))</td>
+    </tr>
+        }
+    </table>
+</div>

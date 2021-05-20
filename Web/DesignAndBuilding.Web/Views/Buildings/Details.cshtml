@@ -69,26 +69,35 @@
                 </tr>
                 @foreach (var assignment in Model.Assignments)
                 {
-                <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button">
-                    @switch (assignment.DesignerType)
-                    {
-                        case DesignAndBuilding.Data.Models.DesignerType.Other:
-                            <td>Друг</td>
-                            break;
-                        case DesignAndBuilding.Data.Models.DesignerType.Architect:
-                            <td>Архитект</td>
-                            break;
-                        case DesignAndBuilding.Data.Models.DesignerType.Engineer:
-                            <td>Инженер</td>
-                            break;
-                        default:
-                            break;
-                    }
+            <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button">
+                @switch (assignment.DesignerType)
+                {
+                    case DesignAndBuilding.Data.Models.DesignerType.Other:
+                        <td>Друг</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.DesignerType.Architect:
+                        <td>Архитект</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
+                        <td>Електро</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
+                        <td>Строителни Конструкции</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
+                        <td>Строителни Конструкции</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
+                        <td>Строителни Конструкции</td>
+                        break;
+                    default:
+                        break;
+                }
 
-                    <td>@assignment.BasePricePerSquareMeter</td>
+                <td>@assignment.BasePricePerSquareMeter лв.</td>
 
-                    <td>@((assignment.EndDate - DateTime.Now).ToString("g", new CultureInfo("en-US")))</td>
-                </tr>
+                <td>@((assignment.EndDate - DateTime.Now).ToString("g", new CultureInfo("en-US")))</td>
+            </tr>
                 }
             </table>
         </div>
