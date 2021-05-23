@@ -1,6 +1,8 @@
 ﻿namespace DesignAndBuilding.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Data.Common.Repositories;
@@ -18,11 +20,10 @@
             this.buildingsService = buildingsService;
         }
 
-        public async Task CreateAssignmentAsync(string description, DateTime endDate, DesignerType designerType, decimal basePricePerSquareMeter, int buildingId)
+        public async Task CreateAssignmentAsync(string description, DateTime endDate, DesignerType designerType, int buildingId)
         {
             var assignment = new Assignment()
             {
-                BasePricePerSquareMeter = basePricePerSquareMeter,
                 BuildingId = buildingId,
                 Description = description,
                 EndDate = endDate,
@@ -31,6 +32,14 @@
 
             await this.assignmentsRepository.AddAsync(assignment);
             await this.assignmentsRepository.SaveChangesAsync();
+        }
+
+        public List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType)
+        {
+            return this.assignmentsRepository
+                .All()
+                .Where(x => x.DesignerType == designerType)
+                .ToList();
         }
 
         public async Task<Assignment> GetAssignmentById(int id)

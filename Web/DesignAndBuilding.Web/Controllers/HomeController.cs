@@ -33,7 +33,7 @@
                     .GetAllAssignmentsForDesignerType(user.DesignerType)
                     .Select(x => new BuildingDetailsAssignmentViewModel
                     {
-                        BasePricePerSquareMeter = x.BasePricePerSquareMeter,
+                        CreatedOn = x.CreatedOn,
                         Description = x.Description,
                         DesignerType = x.DesignerType,
                         EndDate = x.EndDate,
@@ -42,6 +42,7 @@
                 var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
                 {
                     Assignments = assignments,
+                    DesignerType = user.DesignerType,
                 };
 
                 return this.View("EngineerIndex", engineerAssignmentsViewModel);

@@ -23,9 +23,6 @@
         public DesignerType DesignerType { get; set; }
 
         [Required]
-        public decimal BasePricePerSquareMeter { get; set; }
-
-        [Required]
         public int BuildingId { get; set; }
 
         public virtual Building Building { get; set; }

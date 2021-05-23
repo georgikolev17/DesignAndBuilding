@@ -4,6 +4,9 @@
     {
         Other = 0,
         Architect = 1,
-        Engineer = 2,
+        BuildingConstructionEngineer = 2,
+        ElectroEngineer = 3,
+        PlumbingEngineer = 4,
+        HVACEngineer = 5,
     }
 }

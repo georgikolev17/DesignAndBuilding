@@ -23,7 +23,7 @@
         public DesignerType DesignerType { get; set; }
 
         [Required]
-        public decimal BasePricePerSquareMeter { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public virtual AssignmentBuildingViewModel Building { get; set; }
 

@@ -35,7 +35,7 @@
         [HttpPost]
         public async Task<IActionResult> Create(AssignmentInputModel assignment)
         {
-            await this.assignmentsService.CreateAssignmentAsync(assignment.Description, assignment.EndDate, assignment.DesignerType, decimal.Parse(assignment.BasePricePerSquareMeter), assignment.BuildingId);
+            await this.assignmentsService.CreateAssignmentAsync(assignment.Description, assignment.EndDate, assignment.DesignerType, assignment.BuildingId);
             return this.RedirectToAction("Details", "Buildings", new { id = assignment.BuildingId });
         }
 
@@ -46,7 +46,7 @@
 
             return this.View(new AssignmentViewModel()
             {
-                BasePricePerSquareMeter = assignment.BasePricePerSquareMeter,
+                CreatedOn = assignment.CreatedOn,
                 Description = assignment.Description,
                 DesignerType = assignment.DesignerType,
                 EndDate = assignment.EndDate,

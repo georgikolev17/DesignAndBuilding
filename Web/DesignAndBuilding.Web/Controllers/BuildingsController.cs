@@ -85,7 +85,7 @@
                 Assignments = building.Assignments.Select(a => new BuildingDetailsAssignmentViewModel
                 {
                     Id = a.Id,
-                    BasePricePerSquareMeter = a.BasePricePerSquareMeter,
+                    CreatedOn = a.CreatedOn,
                     Description = a.Description,
                     DesignerType = a.DesignerType,
                     EndDate = a.EndDate,

@@ -17,9 +17,6 @@
         public DesignerType DesignerType { get; set; }
 
         [Required]
-        public string BasePricePerSquareMeter { get; set; }
-
-        [Required]
         public int BuildingId { get; set; }
     }
 }
