@@ -10,6 +10,9 @@
         public int Id { get; set; }
 
         [Required]
+        public string BuildingName { get; set; }
+
+        [Required]
         public string Description { get; set; }
 
         [Required]
@@ -20,5 +23,10 @@
 
         [Required]
         public DateTime CreatedOn { get; set; }
+
+        [Required]
+        public string ArchitectName { get; set; }
+
+        public bool UserPlacedBid { get; set; }
     }
 }

@@ -13,5 +13,7 @@
         Task<Assignment> GetAssignmentById(int id);
 
         List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType);
+
+        List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId);
     }
 }

@@ -25,53 +25,37 @@
         default:
             break;
     }
-    <table class="table table-hover text-center">
-        <tr class="table-info">
-            <th>№</th>
-            <th>Дата</th>
-            <th>Описание</th>
-            <th>Специалност</th>
-            <th>Оставащо време</th>
-        </tr>
-        @foreach (var assignment in Model.Assignments)
+<table class="table table-hover text-center">
+    <tr class="table-info">
+        <th>№</th>
+        <th>Име</th>
+        <th>Архитект</th>
+        <th>Дата</th>
+        <th>Оставащо време</th>
+    </tr>
+    @foreach (var assignment in Model.Assignments)
+    {
+        i++;
+        @if (assignment.UserPlacedBid)
         {
-            i++;
-            <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button">
+            <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button" class="font-weight-bold">
                 <td>@i</td>
+                <td>@assignment.BuildingName</td>
+                <td>арх. @assignment.ArchitectName</td>
                 <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy")г.</td>
-                @if (assignment.Description.Length > 10)
-                {
-                    <td>@assignment.Description.Substring(0, 10)...</td>
-                }
-                else
-                {
-                    <td>@assignment.Description</td>
-                }
-                @switch (assignment.DesignerType)
-                {
-                    case DesignAndBuilding.Data.Models.DesignerType.Other:
-                        <td>Друг</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.DesignerType.Architect:
-                        <td>Архитект</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
-                        <td>Електро</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
-                        <td>Строителни Конструкции</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
-                        <td>ВиК</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
-                        <td>ОВК</td>
-                        break;
-                    default:
-                        break;
-                }
                 <td>@((assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss"))</td>
             </tr>
         }
-    </table>
+        else
+        {
+            <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button">
+                <td>@i</td>
+                <td>@assignment.BuildingName</td>
+                <td>арх. @assignment.ArchitectName</td>
+                <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy")г.</td>
+                <td>@((assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss"))</td>
+            </tr>
+        }
+    }
+</table>
 </div>

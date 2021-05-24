@@ -12,12 +12,10 @@
     public class AssignmentsService : IAssignmentsService
     {
         private readonly IDeletableEntityRepository<Assignment> assignmentsRepository;
-        private readonly IBuildingsService buildingsService;
 
-        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository, IBuildingsService buildingsService)
+        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository)
         {
             this.assignmentsRepository = assignmentsRepository;
-            this.buildingsService = buildingsService;
         }
 
         public async Task CreateAssignmentAsync(string description, DateTime endDate, DesignerType designerType, int buildingId)
@@ -36,10 +34,14 @@
 
         public List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType)
         {
-            return this.assignmentsRepository
+            var assignments = this.assignmentsRepository
                 .All()
-                .Where(x => x.DesignerType == designerType)
+                .Include(x => x.Building)
+                .Where(x => x.DesignerType == designerType && x.EndDate >= DateTime.Now)
+                .OrderBy(x => x.EndDate)
                 .ToList();
+
+            return assignments;
         }
 
         public async Task<Assignment> GetAssignmentById(int id)
@@ -49,6 +51,17 @@
                 .Include(x => x.Bids)
                 .Include(x => x.Building)
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId)
+        {
+            var assignments = this.
+                assignmentsRepository.All()
+                .Where(x => x.Bids.Any(b => b.DesignerId == userId))
+                .Include(x => x.Building)
+                .ToList();
+
+            return assignments;
         }
     }
 }

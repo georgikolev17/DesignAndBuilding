@@ -22,6 +22,8 @@
         [Required]
         public DesignerType DesignerType { get; set; }
 
+        public bool IsFinished => this.EndDate < DateTime.Now;
+
         [Required]
         public int BuildingId { get; set; }
 

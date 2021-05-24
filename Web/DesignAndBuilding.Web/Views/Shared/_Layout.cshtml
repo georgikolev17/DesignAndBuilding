@@ -41,6 +41,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="buildings" asp-action="MyBuildings">My Buildings</a>
                             </li>
                         }
+                        @if (user != null && user.DesignerType != DesignerType.Architect)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="mybids">My Bids</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

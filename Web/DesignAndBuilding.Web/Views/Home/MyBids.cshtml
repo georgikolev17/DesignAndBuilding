@@ -1,0 +1,29 @@
+﻿@using DesignAndBuilding.Web.ViewModels.Assignment
+@using System.Globalization;
+@model EngineerAssignmentsViewModel
+@{
+    int i = 0;
+}
+<div>
+    <h3>Задания, в които сте взели участие</h3>
+    <table class="table table-hover text-center">
+        <tr class="table-info">
+            <th>№</th>
+            <th>Име</th>
+            <th>Архитект</th>
+            <th>Дата</th>
+            <th>Оставащо време</th>
+        </tr>
+        @foreach (var assignment in Model.Assignments)
+        {
+            i++;
+            <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button">
+                <td>@i</td>
+                <td>@assignment.BuildingName</td>
+                <td>арх. @assignment.ArchitectName</td>
+                <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy")г.</td>
+                <td>@((assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss"))</td>
+            </tr>
+        }
+    </table>
+</div>
