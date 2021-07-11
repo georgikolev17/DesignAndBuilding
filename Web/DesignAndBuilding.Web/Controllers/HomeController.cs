@@ -35,6 +35,7 @@
                 var userBids = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id);
                 var assignments = this.assignmentsService
                     .GetAllAssignmentsForDesignerType(user.DesignerType)
+                    .Where(x => !x.IsFinished)
                     .Select(x => new BuildingDetailsAssignmentViewModel
                     {
                         BuildingName = x.Building.Name,

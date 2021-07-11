@@ -3,6 +3,7 @@
 @model EngineerAssignmentsViewModel
 @{
     int i = 0;
+    string timeLeft = "";
 }
 <div>
     <h3>Задания, в които сте взели участие</h3>
@@ -17,12 +18,13 @@
         @foreach (var assignment in Model.Assignments)
         {
             i++;
+            timeLeft = assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString("g", new CultureInfo("en-US")) : "Приключило";
             <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button">
                 <td>@i</td>
                 <td>@assignment.BuildingName</td>
                 <td>арх. @assignment.ArchitectName</td>
                 <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy")г.</td>
-                <td>@((assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss"))</td>
+                <td>@timeLeft</td>
             </tr>
         }
     </table>

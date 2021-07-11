@@ -35,7 +35,7 @@
         [HttpPost]
         public async Task<IActionResult> Create(AssignmentInputModel assignment)
         {
-            if (!this.ModelState.IsValid || assignment.EndDate > DateTime.UtcNow)
+            if (!this.ModelState.IsValid || assignment.EndDate < DateTime.UtcNow)
             {
                 return this.View();
             }
