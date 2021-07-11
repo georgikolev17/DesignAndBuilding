@@ -1,16 +1,19 @@
 ﻿namespace DesignAndBuilding.Web.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
+    using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Bid;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize]
     public class AssignmentsController : Controller
     {
         private readonly IAssignmentsService assignmentsService;
@@ -24,22 +27,23 @@
             this.userManager = userManager;
         }
 
-        [Authorize]
-        [HttpGet]
         public IActionResult Create()
         {
             return this.View();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(AssignmentInputModel assignment)
         {
+            if (!this.ModelState.IsValid || assignment.EndDate > DateTime.UtcNow)
+            {
+                return this.View();
+            }
+
             await this.assignmentsService.CreateAssignmentAsync(assignment.Description, assignment.EndDate, assignment.DesignerType, assignment.BuildingId);
             return this.RedirectToAction("Details", "Buildings", new { id = assignment.BuildingId });
         }
 
-        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
             var assignment = await this.assignmentsService.GetAssignmentById(id);
@@ -67,11 +71,22 @@
             });
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Details(PlaceBidViewModel bidViewModel)
         {
             var user = await this.userManager.GetUserAsync(this.User);
+            var assignment = await this.assignmentsService.GetAssignmentById(bidViewModel.Id);
+
+            if (user.DesignerType != assignment.DesignerType)
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Only {assignment.DesignerType}s can make bids for this assignment!" });
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Invalid bid" });
+            }
+
             await this.bidsService.CreateBidAsync(user.Id, bidViewModel.Id, decimal.Parse(bidViewModel.BidPrice));
             return this.RedirectToAction("Details", "Assignments");
         }

@@ -71,6 +71,7 @@
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
 
+        [Authorize]
         public async Task<IActionResult> MyBids()
         {
             var user = await this.userManager.GetUserAsync(this.User);

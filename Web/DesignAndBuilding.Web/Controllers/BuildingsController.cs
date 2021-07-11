@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize]
     public class BuildingsController : BaseController
     {
         private readonly IBuildingsService buildingsService;
@@ -24,7 +25,6 @@
             this.userManager = userManager;
         }
 
-        [Authorize]
         public async Task<IActionResult> Create()
         {
             var user = await this.userManager.GetUserAsync(this.User);
@@ -38,7 +38,6 @@
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Create(BuildingInputModel buildingInputModel)
         {
             var user = await this.userManager.GetUserAsync(this.User);
