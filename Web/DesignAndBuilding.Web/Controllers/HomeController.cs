@@ -9,6 +9,7 @@
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Building;
+    using DesignAndBuilding.Web.ViewModels.Notification;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,14 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IAssignmentsService assignmentsService;
         private readonly IUsersService usersService;
+        private readonly INotificationsService notificationsService;
 
-        public HomeController(UserManager<ApplicationUser> userManager, IAssignmentsService assignmentsService, IUsersService usersService)
+        public HomeController(UserManager<ApplicationUser> userManager, IAssignmentsService assignmentsService, IUsersService usersService, INotificationsService notificationsService)
         {
             this.userManager = userManager;
             this.assignmentsService = assignmentsService;
             this.usersService = usersService;
+            this.notificationsService = notificationsService;
         }
 
         public async Task<IActionResult> Index()
@@ -95,6 +98,23 @@
                 DesignerType = user.DesignerType,
             };
             return this.View(engineerAssignmentsViewModel);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Notifications()
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var viewModel = this.notificationsService.GetNotificationsForUser(user.Id)
+                .Select(n => new NotificationViewModel()
+                {
+                    Id = n.Id,
+                    Date = n.CreatedOn,
+                    Message = n.Message,
+                    IsRead = n.IsRead,
+                });
+
+            return this.View(new AllNotificationsViewModel() { Notifications = viewModel, UserId = user.Id });
         }
     }
 }

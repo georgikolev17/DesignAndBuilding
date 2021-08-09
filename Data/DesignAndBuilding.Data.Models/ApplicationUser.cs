@@ -20,6 +20,7 @@ namespace DesignAndBuilding.Data.Models
 
             this.Bids = new HashSet<Bid>();
             this.Buildings = new HashSet<Building>();
+            this.Notifications = new HashSet<Notification>();
         }
 
         // Audit info
@@ -53,5 +54,7 @@ namespace DesignAndBuilding.Data.Models
         public virtual ICollection<Bid> Bids { get; set; }
 
         public virtual ICollection<Building> Buildings { get; set; }
+
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

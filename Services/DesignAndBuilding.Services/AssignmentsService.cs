@@ -44,6 +44,17 @@
             return assignments;
         }
 
+        public ICollection<string> GetAllUsersBidInAssignment(int assignmentId)
+        {
+            return this.assignmentsRepository
+                .All()
+                .FirstOrDefault(x => x.Id == assignmentId)
+                .Bids
+                .Select(x => x.DesignerId)
+                .Distinct()
+                .ToList();
+        }
+
         public async Task<Assignment> GetAssignmentById(int id)
         {
             return await this.assignmentsRepository

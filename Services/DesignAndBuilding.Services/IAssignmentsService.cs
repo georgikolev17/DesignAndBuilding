@@ -15,5 +15,7 @@
         List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType);
 
         List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId);
+
+        ICollection<string> GetAllUsersBidInAssignment(int assignmentId);
     }
 }

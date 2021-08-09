@@ -1,0 +1,48 @@
+﻿@model DesignAndBuilding.Web.ViewModels.Notification.AllNotificationsViewModel
+
+<div>
+    <h3 class="text-center">Известия</h3>
+
+    @if (Model.Notifications.Count() != 0)
+    {
+        <table class="table table-hover text-center">
+            @foreach (var notification in Model.Notifications)
+            {
+                <tr class="font-weight-bold" id="@notification.Id">
+                    <td>@notification.Message</td>
+                    <td>@notification.Date.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="markAsRead(@notification.Id)" id="btn-@notification.Id">Прочетено</button>
+                        <button class="btn btn-danger" onclick="remove(@notification.Id)">Изтрий</button>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p class="text-center">Нямате нови известия!</p>
+    }
+</div>
+
+@section Scripts
+{
+    
+    <script>
+        function markAsRead(id) {
+            $.get(`/api/notifications/markasread`, { notificationId: id, userId: '@Model.UserId' }, (result) => {
+                if (result) {
+                    $(`#${id}`).removeClass('font-weight-bold');
+                    $(`#btn-${id}`).remove();
+                }
+            })
+        }
+        function remove(id) {
+            $.get(`/api/notifications/delete`, { notificationId: id, userId: '@Model.UserId' }, (result) => {
+                if (result) {
+                    $(`#${id}`).remove();
+                }
+            })
+        }
+    </script>
+}

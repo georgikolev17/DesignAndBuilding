@@ -1,6 +1,7 @@
 ﻿namespace DesignAndBuilding.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -18,12 +19,14 @@
     {
         private readonly IAssignmentsService assignmentsService;
         private readonly IBidsService bidsService;
+        private readonly INotificationsService notificationsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, UserManager<ApplicationUser> userManager)
+        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager)
         {
             this.assignmentsService = assignmentsService;
             this.bidsService = bidsService;
+            this.notificationsService = notificationsService;
             this.userManager = userManager;
         }
 
@@ -71,6 +74,7 @@
             });
         }
 
+        // Place bids
         [HttpPost]
         public async Task<IActionResult> Details(PlaceBidViewModel bidViewModel)
         {
@@ -88,6 +92,20 @@
             }
 
             await this.bidsService.CreateBidAsync(user.Id, bidViewModel.Id, decimal.Parse(bidViewModel.BidPrice));
+
+            var usersToSendNotification = this.assignmentsService.GetAllUsersBidInAssignment(assignment.Id);
+
+            // Assignment creator should also recieve notification
+            usersToSendNotification.Add(assignment.Building.ArchitectId);
+
+            // User who placed bid will recieve another notification
+            usersToSendNotification.Remove(user.Id);
+            var userPlacedBid = new List<string>() { user.Id };
+            await this.notificationsService.AddNotificationAsync(userPlacedBid, $"Вие наддадохте с {bidViewModel.BidPrice} лв. за {assignment.Building.Name}!");
+
+            // All other users placed bids for this assignment will recieve this notification
+            await this.notificationsService.AddNotificationAsync(usersToSendNotification, $"Има ново наддаване в {assignment.Building.Name} - {bidViewModel.BidPrice} лв.");
+
             return this.RedirectToAction("Details", "Assignments");
         }
     }
