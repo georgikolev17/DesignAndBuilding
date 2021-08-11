@@ -108,5 +108,56 @@
 
             return this.RedirectToAction("Details", "Assignments");
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
+            }
+
+            var assignment = await this.assignmentsService.GetAssignmentById(id);
+
+            var assignmentViewModel = new AssignmentInputModel()
+            {
+                BuildingId = assignment.BuildingId,
+                Description = assignment.Description,
+                DesignerType = assignment.DesignerType,
+                EndDate = assignment.EndDate,
+            };
+
+            return this.View(assignmentViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, AssignmentInputModel viewModel)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
+            }
+
+            await this.assignmentsService.EditAssignment(viewModel.DesignerType, viewModel.Description, viewModel.EndDate, id);
+
+            return this.Redirect("/");
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го изтрие!" });
+            }
+
+            await this.assignmentsService.RemoveAssignment(id);
+
+            return this.Redirect("/");
+        }
     }
 }

@@ -37,6 +37,32 @@
             return building.Id;
         }
 
+        public async Task DeleteBuilding(int id)
+        {
+            var building = await this.buildingsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            this.buildingsRepository.Delete(building);
+
+            await this.buildingsRepository.SaveChangesAsync();
+        }
+
+        public async Task EditBuilding(int id, string buildingType, decimal totalBuildUpArea, string town, string name)
+        {
+            var building = await this.buildingsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            if (building == null)
+            {
+                return;
+            }
+
+            building.BuildingType = (BuildingType)Enum.Parse(typeof(BuildingType), buildingType);
+            building.TotalBuildUpArea = totalBuildUpArea;
+            building.Town = town;
+            building.Name = name;
+
+            await this.buildingsRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<MyBuildingsViewModel> GetAllBuildingsOfCurrentUserById(string id)
         {
             var buildings = this.buildingsRepository.All()

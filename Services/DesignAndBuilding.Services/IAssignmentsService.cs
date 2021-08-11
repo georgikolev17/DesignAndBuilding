@@ -17,5 +17,11 @@
         List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId);
 
         ICollection<string> GetAllUsersBidInAssignment(int assignmentId);
+
+        Task RemoveAssignment(int assignmentId);
+
+        bool HasUserCreatedAssignment(string userId, int assignmentId);
+
+        Task EditAssignment(DesignerType designerType, string description, DateTime endDate, int id);
     }
 }

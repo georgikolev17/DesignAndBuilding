@@ -32,6 +32,22 @@
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
+        public async Task EditAssignment(DesignerType designerType, string description, DateTime endDate, int id)
+        {
+            var assignment = await this.assignmentsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            if (assignment == null)
+            {
+                return;
+            }
+
+            assignment.Description = description;
+            assignment.DesignerType = designerType;
+            assignment.EndDate = endDate;
+
+            await this.assignmentsRepository.SaveChangesAsync();
+        }
+
         public List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType)
         {
             var assignments = this.assignmentsRepository
@@ -73,6 +89,17 @@
                 .ToList();
 
             return assignments;
+        }
+
+        public bool HasUserCreatedAssignment(string userId, int assignmentId)
+        {
+            return this.assignmentsRepository.All().Any(a => a.Building.ArchitectId == userId && a.Id == assignmentId);
+        }
+
+        public async Task RemoveAssignment(int assignmentId)
+        {
+            this.assignmentsRepository.All().FirstOrDefault(x => x.Id == assignmentId).IsDeleted = true;
+            await this.assignmentsRepository.SaveChangesAsync();
         }
     }
 }

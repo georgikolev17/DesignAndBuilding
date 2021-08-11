@@ -29,7 +29,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (user == null || user.DesignerType != DesignerType.Architect)
+            if (user.DesignerType != DesignerType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Only architects can create new buildings!" });
             }
@@ -47,7 +47,7 @@
                 return this.View();
             }
 
-            if (user == null || user.DesignerType != DesignerType.Architect)
+            if (user.DesignerType != DesignerType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Only architects can create new buildings!" });
             }
@@ -59,12 +59,11 @@
             return this.Redirect("mybuildings");
         }
 
-        [Authorize]
         public async Task<IActionResult> MyBuildings()
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (user == null || user.DesignerType != DesignerType.Architect)
+            if (user.DesignerType != DesignerType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Only architects can access this page!" });
             }

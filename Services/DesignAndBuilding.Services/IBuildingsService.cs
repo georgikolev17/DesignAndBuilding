@@ -12,5 +12,9 @@
         IEnumerable<MyBuildingsViewModel> GetAllBuildingsOfCurrentUserById(string id);
 
         Task<Building> GetBuildingById(int id);
+
+        Task DeleteBuilding(int id);
+
+        Task EditBuilding(int id, string buildingType, decimal totalBuildUpArea, string town, string name);
     }
 }

@@ -5,19 +5,32 @@
 
     @if (Model.Notifications.Count() != 0)
     {
-        <table class="table table-hover text-center">
-            @foreach (var notification in Model.Notifications)
-            {
-                <tr class="font-weight-bold" id="@notification.Id">
-                    <td>@notification.Message</td>
-                    <td>@notification.Date.ToString("dd.MM.yyyy")</td>
-                    <td>
-                        <button class="btn btn-primary" onclick="markAsRead(@notification.Id)" id="btn-@notification.Id">Прочетено</button>
-                        <button class="btn btn-danger" onclick="remove(@notification.Id)">Изтрий</button>
-                    </td>
-                </tr>
-            }
-        </table>
+<table class="table table-hover text-center">
+    @foreach (var notification in Model.Notifications)
+    {
+        if (notification.IsRead)
+        {
+            <tr id="@notification.Id">
+                <td>@notification.Message</td>
+                <td>@notification.Date.ToString("dd.MM.yyyy")</td>
+                <td>
+                    <button class="btn btn-danger" onclick="remove(@notification.Id)">Изтрий</button>
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr class="font-weight-bold" id="@notification.Id">
+                <td>@notification.Message</td>
+                <td>@notification.Date.ToString("dd.MM.yyyy")</td>
+                <td>
+                    <button class="btn btn-primary" onclick="markAsRead(@notification.Id)" id="btn-@notification.Id">Прочетено</button>
+                    <button class="btn btn-danger" onclick="remove(@notification.Id)">Изтрий</button>
+                </td>
+            </tr>
+        }
+    }
+</table>
     }
     else
     {

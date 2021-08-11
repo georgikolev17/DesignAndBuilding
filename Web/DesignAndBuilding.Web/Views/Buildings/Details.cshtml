@@ -60,18 +60,21 @@
             <br />
             <br />
         </div>
-        <div class="col-8">
+        <div class="col-9">
             <h3 class="text-center">Задания</h3>
             <table class="table table-hover">
-                <tr class="table-info">
+                <tr class="table-info text-center">
                     <th>Специалност</th>
                     <th>Дата</th>
                     <th>Оставащо време</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 @foreach (var assignment in Model.Assignments)
                 {
                     timeLeft = assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString("g", new CultureInfo("en-US")) : "Приключило";
-                    <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'" role="button">
+                    <tr>
                         @switch (assignment.DesignerType)
                         {
                             case DesignAndBuilding.Data.Models.DesignerType.Other:
@@ -96,9 +99,19 @@
                                 break;
                         }
 
-                    <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy")г.</td>
+                        <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy")г.</td>
 
                         <td>@timeLeft</td>
+
+                        <td>
+                            <button class="btn btn-info" onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'">Детайли</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" onclick="window.location.href='@Url.Action("edit", "assignments", new { id = assignment.Id})'">Редактирай</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" onclick="window.location.href='@Url.Action("delete", "assignments", new { id = assignment.Id})'">Изтрий</button>
+                        </td>
                     </tr>
                 }
             </table>

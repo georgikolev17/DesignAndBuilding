@@ -8,7 +8,6 @@
         public int Id { get; set; }
 
         [Required]
-        [Range(0, int.MaxValue)]
         public string BidPrice { get; set; }
     }
 }
