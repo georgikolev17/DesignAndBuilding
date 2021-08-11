@@ -41,7 +41,7 @@
         {
             var building = await this.buildingsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
 
-            this.buildingsRepository.Delete(building);
+            building.IsDeleted = true;
 
             await this.buildingsRepository.SaveChangesAsync();
         }
@@ -86,6 +86,18 @@
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return building;
+        }
+
+        public async Task<bool> HasUserCreatedBuilding(string userId, int buildingId)
+        {
+            var building = await this.buildingsRepository.All().FirstOrDefaultAsync(x => x.Id == buildingId);
+
+            if (building == null)
+            {
+                return false;
+            }
+
+            return building.ArchitectId == userId;
         }
     }
 }

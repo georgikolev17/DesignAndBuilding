@@ -91,5 +91,56 @@
             };
             return this.View(buildingViewModel);
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
+            }
+
+            var building = await this.buildingsService.GetBuildingById(id);
+
+            var buildingViewModel = new BuildingInputModel()
+            {
+                BuildingType = building.BuildingType.ToString(),
+                Name = building.Name,
+                TotalBuildUpArea = building.TotalBuildUpArea,
+                Town = building.Town,
+            };
+
+            return this.View(buildingViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, BuildingInputModel viewModel)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира" });
+            }
+
+            await this.buildingsService.EditBuilding(id, viewModel.BuildingType, viewModel.TotalBuildUpArea, viewModel.Town, viewModel.Name);
+
+            return this.Redirect("/");
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го изтрие!" });
+            }
+
+            await this.buildingsService.DeleteBuilding(id);
+
+            return this.Redirect("/buildings/mybuildings");
+        }
     }
 }

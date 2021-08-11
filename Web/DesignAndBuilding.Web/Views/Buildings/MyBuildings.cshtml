@@ -9,10 +9,13 @@
         <th>Име</th>
         <th>РЗП</th>
         <th>Тип на сградата</th>
+        <th></th>
+        <th></th>
+        <th></th>
     </tr>
     @foreach (var building in Model)
     {
-        <tr onclick="window.location.href='@Url.Action("details", "buildings", new { id = building.Id})'" role="button">
+        <tr>
             <td>@building.Name</td>
             <td>@building.TotalBuildUpArea</td>
             @switch (building.BuildingType)
@@ -60,6 +63,17 @@
                     <td>Неизвестен</td>
                     break;
             }
+            <td>
+                <button onclick="window.location.href='@Url.Action("details", "buildings", new { id = building.Id})'" class="btn btn-info">Детайли</button>
+            </td>
+            <td>
+                <button onclick="window.location.href='@Url.Action("edit", "buildings", new { id = building.Id})'" class="btn btn-primary">Редактирай</button>
+            </td>
+            <td>
+                <button onclick="window.location.href='@Url.Action("delete", "buildings", new { id = building.Id})'" class="btn btn-danger">Изтрий</button>
+            </td>
+            <td></td>
+            <td></td>
         </tr>
     }
 </table>
