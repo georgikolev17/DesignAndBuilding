@@ -1,9 +1,8 @@
 ﻿namespace DesignAndBuilding.Tests
 {
-    using DesignAndBuilding.Data.Models;
-    using DesignAndBuilding.Services;
     using DesignAndBuilding.Tests.Mocks;
-    using DesignAndBuilding.Web;
+    using global::DesignAndBuilding.Data.Models;
+    using global::DesignAndBuilding.Web;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;

@@ -1,8 +1,7 @@
 ﻿namespace DesignAndBuilding.Tests.Mocks
 {
-    using DesignAndBuilding.Data;
-    using DesignAndBuilding.Data.Models;
-    using DesignAndBuilding.Services;
+    using DesignAndBuilding.Tests.Controllers;
+    using global::DesignAndBuilding.Data.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
@@ -40,10 +39,14 @@
             }
         public override async Task<ApplicationUser> GetUserAsync(ClaimsPrincipal principal)
         {
-            return new ApplicationUser()
+            var user = new ApplicationUser()
             {
                 DesignerType = DesignerType.ElectroEngineer,
             };
+
+            user.Id = ControllerConstants.UserId;
+
+            return user;
         }
     }
 }

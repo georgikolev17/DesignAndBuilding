@@ -1,6 +1,6 @@
 ﻿namespace DesignAndBuilding.Tests.Mocks
 {
-    using DesignAndBuilding.Services;
+    using global::DesignAndBuilding.Services;
     using Moq;
     using System.Collections.Generic;
 
