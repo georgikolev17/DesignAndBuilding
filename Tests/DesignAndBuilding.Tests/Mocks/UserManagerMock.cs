@@ -1,4 +1,4 @@
-﻿namespace DesignAndBuilding.Tests.Mocks
+﻿namespace Tests.DesignAndBuilding.Tests.Mocks
 {
     using DesignAndBuilding.Tests.Controllers;
     using global::DesignAndBuilding.Data.Models;
@@ -15,6 +15,21 @@
 
     public class UserManagerMock : UserManager<ApplicationUser>
     {
+        /*public static UserManager<ApplicationUser> Instance
+        {
+            *//*get
+            {
+                *//*var mock = new Mock<UserManager<ApplicationUser>>();
+                var db = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
+                var UserManager = new UserManager <ApplicationUser>(new UserStore<ApplicationUser, CustomRole, string, CustomUserLogin, CustomUserRole, CustomUserClaim>(new myDbContext()));*//*
+
+
+
+                mock.Setup(dtp => dtp.GetUserAsync(new ClaimsPrincipal())).ReturnsAsync(new ApplicationUser() { DesignerType = DesignerType.ElectroEngineer });
+
+                return mock.Object;*//*
+            }*/
+
             public UserManagerMock(IUserStore<ApplicationUser> store, IOptions<IdentityOptions> optionsAccessor,
              IPasswordHasher<ApplicationUser> passwordHasher, IEnumerable<IUserValidator<ApplicationUser>> userValidators,
               IEnumerable<IPasswordValidator<ApplicationUser>> passwordValidators, ILookupNormalizer keyNormalizer,
@@ -32,11 +47,6 @@
             user.Id = ControllerConstants.UserId;
 
             return user;
-        }
-
-        public override Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role)
-        {
-            return base.AddToRoleAsync(user, role);
         }
     }
 }

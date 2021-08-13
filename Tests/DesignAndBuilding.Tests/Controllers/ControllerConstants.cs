@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesignAndBuilding.Tests.Controllers
+namespace Tests.DesignAndBuilding.Tests.Controllers
 {
     public class ControllerConstants
     {
@@ -17,7 +17,5 @@ namespace DesignAndBuilding.Tests.Controllers
         public const string Description = "Test Description";
 
         public const string BuildingName = "TestBuilding";
-        
-        public const string Username = "TestUsername";
     }
 }

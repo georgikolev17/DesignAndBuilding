@@ -21,8 +21,6 @@
 
             services.ReplaceDbContext();
 
-            //services.ReplaceTransient<IAssignmentsService>(_ => AssignmentsServiceMock.Instance);
-            //services.ReplaceTransient<UserManager<ApplicationUser>>(_ => UserManagerMock.Instance);
             services.ReplaceSingleton<UserManager<ApplicationUser>, UserManagerMock>();
         }
     }
