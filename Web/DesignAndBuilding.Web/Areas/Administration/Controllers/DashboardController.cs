@@ -8,7 +8,11 @@
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [Area("Administration")]
-    public class AdministrationController : BaseController
+    public class DashboardController : BaseController
     {
+        public IActionResult Index()
+        {
+            return this.View();
+        }
     }
 }

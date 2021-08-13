@@ -1,6 +1,6 @@
 ﻿@using DesignAndBuilding.Common
 @using DesignAndBuilding.Web.ViewModels.Building;
-@using DesignAndBuilding.Data.Models; 
+@using DesignAndBuilding.Data.Models;
 @model BuildingInputModel
 @{
     this.ViewData["Title"] = "Create Building";
@@ -36,3 +36,7 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

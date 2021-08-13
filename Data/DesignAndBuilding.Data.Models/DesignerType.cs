@@ -8,5 +8,6 @@
         ElectroEngineer = 3,
         PlumbingEngineer = 4,
         HVACEngineer = 5,
+        Admin = 6,
     }
 }
