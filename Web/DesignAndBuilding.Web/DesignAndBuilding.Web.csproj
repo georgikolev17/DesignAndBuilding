@@ -42,4 +42,13 @@
     <ProjectReference Include="..\DesignAndBuilding.Web.Infrastructure\DesignAndBuilding.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\DesignAndBuilding.Web.ViewModels\DesignAndBuilding.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\lib\bootstrap\dist\css\bootstrap.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\bootstrap\dist\js\bootstrap.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

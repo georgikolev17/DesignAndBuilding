@@ -40,7 +40,7 @@
         {
             if (!this.ModelState.IsValid || assignment.EndDate < DateTime.UtcNow)
             {
-                return this.View();
+                return this.View(assignment);
             }
 
             await this.assignmentsService.CreateAssignmentAsync(assignment.Description, assignment.EndDate, assignment.DesignerType, assignment.BuildingId);
@@ -50,6 +50,11 @@
         public async Task<IActionResult> Details(int id)
         {
             var assignment = await this.assignmentsService.GetAssignmentById(id);
+
+            if (assignment == null)
+            {
+                return this.NotFound();
+            }
 
             return this.View(new AssignmentViewModel()
             {
@@ -81,14 +86,19 @@
             var user = await this.userManager.GetUserAsync(this.User);
             var assignment = await this.assignmentsService.GetAssignmentById(bidViewModel.Id);
 
+            if (assignment == null)
+            {
+                return this.NotFound();
+            }
+
             if (user.DesignerType != assignment.DesignerType)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Only {assignment.DesignerType}s can make bids for this assignment!" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Само {DisplayDesignertypeInBulgarian(assignment.DesignerType)}и могат да наддават за това задание!" });
             }
 
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Invalid bid" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Невалидно наддаване" });
             }
 
             await this.bidsService.CreateBidAsync(user.Id, bidViewModel.Id, decimal.Parse(bidViewModel.BidPrice));
@@ -106,19 +116,24 @@
             // All other users placed bids for this assignment will recieve this notification
             await this.notificationsService.AddNotificationAsync(usersToSendNotification, $"Има ново наддаване в {assignment.Building.Name} - {bidViewModel.BidPrice} лв.");
 
-            return this.RedirectToAction("Details", "Assignments");
+            return this.Redirect($"/assignments/details/{bidViewModel.Id}");
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            var assignment = await this.assignmentsService.GetAssignmentById(id);
+
+            if (assignment == null)
+            {
+                return this.NotFound();
+            }
+
             if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
             }
-
-            var assignment = await this.assignmentsService.GetAssignmentById(id);
 
             var assignmentViewModel = new AssignmentInputModel()
             {
@@ -158,6 +173,29 @@
             await this.assignmentsService.RemoveAssignment(id);
 
             return this.Redirect("/");
+        }
+
+        private static string DisplayDesignertypeInBulgarian(DesignerType designerType)
+        {
+            switch (designerType)
+            {
+                case DesignerType.Other:
+                    return "друг";
+                case DesignerType.Architect:
+                    return "архитект";
+                case DesignerType.BuildingConstructionEngineer:
+                    return "строителни конструктор";
+                case DesignerType.ElectroEngineer:
+                    return "електро инженер";
+                case DesignerType.PlumbingEngineer:
+                    return "ВиК инженер";
+                case DesignerType.HVACEngineer:
+                    return "ОВК инженер";
+                case DesignerType.Admin:
+                    return "админ";
+                default:
+                    return "друг";
+            }
         }
     }
 }

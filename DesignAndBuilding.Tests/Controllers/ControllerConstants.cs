@@ -19,5 +19,7 @@ namespace DesignAndBuilding.Tests.Controllers
         public const string BuildingName = "TestBuilding";
         
         public const string Username = "TestUsername";
+
+        public const string Architectid = "25";
     }
 }

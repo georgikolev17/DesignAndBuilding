@@ -73,11 +73,13 @@
 
         public async Task<Assignment> GetAssignmentById(int id)
         {
-            return await this.assignmentsRepository
+            var assignment = await this.assignmentsRepository
                 .All()
                 .Include(x => x.Bids)
                 .Include(x => x.Building)
                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            return assignment;
         }
 
         public List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId)
