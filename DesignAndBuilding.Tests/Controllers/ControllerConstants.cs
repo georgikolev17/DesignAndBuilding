@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DesignAndBuilding.Tests.Controllers
 {
-    public class ControllerConstants
+    public static class ControllerConstants
     {
         public const string UserFirstName = "TestFirstName";
 

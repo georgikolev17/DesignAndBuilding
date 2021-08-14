@@ -31,7 +31,7 @@
 
             if (user.DesignerType != DesignerType.Architect)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Only architects can create new buildings!" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават обекти!" });
             }
 
             return this.View();
@@ -42,14 +42,16 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            var id = this.userManager.GetUserId(this.User);
+
             if (!this.ModelState.IsValid)
             {
-                return this.View();
+                return this.View(buildingInputModel);
             }
 
             if (user.DesignerType != DesignerType.Architect)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Only architects can create new buildings!" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават обекти!" });
             }
 
             var userId = await this.userManager.GetUserIdAsync(await this.userManager.GetUserAsync(this.User));
@@ -65,7 +67,7 @@
 
             if (user.DesignerType != DesignerType.Architect)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Only architects can access this page!" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да достъпват тази страница!" });
             }
 
             return this.View(this.buildingsService.GetAllBuildingsOfCurrentUserById(user.Id));
@@ -74,6 +76,19 @@
         public async Task<IActionResult> Details(int id)
         {
             var building = await this.buildingsService.GetBuildingById(id);
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (building == null)
+            {
+                return this.NotFound();
+            }
+
+            if (building.ArchitectId != user.Id)
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да вижда детейлите му!" });
+            }
+
             var buildingViewModel = new BuildingDetailsViewModel()
             {
                 Id = id,

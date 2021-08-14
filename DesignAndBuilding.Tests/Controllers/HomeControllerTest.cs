@@ -1,20 +1,15 @@
 ﻿namespace DesignAndBuilding.Tests.Controllers
 {
     using Xunit;
-    using global::DesignAndBuilding.Web.Controllers;
+    using DesignAndBuilding.Web.Controllers;
     using MyTested.AspNetCore.Mvc;
-    using global::DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Data.Models;
     using System.Collections.Generic;
     using System.Linq;
-    using global::DesignAndBuilding.Web.ViewModels.Assignment;
-    using Moq;
-    using Microsoft.AspNetCore.Identity;
-    using DesignAndBuilding.Tests.Mocks;
-    using Microsoft.Extensions.Options;
+    using DesignAndBuilding.Web.ViewModels.Assignment;
     using System;
-    using Microsoft.Extensions.Logging;
-    using global::DesignAndBuilding.Web.ViewModels;
-    using global::DesignAndBuilding.Web.ViewModels.Notification;
+    using DesignAndBuilding.Web.ViewModels;
+    using DesignAndBuilding.Web.ViewModels.Notification;
 
     public class HomeControllerTest
     {
@@ -45,17 +40,22 @@
         public void IndexShouldReturnCorrectViewWithCoreectDataAndModelForLoggedUserAndShouldHaveAttributes(DesignerType designerType, int expectedAssignmentsCount)
         {
             MyController<HomeController>
-               .Instance()
+                .Instance()
                 .WithData(Get10Assignments(designerType))
-                .WithData(GetUser(DesignerType.Architect))
-               .Calling(c => c.Index())
-               .ShouldHave()
-               .ActionAttributes()
-               .AndAlso()
-               .ShouldReturn()
-               .View(view => view
-                   .WithModelOfType<EngineerAssignmentsViewModel>()
-                   .Passing(m => Assert.Equal(expectedAssignmentsCount, m.Assignments.Count)));
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .Calling(c => c.Index())
+                .ShouldHave()
+                .ActionAttributes()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<EngineerAssignmentsViewModel>()
+                    .Passing(m => Assert.Equal(expectedAssignmentsCount, m.Assignments.Count)));
         }
 
         [Fact]
@@ -77,7 +77,12 @@
             => MyController<HomeController>
                 .Instance()
                 .WithData(Get10AssignmentsWhereUserBid(userIdForbids))
-                .WithData(GetUser(DesignerType.Architect))
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
                 .Calling(c => c.MyBids())
                 .ShouldHave()
                 .ActionAttributes(c => c.RestrictingForAuthorizedRequests())
@@ -94,7 +99,12 @@
             => MyController<HomeController>
                 .Instance()
                 .WithData(Get10NotificationsForUser(userIdForNotifications))
-                .WithData(GetUser(DesignerType.Architect))
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
                 .Calling(c => c.Notifications())
                 .ShouldHave()
                 .ActionAttributes(c => c.RestrictingForAuthorizedRequests())
@@ -126,16 +136,11 @@
             return assignments;
         }
 
-        private static ApplicationUser GetUser(DesignerType designerType, string email = "admin@dab.com")
+        private static ApplicationUser GetUser(DesignerType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
         {
-            return new ApplicationUser()
-            {
-                Id = ControllerConstants.UserId,
-                FirstName = ControllerConstants.UserFirstName,
-                LastName = ControllerConstants.UserLastName,
-                DesignerType = designerType,
-                Email = email,
-            };
+            var user = new ApplicationUser() { DesignerType = designerType, Id = userId, UserName = username, };
+
+            return user;
         }
 
         private static List<Assignment> Get10AssignmentsWhereUserBid(string userId)

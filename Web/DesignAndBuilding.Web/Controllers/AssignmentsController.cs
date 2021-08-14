@@ -151,6 +151,18 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            var assignment = await this.assignmentsService.GetAssignmentById(id);
+
+            if (assignment == null)
+            {
+                return this.NotFound();
+            }
+
+            if (!this.ModelState.IsValid || viewModel.EndDate < DateTime.Now)
+            {
+                return this.View(viewModel);
+            }
+
             if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
@@ -164,6 +176,11 @@
         public async Task<IActionResult> Delete(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.assignmentsService.GetAssignmentById(id) == null)
+            {
+                return this.NotFound();
+            }
 
             if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
             {

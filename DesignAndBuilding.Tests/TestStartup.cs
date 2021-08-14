@@ -1,6 +1,5 @@
 ﻿namespace DesignAndBuilding.Tests
 {
-    using DesignAndBuilding.Tests.Mocks;
     using global::DesignAndBuilding.Data.Models;
     using global::DesignAndBuilding.Web;
     using Microsoft.AspNetCore.Identity;
@@ -20,8 +19,6 @@
             base.ConfigureServices(services);
 
             services.ReplaceDbContext();
-
-            services.ReplaceSingleton<UserManager<ApplicationUser>, UserManagerMock>();
         }
     }
 }

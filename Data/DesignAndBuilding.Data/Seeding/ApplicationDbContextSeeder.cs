@@ -24,17 +24,11 @@
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(ApplicationDbContextSeeder));
 
-            var um = serviceProvider.GetService<UserManager<ApplicationUser>>().GetType();
-
             var seeders = new List<ISeeder>
                           {
                               new RolesSeeder(),
+                              new AdministratorSeeder(),
                           };
-
-            if (um == typeof(UserManager<ApplicationUser>))
-            {
-                seeders.Add(new AdministratorSeeder());
-            }
 
             foreach (var seeder in seeders)
             {

@@ -1,18 +1,16 @@
-﻿using DesignAndBuilding.Data.Models;
-using DesignAndBuilding.Web.Controllers;
-using DesignAndBuilding.Web.ViewModels;
-using DesignAndBuilding.Web.ViewModels.Assignment;
-using DesignAndBuilding.Web.ViewModels.Bid;
-using MyTested.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-
-namespace DesignAndBuilding.Tests.Controllers
+﻿namespace DesignAndBuilding.Tests.Controllers
 {
+    using DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Web.Controllers;
+    using DesignAndBuilding.Web.ViewModels;
+    using DesignAndBuilding.Web.ViewModels.Assignment;
+    using DesignAndBuilding.Web.ViewModels.Bid;
+    using MyTested.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Xunit;
+
     public class AssignmentsControllerTest
     {
         [Fact]
@@ -111,6 +109,12 @@ namespace DesignAndBuilding.Tests.Controllers
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment(1, DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
                 .Calling(c => c.Details(new PlaceBidViewModel() { Id = 1, BidPrice = null }))
                 .ShouldHave()
                 .InvalidModelState()
@@ -123,6 +127,12 @@ namespace DesignAndBuilding.Tests.Controllers
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment(1))
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
                 .Calling(c => c.Details(new PlaceBidViewModel() { Id = 1, BidPrice = null }))
                 .ShouldHave()
                 .InvalidModelState()
@@ -136,6 +146,12 @@ namespace DesignAndBuilding.Tests.Controllers
                 .Instance()
                 .WithData(GetAssignment(designerType: DesignerType.ElectroEngineer))
                 .WithData(Get10UsersBidForAssignment())
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
                 .Calling(c => c.Details(new PlaceBidViewModel() { BidPrice = "1", Id = 1 }))
                 .ShouldHave()
                 .ValidModelState()
@@ -168,6 +184,12 @@ namespace DesignAndBuilding.Tests.Controllers
         public void EditGetSHouldReturnErrorViewWithCorrectExceptionMessageIfUserHasntCreatedAssignment()
             => MyController<AssignmentsController>
                 .Instance()
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
                 .WithData(GetAssignment())
                 .Calling(c => c.Edit(1))
                 .ShouldReturn()
@@ -177,22 +199,17 @@ namespace DesignAndBuilding.Tests.Controllers
         public void EditGetShouldReturnViewWithCorrectModelAndDataIfUserHasCreatedAssignment()
             => MyController<AssignmentsController>
                 .Instance()
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
                 .WithData(GetAssignment(architectId: ControllerConstants.UserId))
                 .Calling(c => c.Edit(1))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<AssignmentInputModel>(model => model.DesignerType == DesignerType.Other));
-                
-
-        public static Assignment GetAssignment(int id = 1, DesignerType designerType = DesignerType.Other, string architectId = ControllerConstants.Architectid)
-        {
-            return new Assignment() 
-            { 
-                Id = id, 
-                Building = new Building() { ArchitectId = architectId },
-                DesignerType = designerType,
-            };
-        }
 
         //Edit - POST
 
@@ -203,7 +220,94 @@ namespace DesignAndBuilding.Tests.Controllers
                 .ShouldHave()
                 .ActionAttributes(a => a.RestrictingForHttpMethod(HttpMethod.Post));
 
-        public static IEnumerable<Bid> Get10UsersBidForAssignment(int assignmentId = 1)
+        [Fact]
+        public void EditPostShouldReturnErrorViewWithCorrectExceptionMessageIfUserHasntCreatedAssignment()
+            => MyController<AssignmentsController>
+                .Instance()
+                .WithData(GetAssignment())
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .Calling(c => c.Edit(1, new AssignmentInputModel() { Description = "test description", EndDate = DateTime.Now + TimeSpan.FromDays(5), BuildingId = 1, DesignerType = DesignerType.Other }))
+                .ShouldReturn()
+                .View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
+
+        [Fact]
+        public void InvalidAssignmentIdShouldReturnNotFoundError()
+            => MyController<AssignmentsController>
+                .Calling(c => c.Edit(10, With.Empty<AssignmentInputModel>()))
+                .ShouldReturn()
+                .NotFound();
+
+        [Fact]
+        public void EditPostWithValidInputModelAndIdShouldEditAssignment()
+            => MyController<AssignmentsController>
+                .Instance()
+                .WithData(GetAssignment(architectId: "1"))
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .Calling(c => c.Edit(1, new AssignmentInputModel() { BuildingId = 1, Description = "Changed description", DesignerType = DesignerType.Admin, EndDate = DateTime.Now + TimeSpan.FromDays(5) }))
+                .ShouldHave()
+                .Data(data => data.WithSet<Assignment>(set =>
+                {
+                    Assert.NotNull(set.SingleOrDefault(a => a.Description == "Changed description" && a.BuildingId == 1 && a.DesignerType == DesignerType.Admin));
+                }))
+                .AndAlso()
+                .ShouldReturn()
+                .Redirect("/");
+
+        [Fact]
+        public void DeleteShouldReturnNotFoundWhenIdIsInvalid()
+            => MyController<AssignmentsController>
+                .Calling(c => c.Delete(1))
+                .ShouldReturn()
+                .NotFound();
+
+        [Fact]
+        public void DeleteShouldReturnErrorViewWithCorrectModelAndExceptionWhenUserHasntCreatedAssignment()
+            => MyController<AssignmentsController>
+                .Instance()
+                .WithData(GetAssignment())
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .Calling(c => c.Delete(1))
+                .ShouldReturn()
+                .View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го изтрие!" });
+
+        [Fact]
+        public void DeleteShouldDeleteAssignmentAndRedirectToHomePageWhenUserHasCreatedAssignment()
+            => MyController<AssignmentsController>
+                .Instance()
+                .WithData(GetAssignment(architectId: ControllerConstants.UserId))
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .Calling(c => c.Delete(1))
+                .ShouldHave()
+                .Data(data => data
+                    .WithSet<Assignment>(set =>
+                    {
+                        Assert.Equal(0, set.Count());
+                    }))
+                .AndAlso()
+                .ShouldReturn()
+                .Redirect("/");
+
+        private static IEnumerable<Bid> Get10UsersBidForAssignment(int assignmentId = 1)
         {
             var bids = new List<Bid>();
 
@@ -220,14 +324,19 @@ namespace DesignAndBuilding.Tests.Controllers
             return bids;
         }
 
-        public static ApplicationUser GetUser(string id = ControllerConstants.UserId, DesignerType designerType = DesignerType.ElectroEngineer, string username = ControllerConstants.Username)
+        private static Assignment GetAssignment(int id = 1, DesignerType designerType = DesignerType.Other, string architectId = ControllerConstants.Architectid)
         {
-            var user = new ApplicationUser()
+            return new Assignment()
             {
+                Id = id,
+                Building = new Building() { ArchitectId = architectId },
                 DesignerType = designerType,
-                UserName = username,
             };
-            user.Id = id;
+        }
+
+        private static ApplicationUser GetUser(DesignerType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
+        {
+            var user = new ApplicationUser() { DesignerType = designerType, Id = userId, UserName = username, };
 
             return user;
         }
