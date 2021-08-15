@@ -48,6 +48,11 @@
             return true;
         }
 
+        public bool DoesNotificationExists(int notificationId)
+        {
+            return this.notificationsRepository.All().Any(x => x.Id == notificationId);
+        }
+
         public IEnumerable<Notification> GetNotificationsForUser(string userId)
         {
             return this.notificationsRepository.All().Where(n => n.UserId == userId).OrderByDescending(n => n.CreatedOn);

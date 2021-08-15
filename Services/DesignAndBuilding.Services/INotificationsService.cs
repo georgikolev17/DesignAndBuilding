@@ -16,5 +16,7 @@
         Task<bool> MarkNotificationAsRead(int notificationId, string userId);
 
         bool IsNotificationUsers(string userId, int notificationId);
+
+        bool DoesNotificationExists(int notificationId);
     }
 }

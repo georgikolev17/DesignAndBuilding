@@ -1,9 +1,10 @@
 ﻿namespace DesignAndBuilding.Web.Controllers.Api
 {
+    using System.Threading.Tasks;
+
     using DesignAndBuilding.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
 
     [ApiController]
     [Route("api/notifications")]
@@ -22,6 +23,11 @@
         {
             int notificationIdNumber = int.Parse(notificationId);
 
+            if (!this.notificationsService.DoesNotificationExists(notificationIdNumber))
+            {
+                return this.NotFound();
+            }
+
             if (await this.notificationsService.DeleteNotification(notificationIdNumber, userId))
             {
                 return this.Json(true);
@@ -34,6 +40,11 @@
         public async Task<IActionResult> MarkAsRead(string notificationId, string userId)
         {
             int notificationIdNumber = int.Parse(notificationId);
+
+            if (!this.notificationsService.DoesNotificationExists(notificationIdNumber))
+            {
+                return this.NotFound();
+            }
 
             if (await this.notificationsService.MarkNotificationAsRead(notificationIdNumber, userId))
             {
