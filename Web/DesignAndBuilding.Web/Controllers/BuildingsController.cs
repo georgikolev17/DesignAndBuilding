@@ -111,12 +111,17 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
+            var building = await this.buildingsService.GetBuildingById(id);
+
+            if (building == null)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
+                return this.NotFound(0);
             }
 
-            var building = await this.buildingsService.GetBuildingById(id);
+            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира!" });
+            }
 
             var buildingViewModel = new BuildingInputModel()
             {
@@ -134,19 +139,29 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            if (await this.buildingsService.GetBuildingById(id) == null)
+            {
+                return this.NotFound();
+            }
+
             if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира!" });
             }
 
             await this.buildingsService.EditBuilding(id, viewModel.BuildingType, viewModel.TotalBuildUpArea, viewModel.Town, viewModel.Name);
 
-            return this.Redirect("/");
+            return this.Redirect("/buildings/mybuildings");
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.buildingsService.GetBuildingById(id) == null)
+            {
+                return this.NotFound();
+            }
 
             if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
             {

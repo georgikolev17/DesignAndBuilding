@@ -188,6 +188,150 @@
                     .WithModelOfType<BuildingDetailsViewModel>()
                     .Passing(x => x.Name == "Test name" && x.TotalBuildUpArea == 100 && x.BuildingType == BuildingType.Other && x.Assignments.Count() == 0));
 
+        // Edit - GET
+        [Fact]
+        public void EditGetShouldReturnNotFoundWhenIdIsInvalid()
+            => MyController<BuildingsController>
+                .Instance()
+                .Calling(c => c.Edit(1))
+                .ShouldReturn()
+                .NotFound();
+
+        [Fact]
+        public void EditGetShouldReturnErrorViewWithCorrectModelAndErrorMessageWhenUserHasntCreatedBuilding()
+            => MyController<BuildingsController>
+                .Instance()
+                .WithData(Get10BuildingsForArchitect("2"))
+                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .Calling(c => c.Edit(1))
+                .ShouldReturn()
+                .View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира!" });
+
+
+        [Fact]
+        public void EditGetShouldReturnViewWithCorrectModelAndData()
+            => MyController<BuildingsController>
+                .Instance()
+                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .WithData(Get1BuildingDetails())
+                .Calling(c => c.Edit(1))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<BuildingInputModel>()
+                    .Passing(x => x.Name == "Test name" && x.Town == "Test town" && x.BuildingType == BuildingType.Other.ToString()));
+
+        // Edit - POST
+
+        [Fact]
+        public void EditPostShouldHavePostAttribute()
+            => MyController<BuildingsController>
+                .Calling(c => c.Edit(1, With.Default<BuildingInputModel>()))
+                .ShouldHave()
+                .ActionAttributes(a => a.RestrictingForHttpMethod(HttpMethod.Post));
+
+        [Fact]
+        public void EditPostShouldReturnNotFoundWhenIdIsInvalid()
+            => MyController<BuildingsController>
+                .Instance()
+                .Calling(c => c.Edit(1, With.Empty<BuildingInputModel>()))
+                .ShouldReturn()
+                .NotFound();
+
+        [Fact]
+        public void EditPostShouldReturnErrorViewWithCorrectModelAndErrorMessageWhenUserHasntCreatedBuilding()
+            => MyController<BuildingsController>
+                .Instance()
+                .WithData(Get10BuildingsForArchitect("2"))
+                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .Calling(c => c.Edit(1, With.Default<BuildingInputModel>()))
+                .ShouldReturn()
+                .View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира!" });
+
+        [Fact]
+        public void EditPostShouldEditBuildingAndRedirectToMyBuildings()
+            => MyController<BuildingsController>
+                .Instance()
+                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .WithData(Get1BuildingDetails())
+                .Calling(c => c.Edit(1, new BuildingInputModel() { BuildingType = BuildingType.Hotel.ToString(), Name = "Changed name", TotalBuildUpArea = 150, Town = "Changed town" }))
+                .ShouldHave()
+                .Data(data => data
+                    .WithSet<Building>(set =>
+                    {
+                        Assert.NotNull(set.SingleOrDefault(b => b.Name == "Changed name" && b.TotalBuildUpArea == 150));
+                    }))
+                .AndAlso()
+                .ShouldReturn()
+                .Redirect("/buildings/mybuildings");
+
+
+        //Delete
+
+        [Fact]
+        public void DeleteShouldReturnNotFoundWhenIdIsInvalid()
+            => MyController<BuildingsController>
+                .Instance()
+                .Calling(c => c.Delete(1))
+                .ShouldReturn()
+                .NotFound();
+
+        [Fact]
+        public void DeleteShouldReturnErrorViewWithCorrectModelAndErrorMessageWhenUserHasntCreatedBuilding()
+            => MyController<BuildingsController>
+                .Instance()
+                .WithData(Get10BuildingsForArchitect("2"))
+                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .Calling(c => c.Delete(1))
+                .ShouldReturn()
+                .View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го изтрие!" });
+
+        [Fact]
+        public void DeleteShouldDeleteBuildingAndRedirectToMyBuildings()
+            => MyController<BuildingsController>
+                .Instance()
+                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
+                .WithData(Get1BuildingDetails())
+                .Calling(c => c.Delete(1))
+                .ShouldHave()
+                .Data(data => data
+                    .WithSet<Building>(set =>
+                    {
+                        Assert.Equal(0, set.Count());
+                    }))
+                .AndAlso()
+                .ShouldReturn()
+                .Redirect("/buildings/mybuildings");
+
         //Static methods
 
         private static ApplicationUser GetUser(DesignerType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
