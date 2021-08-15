@@ -60,27 +60,39 @@
             <p><b>Краен срок: </b>@Model.EndDate</p>
             <p><b>Дата: </b>@Model.CreatedOn</p>
         </div>
-        <div class="col-4">
-            <h3 class="text-center">Наддавания</h3>
+        <div class="col-5">
+            <h3 class="text-center">Оферти</h3>
             <table class="table table-hover text-center">
-                    @foreach (var bid in Model.Bids)
-                    { i++;
-                        <tr>
-                            <td>@i</td>
-                            <td>@bid.Price лв.</td>
-                            <td>@bid.TimePlaced</td>
-                        </tr>
+                @foreach (var bid in Model.Bids)
+                {
+                    i++;
+                <tr>
+                    <td>@i</td>
+                    @if (Model.IsFinished)
+                    {
+                        <td>@bid.UserFullName</td>
                     }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td>@bid.Price лв.</td>
+                    <td>@bid.TimePlaced</td>
+                </tr>
+                }
             </table>
-            <form method="post">
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="@Model.BidPrice"></label>
-                    <input asp-for="@Model.BidPrice" class="form-control" />
-                    <span asp-validation-for="@Model.BidPrice" class="text-danger"></span>
-                </div>
-                <button type="submit" class="btn btn-primary">Place bid</button>
-            </form>
+            @if (!Model.IsFinished && !Model.HasUserCreatedAssignment)
+            {
+                <form method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="@Model.BidPrice"></label>
+                        <input asp-for="@Model.BidPrice" class="form-control" />
+                        <span asp-validation-for="@Model.BidPrice" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Place bid</button>
+                </form>
+            }
         </div>
     </div>
 </div>

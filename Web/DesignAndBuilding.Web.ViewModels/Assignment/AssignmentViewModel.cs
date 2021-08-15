@@ -30,5 +30,9 @@
         public virtual ICollection<AssignmentBidViewModel> Bids { get; set; }
 
         public string BidPrice { get; set; }
+
+        public bool IsFinished { get; set; }
+
+        public bool HasUserCreatedAssignment { get; set; }
     }
 }

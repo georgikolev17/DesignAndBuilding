@@ -76,6 +76,7 @@
             var assignment = await this.assignmentsRepository
                 .All()
                 .Include(x => x.Bids)
+                .ThenInclude(x => x.Designer)
                 .Include(x => x.Building)
                 .FirstOrDefaultAsync(x => x.Id == id);
 

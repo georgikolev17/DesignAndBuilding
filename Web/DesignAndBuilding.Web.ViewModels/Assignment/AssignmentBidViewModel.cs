@@ -10,5 +10,8 @@
 
         [Required]
         public DateTime TimePlaced { get; set; }
+
+        [Required]
+        public string UserFullName { get; set; }
     }
 }

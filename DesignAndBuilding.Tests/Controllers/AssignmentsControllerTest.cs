@@ -83,6 +83,12 @@
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment(1))
+                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithUser(user =>
+                {
+                    user.WithIdentifier(ControllerConstants.UserId);
+                    user.WithUsername(ControllerConstants.Username);
+                })
                 .Calling(c => c.Details(1))
                 .ShouldReturn()
                 .View(view => view

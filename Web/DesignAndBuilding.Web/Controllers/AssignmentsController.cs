@@ -50,6 +50,7 @@
         public async Task<IActionResult> Details(int id)
         {
             var assignment = await this.assignmentsService.GetAssignmentById(id);
+            var user = await this.userManager.GetUserAsync(this.User);
 
             if (assignment == null)
             {
@@ -62,6 +63,8 @@
                 Description = assignment.Description,
                 DesignerType = assignment.DesignerType,
                 EndDate = assignment.EndDate,
+                IsFinished = assignment.IsFinished,
+                HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id),
                 Building = new AssignmentBuildingViewModel()
                 {
                     TotalBuildUpArea = assignment.Building.TotalBuildUpArea,
@@ -73,6 +76,7 @@
                     {
                         Price = x.Price,
                         TimePlaced = x.TimePlaced,
+                        UserFullName = x.Designer.FirstName + " " + x.Designer.LastName,
                     })
                     .OrderBy(x => x.Price)
                     .ToList(),
