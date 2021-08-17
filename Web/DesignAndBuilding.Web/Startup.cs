@@ -56,6 +56,8 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
+            services.AddMemoryCache();
+
             services.AddControllersWithViews(
                 options =>
                     {

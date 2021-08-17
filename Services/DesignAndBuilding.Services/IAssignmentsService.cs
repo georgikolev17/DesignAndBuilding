@@ -23,5 +23,7 @@
         bool HasUserCreatedAssignment(string userId, int assignmentId);
 
         Task EditAssignment(DesignerType designerType, string description, DateTime endDate, int id);
+
+        int GetAssignmentsCount();
     }
 }

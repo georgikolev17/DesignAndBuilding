@@ -28,5 +28,9 @@
         public string ArchitectName { get; set; }
 
         public bool UserPlacedBid { get; set; }
+
+        public decimal? UserBestBid { get; set; }
+
+        public decimal? BestBid { get; set; }
     }
 }

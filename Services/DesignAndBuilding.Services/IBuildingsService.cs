@@ -18,5 +18,7 @@
         Task EditBuilding(int id, string buildingType, decimal totalBuildUpArea, string town, string name);
 
         Task<bool> HasUserCreatedBuilding(string userId, int buildingId);
+
+        int GetBuildingsCount();
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace DesignAndBuilding.Web.Controllers
 {
+    using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
@@ -36,9 +37,8 @@
             if (user != null && user.DesignerType != DesignerType.Architect)
             {
                 var userBids = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id);
-                var activeAssignments = this.assignmentsService
+                var assignments = this.assignmentsService
                     .GetAllAssignmentsForDesignerType(user.DesignerType)
-                    .Where(x => !x.IsFinished)
                     .Select(x => new BuildingDetailsAssignmentViewModel
                     {
                         BuildingName = x.Building.Name,
@@ -49,22 +49,11 @@
                         EndDate = x.EndDate,
                         Id = x.Id,
                         UserPlacedBid = userBids.Contains(x),
+                        BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault()?.Price,
+                        UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault()?.Price,
                     }).ToList();
-
-                var finishedAssignments = this.assignmentsService
-                    .GetAllAssignmentsForDesignerType(user.DesignerType)
-                    .Where(x => x.IsFinished)
-                    .Select(x => new BuildingDetailsAssignmentViewModel
-                    {
-                        BuildingName = x.Building.Name,
-                        CreatedOn = x.CreatedOn,
-                        ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
-                        Description = x.Description,
-                        DesignerType = x.DesignerType,
-                        EndDate = x.EndDate,
-                        Id = x.Id,
-                        UserPlacedBid = userBids.Contains(x),
-                    }).ToList();
+                var activeAssignments = assignments.Where(x => x.EndDate > DateTime.Now).ToList();
+                var finishedAssignments = assignments.Where(x => x.EndDate <= DateTime.Now).ToList();
 
                 var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
                 {
@@ -108,10 +97,17 @@
                         DesignerType = x.DesignerType,
                         EndDate = x.EndDate,
                         Id = x.Id,
+                        BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
+                        UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault().Price,
                     }).ToList();
+
+            var activeAssignments = assignments.Where(x => x.EndDate > DateTime.Now).ToList();
+            var finishedAssignments = assignments.Where(x => x.EndDate <= DateTime.Now).ToList();
+
             var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
             {
-                ActiveAssignments = assignments,
+                ActiveAssignments = activeAssignments,
+                FinishedAssignments = finishedAssignments,
                 DesignerType = user.DesignerType,
             };
             return this.View(engineerAssignmentsViewModel);

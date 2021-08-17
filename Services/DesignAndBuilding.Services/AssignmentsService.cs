@@ -53,6 +53,7 @@
             var assignments = this.assignmentsRepository
                 .All()
                 .Include(x => x.Building)
+                .Include(x => x.Bids)
                 .Where(x => x.DesignerType == designerType)
                 .OrderBy(x => x.EndDate)
                 .ToList();
@@ -83,12 +84,18 @@
             return assignment;
         }
 
+        public int GetAssignmentsCount()
+        {
+            return this.assignmentsRepository.All().Count();
+        }
+
         public List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId)
         {
             var assignments = this.
                 assignmentsRepository.All()
                 .Where(x => x.Bids.Any(b => b.DesignerId == userId))
                 .Include(x => x.Building)
+                .Include(x => x.Bids)
                 .ToList();
 
             return assignments;

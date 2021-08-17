@@ -88,6 +88,11 @@
             return building;
         }
 
+        public int GetBuildingsCount()
+        {
+            return this.buildingsRepository.All().Count();
+        }
+
         public async Task<bool> HasUserCreatedBuilding(string userId, int buildingId)
         {
             var building = await this.buildingsRepository.All().FirstOrDefaultAsync(x => x.Id == buildingId);

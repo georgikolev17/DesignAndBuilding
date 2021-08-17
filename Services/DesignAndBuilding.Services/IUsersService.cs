@@ -5,5 +5,7 @@
     public interface IUsersService
     {
         ApplicationUser GetUserById(string id);
+
+        int GetUsersCount();
     }
 }
