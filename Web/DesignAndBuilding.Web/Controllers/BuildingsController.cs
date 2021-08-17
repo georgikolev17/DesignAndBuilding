@@ -2,7 +2,7 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-
+    using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
     using DesignAndBuilding.Web.ViewModels;
@@ -84,7 +84,7 @@
                 return this.NotFound();
             }
 
-            if (building.ArchitectId != user.Id)
+            if (building.ArchitectId != user.Id && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да вижда детейлите му!" });
             }
@@ -118,7 +118,7 @@
                 return this.NotFound(0);
             }
 
-            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
+            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира!" });
             }
@@ -144,7 +144,7 @@
                 return this.NotFound();
             }
 
-            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
+            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира!" });
             }
@@ -163,7 +163,7 @@
                 return this.NotFound();
             }
 
-            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id))
+            if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го изтрие!" });
             }

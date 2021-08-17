@@ -1,0 +1,82 @@
+﻿@using DesignAndBuilding.Web.ViewModels.Building
+@model ICollection<MyBuildingsViewModel>
+
+@{
+    this.ViewData["Title"] = "Всички обекти";
+}
+
+<div id="alert"></div>
+<h1>@this.ViewData["Title"]</h1>
+<table class="table table-hover">
+    <tr class="table-info">
+        <th>Име</th>
+        <th>РЗП</th>
+        <th>Тип на сградата</th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var building in Model)
+    {
+        <tr>
+            <td>@building.Name</td>
+            <td>@building.TotalBuildUpArea</td>
+            @switch (building.BuildingType)
+            {
+                case DesignAndBuilding.Data.Models.BuildingType.Other:
+                    <td>Друг</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.Hotel:
+                    <td>Хотел</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.Kindergarten:
+                    <td>Детска градина</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.SingleFamilyHouse:
+                    <td>Еднофамилна къща</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.MultiFamiyHouse:
+                    <td>Многофамилна къща</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.Hospital:
+                    <td>Болница</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.Factory:
+                    <td>Производствено предприятие</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.AdministrationBuilding:
+                    <td>Административна сграда</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.School:
+                    <td>Училище</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.University:
+                    <td>Университет</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.ComercialBuilding:
+                    <td>Търговска сграда</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.SportBuilding:
+                    <td>Спортна сграда</td>
+                    break;
+                case DesignAndBuilding.Data.Models.BuildingType.ArtAndCultureBuilding:
+                    <td>Сграда за изкуство и култура</td>
+                    break;
+                default:
+                    <td>Неизвестен</td>
+                    break;
+            }
+            <td>
+                <a href="/buildings/details/@building.Id" class="btn btn-info">Детайли</a>
+            </td>
+            <td>
+                <a href="/buildings/edit/@building.Id" class="btn btn-primary">Редактирай</a>
+            </td>
+            <td>
+                <a href="/buildings/delete/@building.Id" class="btn btn-danger">Изтрий</a>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    }
+</table>

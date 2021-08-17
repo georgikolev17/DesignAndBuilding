@@ -5,7 +5,7 @@
     this.ViewData["Title"] = "Детайли на заданието";
 }
 <div id="alert"></div>
-<h1>@this.ViewData["Title"]</h1>
+<h3 class="text-center">@this.ViewData["Title"]</h3>
 <div class="container align-center">
     <div class="row h-100 d-flex justify-content-around">
         <div class="col-3 border my-auto table-info">
@@ -59,28 +59,59 @@
             }
             <h4>Задание</h4>
             <p><b>Описание: </b>@Model.Description</p>
-            <p><b>Специалност: </b>@Model.DesignerType</p>
+            @switch (Model.DesignerType)
+            {
+                case DesignAndBuilding.Data.Models.DesignerType.Architect:
+                    <p><b>Специалност: </b>Архитектура</p>
+                    break;
+                case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
+                    <p><b>Специалност: </b>Електро</p>
+                    break;
+                case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
+                    <p><b>Специалност: </b>Строителни конструкции</p>
+                    break;
+                case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
+                    <p><b>Специалност: </b>ВиК</p>
+                    break;
+                case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
+                    <p><b>Специалност: </b>ОВК</p>
+                    break;
+                default:
+                    <p><b>Специалност: </b>Друга</p>
+                    break;
+            }
             <p><b>Краен срок: </b>@Model.EndDate</p>
             <p><b>Дата: </b>@Model.CreatedOn</p>
         </div>
-        <div class="col-5">
-            <h3 class="text-center">Оферти</h3>
+        <div class="col-8">
+            <h4 class="text-center">Оферти</h4>
             <table class="table table-hover text-center">
                 @foreach (var bid in Model.Bids)
                 {
                     i++;
                 <tr>
                     <td>@i</td>
-                    @if (Model.IsFinished)
+                    @if (Model.IsFinished && Model.HasUserCreatedAssignment)
                     {
                         <td>@bid.UserFullName</td>
+                        <td>@bid.PhoneNumber</td>
+                        <td>@bid.Email</td>
                     }
                     else
                     {
                         <td></td>
+                        <td></td>
+                        <td></td>
                     }
                     <td>@bid.Price лв.</td>
-                    <td>@bid.TimePlaced</td>
+                    @if (Model.IsFinished && Model.HasUserCreatedAssignment)
+                    {
+                        <td></td>
+                    }
+                    else
+                    {
+                        <td>@bid.TimePlaced</td>
+                    }
                 </tr>
                 }
             </table>
@@ -93,7 +124,7 @@
                         <input asp-for="@Model.BidPrice" class="form-control" />
                         <span asp-validation-for="@Model.BidPrice" class="text-danger"></span>
                     </div>
-                    <button type="submit" class="btn btn-primary">Place bid</button>
+                    <button type="submit" class="btn btn-primary">Предложи цена</button>
                 </form>
             }
         </div>

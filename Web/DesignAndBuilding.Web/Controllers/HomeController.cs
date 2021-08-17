@@ -4,7 +4,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
     using DesignAndBuilding.Web.ViewModels;
@@ -34,7 +34,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (user != null && user.DesignerType != DesignerType.Architect)
+            if (user != null && user.DesignerType != DesignerType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var userBids = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id);
                 var assignments = this.assignmentsService

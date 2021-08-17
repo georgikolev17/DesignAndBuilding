@@ -1,11 +1,30 @@
 ﻿@using DesignAndBuilding.Common
+@using DesignAndBuilding.Data.Models
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> userManager;
 @{
     this.ViewData["Title"] = "Начало";
+    ApplicationUser user = await userManager.GetUserAsync(this.User);
 }
 <div id="alert"></div>
 <div class="text-center" id="container">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    
+    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+    {
+        <div class="card-body text-justify col-7">
+            Добре дошли в администраторския панел на платформата. Чрез менютата <strong>Всички обекти</strong> и <strong>Admin</strong> може да следите и контролирате данните в приложението.
+        </div>
+    }
+    @if (user != null && user.DesignerType == DesignerType.Architect)
+    {
+        <div>
+            Добре дошли, архитекти!
+        </div>
+    }
+    else
+    {
+        <div>
+            Не знам
+        </div>
+    }
 
 </div>

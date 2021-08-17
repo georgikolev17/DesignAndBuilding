@@ -63,6 +63,13 @@
             await this.buildingsRepository.SaveChangesAsync();
         }
 
+        public async Task<ICollection<Building>> GetAllBuildings()
+        {
+            var buildings = await this.buildingsRepository.All().ToListAsync();
+
+            return buildings;
+        }
+
         public IEnumerable<MyBuildingsViewModel> GetAllBuildingsOfCurrentUserById(string id)
         {
             var buildings = this.buildingsRepository.All()

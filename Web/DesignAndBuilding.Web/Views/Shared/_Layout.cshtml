@@ -41,10 +41,16 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="buildings" asp-action="MyBuildings">Моите обекти</a>
                             </li>
                         }
-                        @if (user != null && user.DesignerType != DesignerType.Architect)
+                        @if (user != null && user.DesignerType != DesignerType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="mybids">Моите наддавания</a>
+                            </li>
+                        }
+                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="administration" asp-controller="dashboard" asp-action="allbuildings">Всички обекти</a>
                             </li>
                         }
                         <li class="nav-item">

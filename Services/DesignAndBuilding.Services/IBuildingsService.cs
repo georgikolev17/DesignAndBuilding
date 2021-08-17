@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Web.ViewModels.Building;
 
@@ -20,5 +21,7 @@
         Task<bool> HasUserCreatedBuilding(string userId, int buildingId);
 
         int GetBuildingsCount();
+
+        Task<ICollection<Building>> GetAllBuildings();
     }
 }

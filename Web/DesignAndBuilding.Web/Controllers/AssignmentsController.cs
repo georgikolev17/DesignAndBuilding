@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
     using DesignAndBuilding.Web.ViewModels;
@@ -77,6 +78,8 @@
                         Price = x.Price,
                         TimePlaced = x.TimePlaced,
                         UserFullName = x.Designer.FirstName + " " + x.Designer.LastName,
+                        PhoneNumber = x.Designer.PhoneNumber,
+                        Email = x.Designer.Email,
                     })
                     .OrderBy(x => x.Price)
                     .ToList(),
@@ -134,7 +137,7 @@
                 return this.NotFound();
             }
 
-            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
+            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
             }
@@ -167,7 +170,7 @@
                 return this.View(viewModel);
             }
 
-            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
+            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
             }
@@ -186,7 +189,7 @@
                 return this.NotFound();
             }
 
-            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id))
+            if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го изтрие!" });
             }
