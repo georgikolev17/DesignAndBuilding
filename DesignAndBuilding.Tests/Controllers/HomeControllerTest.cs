@@ -55,7 +55,7 @@
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<EngineerAssignmentsViewModel>()
-                    .Passing(m => Assert.Equal(expectedAssignmentsCount, m.Assignments.Count)));
+                    .Passing(m => Assert.Equal(expectedAssignmentsCount, m.ActiveAssignments.Count)));
         }
 
         [Fact]
@@ -90,7 +90,7 @@
                 .ShouldReturn()
                 .View(view => view
                 .WithModelOfType<EngineerAssignmentsViewModel>()
-                .Passing(v => Assert.Equal(v.Assignments.Count, bidsCount)));
+                .Passing(v => Assert.Equal(v.ActiveAssignments.Count, bidsCount)));
 
         [Theory]
         //[InlineData(ControllerConstants.UserId, 10)]

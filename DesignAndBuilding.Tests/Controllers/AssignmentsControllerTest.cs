@@ -259,11 +259,11 @@
                     user.WithIdentifier(ControllerConstants.UserId);
                     user.WithUsername(ControllerConstants.Username);
                 })
-                .Calling(c => c.Edit(1, new AssignmentInputModel() { BuildingId = 1, Description = "Changed description", DesignerType = DesignerType.Admin, EndDate = DateTime.Now + TimeSpan.FromDays(5) }))
+                .Calling(c => c.Edit(1, new AssignmentInputModel() { BuildingId = 1, Description = "Changed description", DesignerType = DesignerType.ElectroEngineer, EndDate = DateTime.Now + TimeSpan.FromDays(5) }))
                 .ShouldHave()
                 .Data(data => data.WithSet<Assignment>(set =>
                 {
-                    Assert.NotNull(set.SingleOrDefault(a => a.Description == "Changed description" && a.BuildingId == 1 && a.DesignerType == DesignerType.Admin));
+                    Assert.NotNull(set.SingleOrDefault(a => a.Description == "Changed description" && a.BuildingId == 1 && a.DesignerType == DesignerType.ElectroEngineer));
                 }))
                 .AndAlso()
                 .ShouldReturn()

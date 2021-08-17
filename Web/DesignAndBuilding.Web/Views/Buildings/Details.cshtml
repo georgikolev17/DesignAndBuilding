@@ -2,9 +2,11 @@
 @using System.Globalization;
 @model BuildingDetailsViewModel
 @{
-    this.ViewData["Title"] = "Building Details";
+    this.ViewData["Title"] = "Детайли на проекта";
     string timeLeft = "";
 }
+<div id="alert"></div>
+<h1>@this.ViewData["Title"]</h1>
 <div class="container">
     <div class="row">
         <div class="col-3 border">
@@ -62,7 +64,7 @@
         </div>
         <div class="col-9">
             <h3 class="text-center">Задания</h3>
-            <table class="table table-hover">
+            <table class="table table-hover text-center">
                 <tr class="table-info text-center">
                     <th>Специалност</th>
                     <th>Дата</th>
@@ -73,7 +75,7 @@
                 </tr>
                 @foreach (var assignment in Model.Assignments)
                 {
-                    timeLeft = assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString("g", new CultureInfo("en-US")) : "Приключило";
+                    timeLeft = assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString(@"dd\.hh\:mm\:ss") : "Приключило";
                     <tr>
                         @switch (assignment.DesignerType)
                         {

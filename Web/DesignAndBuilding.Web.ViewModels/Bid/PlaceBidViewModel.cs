@@ -8,6 +8,7 @@
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Цена лв/кв.м.")]
         public string BidPrice { get; set; }
     }
 }

@@ -29,6 +29,7 @@
 
         public virtual ICollection<AssignmentBidViewModel> Bids { get; set; }
 
+        [Display(Name = "Цена лв/кв.м.")]
         public string BidPrice { get; set; }
 
         public bool IsFinished { get; set; }

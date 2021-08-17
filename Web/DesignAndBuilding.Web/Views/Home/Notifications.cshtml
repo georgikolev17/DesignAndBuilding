@@ -1,7 +1,10 @@
 ﻿@model DesignAndBuilding.Web.ViewModels.Notification.AllNotificationsViewModel
-
+@{ 
+    this.ViewData["Title"] = "Известия";
+}
+<div id="alert"></div>
 <div>
-    <h3 class="text-center">Известия</h3>
+    <h1>@this.ViewData["Title"]</h1>
 
     @if (Model.Notifications.Count() != 0)
     {

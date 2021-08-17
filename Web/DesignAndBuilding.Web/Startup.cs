@@ -12,6 +12,7 @@
     using DesignAndBuilding.Services.Data;
     using DesignAndBuilding.Services.Mapping;
     using DesignAndBuilding.Services.Messaging;
+    using DesignAndBuilding.Web.Hubs;
     using DesignAndBuilding.Web.ViewModels;
 
     using Microsoft.AspNetCore.Builder;
@@ -35,6 +36,13 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR(
+                options =>
+                {
+                    options.EnableDetailedErrors = true;
+                })
+                .AddMessagePackProtocol();
+
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
@@ -81,7 +89,7 @@
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-             
+
                 dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
@@ -109,6 +117,7 @@
             app.UseEndpoints(
                 endpoints =>
                     {
+                        endpoints.MapHub<NotificationsHub>("/notificationshub");
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();

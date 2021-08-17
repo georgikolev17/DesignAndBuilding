@@ -25,10 +25,24 @@
                     Message = message,
                     IsRead = false,
                     UserId = id,
+                    IsNew = true,
                 });
             }
 
             await this.notificationsRepository.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<Notification>> NewNotificationsForUser(string userId)
+        {
+            var notifications = this.notificationsRepository.All()
+                .Where(x => x.UserId == userId && x.IsNew).ToList();
+
+            foreach (var notification in notifications)
+            {
+                await this.SetNotificationAsOld(notification);
+            }
+
+            return notifications;
         }
 
         public async Task<bool> DeleteNotification(int notificationId, string userId)
@@ -81,6 +95,12 @@
             await this.notificationsRepository.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task SetNotificationAsOld(Notification notification)
+        {
+            this.notificationsRepository.All().FirstOrDefault(x => x.Id == notification.Id).IsNew = false;
+            await this.notificationsRepository.SaveChangesAsync();
         }
     }
 }

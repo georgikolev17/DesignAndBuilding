@@ -53,7 +53,7 @@
             var assignments = this.assignmentsRepository
                 .All()
                 .Include(x => x.Building)
-                .Where(x => x.DesignerType == designerType && x.EndDate >= DateTime.Now)
+                .Where(x => x.DesignerType == designerType)
                 .OrderBy(x => x.EndDate)
                 .ToList();
 

@@ -36,7 +36,7 @@
             {
                 Email = AdminEmail,
                 UserName = AdminEmail,
-                DesignerType = DesignerType.Admin,
+                DesignerType = DesignerType.Other,
                 FirstName = "Admin",
                 LastName = "Adminov",
                 Password = "123456",

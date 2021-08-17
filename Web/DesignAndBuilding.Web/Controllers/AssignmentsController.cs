@@ -212,8 +212,6 @@
                     return "ВиК инженер";
                 case DesignerType.HVACEngineer:
                     return "ОВК инженер";
-                case DesignerType.Admin:
-                    return "админ";
                 default:
                     return "друг";
             }

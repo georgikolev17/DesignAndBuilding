@@ -8,12 +8,15 @@
     public class AssignmentInputModel
     {
         [Required]
+        [Display(Name = "Описание")]
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Крайна дата")]
         public DateTime EndDate { get; set; }
 
         [Required]
+        [Display(Name = "Предназначено за")]
         public DesignerType DesignerType { get; set; }
 
         [Required]

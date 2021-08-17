@@ -18,5 +18,9 @@
         bool IsNotificationUsers(string userId, int notificationId);
 
         bool DoesNotificationExists(int notificationId);
+
+        Task<ICollection<Notification>> NewNotificationsForUser(string userId);
+
+        Task SetNotificationAsOld(Notification notifications);
     }
 }

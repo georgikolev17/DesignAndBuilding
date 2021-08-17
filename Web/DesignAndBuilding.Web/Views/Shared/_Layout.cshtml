@@ -27,28 +27,28 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Поверителност</a>
                         </li>
                         @if (user != null && user.DesignerType == DesignerType.Architect)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="buildings" asp-action="create">Create Building</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="buildings" asp-action="create">Създай обект</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="buildings" asp-action="MyBuildings">My Buildings</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="buildings" asp-action="MyBuildings">Моите обекти</a>
                             </li>
                         }
                         @if (user != null && user.DesignerType != DesignerType.Architect)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="mybids">My Bids</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="mybids">Моите наддавания</a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Notifications">Notifications</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Notifications">Известия</a>
                         </li>
                     </ul>
                 </div>
@@ -73,6 +73,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     @await this.RenderSectionAsync("Scripts", required: false)
 </body>

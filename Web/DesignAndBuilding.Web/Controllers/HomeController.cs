@@ -36,7 +36,7 @@
             if (user != null && user.DesignerType != DesignerType.Architect)
             {
                 var userBids = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id);
-                var assignments = this.assignmentsService
+                var activeAssignments = this.assignmentsService
                     .GetAllAssignmentsForDesignerType(user.DesignerType)
                     .Where(x => !x.IsFinished)
                     .Select(x => new BuildingDetailsAssignmentViewModel
@@ -50,9 +50,26 @@
                         Id = x.Id,
                         UserPlacedBid = userBids.Contains(x),
                     }).ToList();
+
+                var finishedAssignments = this.assignmentsService
+                    .GetAllAssignmentsForDesignerType(user.DesignerType)
+                    .Where(x => x.IsFinished)
+                    .Select(x => new BuildingDetailsAssignmentViewModel
+                    {
+                        BuildingName = x.Building.Name,
+                        CreatedOn = x.CreatedOn,
+                        ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
+                        Description = x.Description,
+                        DesignerType = x.DesignerType,
+                        EndDate = x.EndDate,
+                        Id = x.Id,
+                        UserPlacedBid = userBids.Contains(x),
+                    }).ToList();
+
                 var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
                 {
-                    Assignments = assignments,
+                    ActiveAssignments = activeAssignments,
+                    FinishedAssignments = finishedAssignments,
                     DesignerType = user.DesignerType,
                 };
 
@@ -94,7 +111,7 @@
                     }).ToList();
             var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
             {
-                Assignments = assignments,
+                ActiveAssignments = assignments,
                 DesignerType = user.DesignerType,
             };
             return this.View(engineerAssignmentsViewModel);

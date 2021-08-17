@@ -16,6 +16,8 @@
         [Required]
         public bool IsRead { get; set; }
 
+        public bool IsNew { get; set; }
+
         [Required]
         public string UserId { get; set; }
 
