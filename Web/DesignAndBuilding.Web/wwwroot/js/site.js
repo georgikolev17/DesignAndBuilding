@@ -6,7 +6,6 @@ setupConnection = async function start() {
         .build();
 
     await connection.on('RecieveNewNotificationMessage', (msg) => {
-        console.log(msg);
         if (msg.length != 0) {
             for (var i in msg) {
                 var div = document.getElementById('alert');
@@ -16,7 +15,6 @@ setupConnection = async function start() {
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>`;
-                console.log(msg[i]);
                 document.appendChild('div');
             }
         }
