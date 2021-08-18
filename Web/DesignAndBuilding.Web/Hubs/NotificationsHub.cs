@@ -1,5 +1,6 @@
 ﻿namespace DesignAndBuilding.Web.Hubs
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Data.Models;
@@ -10,12 +11,10 @@
     public class NotificationsHub : Hub
     {
         private readonly INotificationsService notificationsService;
-        private readonly UserManager<ApplicationUser> userManager;
 
-        public NotificationsHub(INotificationsService notificationsService, UserManager<ApplicationUser> userManager)
+        public NotificationsHub(INotificationsService notificationsService)
         {
             this.notificationsService = notificationsService;
-            this.userManager = userManager;
         }
 
         public async Task CheckForNewNotifications()
@@ -24,9 +23,11 @@
             {
                 var newNotifications = await this.notificationsService.NewNotificationsForUser(this.Context.UserIdentifier);
 
-                if (newNotifications != null)
+                var newNotificationsMessages = newNotifications.Select(x => x.Message);
+
+                if (newNotificationsMessages.Any())
                 {
-                    await this.Clients.Caller.SendAsync("RecieveNewNotificationMessage", newNotifications);
+                    await this.Clients.Caller.SendAsync("RecieveNewNotificationMessage", newNotificationsMessages);
                 }
             }
             while (true);

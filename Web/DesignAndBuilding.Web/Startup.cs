@@ -42,6 +42,7 @@
                     options.EnableDetailedErrors = true;
                 })
                 .AddMessagePackProtocol();
+            services.AddMvc();
 
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
