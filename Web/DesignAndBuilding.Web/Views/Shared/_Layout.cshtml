@@ -29,9 +29,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Поверителност</a>
-                        </li>
                         @if (user != null && user.DesignerType == DesignerType.Architect)
                         {
                             <li class="nav-item">
@@ -53,8 +50,14 @@
                                 <a class="nav-link text-dark" asp-area="administration" asp-controller="dashboard" asp-action="allbuildings">Всички обекти</a>
                             </li>
                         }
+                        @if (user != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Notifications">Известия</a>
+                            </li>
+                        }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Notifications">Известия</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Поверителност</a>
                         </li>
                     </ul>
                 </div>

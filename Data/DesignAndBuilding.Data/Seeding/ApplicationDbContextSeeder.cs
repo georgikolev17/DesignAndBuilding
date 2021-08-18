@@ -3,8 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using DesignAndBuilding.Data.Models;
-    using Microsoft.AspNetCore.Identity;
+
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
@@ -28,6 +27,9 @@
                           {
                               new RolesSeeder(),
                               new AdministratorSeeder(),
+                              new UsersSeeder(),
+                              new BuildingSeeder(),
+                              new AssignmentSeeder(),
                           };
 
             foreach (var seeder in seeders)
