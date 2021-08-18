@@ -93,7 +93,7 @@
                 .Passing(v => Assert.Equal(v.ActiveAssignments.Count + v.FinishedAssignments.Count, bidsCount)));
 
         [Theory]
-        //[InlineData(ControllerConstants.UserId, 10)]
+        [InlineData(ControllerConstants.UserId, 10)]
         [InlineData("2", 0)]
         public void NotificationsShouldHaveAttributesAttributeAndShouldReturnCorrectViewWithCorrectModel(string userIdForNotifications, int notificationsCount)
             => MyController<HomeController>
