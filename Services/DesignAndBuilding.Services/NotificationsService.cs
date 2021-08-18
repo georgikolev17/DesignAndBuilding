@@ -6,6 +6,7 @@
 
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
+    using Microsoft.EntityFrameworkCore;
 
     public class NotificationsService : INotificationsService
     {
@@ -34,8 +35,8 @@
 
         public async Task<ICollection<Notification>> NewNotificationsForUser(string userId)
         {
-            var notifications = this.notificationsRepository.All()
-                .Where(x => x.UserId == userId && x.IsNew).ToList();
+            var notifications = await this.notificationsRepository.All()
+                .Where(x => x.UserId == userId && x.IsNew).ToListAsync();
 
             foreach (var notification in notifications)
             {
@@ -99,7 +100,8 @@
 
         public async Task SetNotificationAsOld(Notification notification)
         {
-            this.notificationsRepository.All().FirstOrDefault(x => x.Id == notification.Id).IsNew = false;
+            var not = await this.notificationsRepository.All().FirstOrDefaultAsync(x => x.Id == notification.Id);
+            not.IsNew = false;
             await this.notificationsRepository.SaveChangesAsync();
         }
     }
