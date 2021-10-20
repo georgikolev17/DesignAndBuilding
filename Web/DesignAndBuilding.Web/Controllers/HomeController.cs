@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
+
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
@@ -38,20 +39,8 @@
             {
                 var userBids = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id);
                 var assignments = this.assignmentsService
-                    .GetAllAssignmentsForDesignerType(user.DesignerType)
-                    .Select(x => new BuildingDetailsAssignmentViewModel
-                    {
-                        BuildingName = x.Building.Name,
-                        CreatedOn = x.CreatedOn,
-                        ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
-                        Description = x.Description,
-                        DesignerType = x.DesignerType,
-                        EndDate = x.EndDate,
-                        Id = x.Id,
-                        UserPlacedBid = userBids.Contains(x),
-                        BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault()?.Price,
-                        UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault()?.Price,
-                    }).ToList();
+                    .GetAllAssignmentsForDesignerType(user.DesignerType, user.Id).ToList();
+
                 var activeAssignments = assignments.Where(x => x.EndDate > DateTime.Now).ToList();
                 var finishedAssignments = assignments.Where(x => x.EndDate <= DateTime.Now).ToList();
 
@@ -118,14 +107,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var viewModel = this.notificationsService.GetNotificationsForUser(user.Id)
-                .Select(n => new NotificationViewModel()
-                {
-                    Id = n.Id,
-                    Date = n.CreatedOn,
-                    Message = n.Message,
-                    IsRead = n.IsRead,
-                });
+            var viewModel = this.notificationsService.GetNotificationsForUser(user.Id);
 
             return this.View(new AllNotificationsViewModel() { Notifications = viewModel, UserId = user.Id });
         }

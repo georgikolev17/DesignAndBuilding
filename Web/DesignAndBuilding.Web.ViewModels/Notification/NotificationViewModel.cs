@@ -14,7 +14,7 @@
         public string Message { get; set; }
 
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         [Required]
         public bool IsRead { get; set; }

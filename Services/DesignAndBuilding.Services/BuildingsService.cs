@@ -5,7 +5,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using DesignAndBuilding.Data;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Web.ViewModels.Building;
@@ -14,10 +15,12 @@
     public class BuildingsService : IBuildingsService
     {
         private readonly IDeletableEntityRepository<Building> buildingsRepository;
+        private readonly IConfigurationProvider mapper;
 
-        public BuildingsService(IDeletableEntityRepository<Building> buildingsRepository)
+        public BuildingsService(IDeletableEntityRepository<Building> buildingsRepository, IMapper mapper)
         {
             this.buildingsRepository = buildingsRepository;
+            this.mapper = mapper.ConfigurationProvider;
         }
 
         public async Task<int> CreateBuildingAsync(string architectId, string name, string town, decimal totalBuildUpArea, string buildingType)
@@ -74,13 +77,7 @@
         {
             var buildings = this.buildingsRepository.All()
                 .Where(x => x.ArchitectId == id)
-                .Select(x => new MyBuildingsViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    BuildingType = x.BuildingType,
-                    TotalBuildUpArea = x.TotalBuildUpArea,
-                })
+                .ProjectTo<MyBuildingsViewModel>(this.mapper)
                 .ToList();
 
             return buildings;
@@ -91,7 +88,6 @@
             var building = await this.buildingsRepository.All()
                 .Include(x => x.Assignments)
                 .FirstOrDefaultAsync(x => x.Id == id);
-
             return building;
         }
 

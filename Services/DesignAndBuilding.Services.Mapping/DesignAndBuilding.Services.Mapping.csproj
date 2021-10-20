@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\DesignAndBuilding.Data.Models\DesignAndBuilding.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\DesignAndBuilding.Web.ViewModels\DesignAndBuilding.Web.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

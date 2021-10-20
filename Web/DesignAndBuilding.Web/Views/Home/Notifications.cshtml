@@ -15,7 +15,7 @@
         {
             <tr id="@notification.Id">
                 <td>@notification.Message</td>
-                <td>@notification.Date.ToString("dd.MM.yyyy")</td>
+                <td>@notification.CreatedOn.ToString("dd.MM.yyyy")</td>
                 <td>
                     <button class="btn btn-danger" onclick="remove(@notification.Id)">Изтрий</button>
                 </td>
@@ -25,7 +25,7 @@
         {
             <tr class="font-weight-bold" id="@notification.Id">
                 <td>@notification.Message</td>
-                <td>@notification.Date.ToString("dd.MM.yyyy")</td>
+                <td>@notification.CreatedOn.ToString("dd.MM.yyyy")</td>
                 <td>
                     <button class="btn btn-primary" onclick="markAsRead(@notification.Id)" id="btn-@notification.Id">Прочетено</button>
                     <button class="btn btn-danger" onclick="remove(@notification.Id)">Изтрий</button>

@@ -1,7 +1,7 @@
 ﻿namespace DesignAndBuilding.Web
 {
     using System.Reflection;
-
+    using AutoMapper;
     using DesignAndBuilding.Data;
     using DesignAndBuilding.Data.Common;
     using DesignAndBuilding.Data.Common.Repositories;
@@ -56,6 +56,8 @@
                         options.CheckConsentNeeded = context => true;
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
+
+            services.AddAutoMapper(typeof(Startup), typeof(MappingProfile));
 
             services.AddMemoryCache();
 

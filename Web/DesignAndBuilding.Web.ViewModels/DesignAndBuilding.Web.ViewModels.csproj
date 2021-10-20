@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\DesignAndBuilding.Data.Models\DesignAndBuilding.Data.Models.csproj" />
-    <ProjectReference Include="..\..\Services\DesignAndBuilding.Services.Mapping\DesignAndBuilding.Services.Mapping.csproj" />
   </ItemGroup>
 
   <ItemGroup>

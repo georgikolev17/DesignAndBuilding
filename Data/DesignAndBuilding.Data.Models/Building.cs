@@ -27,7 +27,7 @@
         [Required]
         public string ArchitectId { get; set; }
 
-        public ApplicationRole Architect { get; set; }
+        public ApplicationUser Architect { get; set; }
 
         public virtual ICollection<Assignment> Assignments { get; set; }
     }

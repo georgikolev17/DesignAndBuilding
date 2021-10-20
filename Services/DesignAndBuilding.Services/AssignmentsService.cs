@@ -5,17 +5,24 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AutoMapper;
+    using AutoMapper.Configuration;
+    using AutoMapper.QueryableExtensions;
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Web.ViewModels.Building;
     using Microsoft.EntityFrameworkCore;
 
     public class AssignmentsService : IAssignmentsService
     {
         private readonly IDeletableEntityRepository<Assignment> assignmentsRepository;
+        private readonly IUsersService usersService;
+        private MapperConfiguration config;
 
-        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository)
+        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository, IUsersService usersService)
         {
             this.assignmentsRepository = assignmentsRepository;
+            this.usersService = usersService;
         }
 
         public async Task CreateAssignmentAsync(string description, DateTime endDate, DesignerType designerType, int buildingId)
@@ -48,7 +55,7 @@
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
-        public List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType)
+        public List<BuildingDetailsAssignmentViewModel> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId)
         {
             var assignments = this.assignmentsRepository
                 .All()
@@ -56,6 +63,19 @@
                 .Include(x => x.Bids)
                 .Where(x => x.DesignerType == designerType)
                 .OrderBy(x => x.EndDate)
+                .Select(x => new BuildingDetailsAssignmentViewModel
+                {
+                    BuildingName = x.Building.Name,
+                    CreatedOn = x.CreatedOn,
+                    ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
+                    Description = x.Description,
+                    DesignerType = x.DesignerType,
+                    EndDate = x.EndDate,
+                    Id = x.Id,
+                    UserPlacedBid = this.GetAssignmentsWhereUserPlacedBid(userId).Contains(x),
+                    BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault() == null ? null : x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
+                    UserBestBid = x.Bids.Where(x => x.DesignerId == userId).OrderBy(x => x.Price).FirstOrDefault() != null ? x.Bids.Where(x => x.DesignerId == userId).OrderBy(x => x.Price).FirstOrDefault().Price : null,
+                })
                 .ToList();
 
             return assignments;

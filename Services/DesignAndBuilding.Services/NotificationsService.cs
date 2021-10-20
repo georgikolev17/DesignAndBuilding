@@ -3,18 +3,22 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Web.ViewModels.Notification;
     using Microsoft.EntityFrameworkCore;
 
     public class NotificationsService : INotificationsService
     {
         private readonly IDeletableEntityRepository<Notification> notificationsRepository;
+        private readonly IConfigurationProvider mapper;
 
-        public NotificationsService(IDeletableEntityRepository<Notification> notificationsRepository)
+        public NotificationsService(IDeletableEntityRepository<Notification> notificationsRepository, IMapper mapper)
         {
             this.notificationsRepository = notificationsRepository;
+            this.mapper = mapper.ConfigurationProvider;
         }
 
         public async Task AddNotificationAsync(IEnumerable<string> userIds, string message)
@@ -68,9 +72,12 @@
             return this.notificationsRepository.All().Any(x => x.Id == notificationId);
         }
 
-        public IEnumerable<Notification> GetNotificationsForUser(string userId)
+        public IEnumerable<NotificationViewModel> GetNotificationsForUser(string userId)
         {
-            return this.notificationsRepository.All().Where(n => n.UserId == userId).OrderByDescending(n => n.CreatedOn);
+            return this.notificationsRepository.All()
+                .Where(n => n.UserId == userId)
+                .OrderByDescending(n => n.CreatedOn)
+                .ProjectTo<NotificationViewModel>(this.mapper);
         }
 
         public bool IsNotificationUsers(string userId, int notificationId)

@@ -4,10 +4,11 @@
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Web.ViewModels.Notification;
 
     public interface INotificationsService
     {
-        IEnumerable<Notification> GetNotificationsForUser(string userId);
+        IEnumerable<NotificationViewModel> GetNotificationsForUser(string userId);
 
         Task AddNotificationAsync(IEnumerable<string> userIds, string message);
 
