@@ -31,7 +31,7 @@
             this.notificationsService = notificationsService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(AssignmentSearchInputModel search)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
@@ -39,7 +39,7 @@
             {
                 var userBids = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id);
                 var assignments = this.assignmentsService
-                    .GetAllAssignmentsForDesignerType(user.DesignerType, user.Id).ToList();
+                    .GetAllAssignmentsForDesignerType(user.DesignerType, user.Id, search).ToList();
 
                 var activeAssignments = assignments.Where(x => x.EndDate > DateTime.Now).ToList();
                 var finishedAssignments = assignments.Where(x => x.EndDate <= DateTime.Now).ToList();
@@ -49,6 +49,7 @@
                     ActiveAssignments = activeAssignments,
                     FinishedAssignments = finishedAssignments,
                     DesignerType = user.DesignerType,
+                    Search = search,
                 };
 
                 return this.View("EngineerIndex", engineerAssignmentsViewModel);

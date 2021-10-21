@@ -5,11 +5,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using AutoMapper;
-    using AutoMapper.Configuration;
-    using AutoMapper.QueryableExtensions;
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Building;
     using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +15,6 @@
     {
         private readonly IDeletableEntityRepository<Assignment> assignmentsRepository;
         private readonly IUsersService usersService;
-        private MapperConfiguration config;
 
         public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository, IUsersService usersService)
         {
@@ -55,13 +52,14 @@
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
-        public List<BuildingDetailsAssignmentViewModel> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId)
+        public List<BuildingDetailsAssignmentViewModel> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId, AssignmentSearchInputModel search)
         {
             var assignments = this.assignmentsRepository
                 .All()
                 .Include(x => x.Building)
+                .ThenInclude(x => x.Architect)
                 .Include(x => x.Bids)
-                .Where(x => x.DesignerType == designerType)
+                .Where(x => x.DesignerType == designerType && (string.IsNullOrEmpty(search.SearchText) || (x.Building.Architect.FirstName + " " + x.Building.Architect.LastName + " " + x.Building.Name + " " + x.Description + " " + x.Building.Town).ToLower().Contains(search.SearchText)) && (search.BuildingType == null || x.Building.BuildingType == search.BuildingType))
                 .OrderBy(x => x.EndDate)
                 .Select(x => new BuildingDetailsAssignmentViewModel
                 {

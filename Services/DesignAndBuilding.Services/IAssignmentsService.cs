@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Building;
 
     public interface IAssignmentsService
@@ -13,7 +14,7 @@
 
         Task<Assignment> GetAssignmentById(int id);
 
-        List<BuildingDetailsAssignmentViewModel> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId);
+        List<BuildingDetailsAssignmentViewModel> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId, AssignmentSearchInputModel search);
 
         List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId);
 
