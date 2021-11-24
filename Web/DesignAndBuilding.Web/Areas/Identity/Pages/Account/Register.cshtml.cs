@@ -73,7 +73,13 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
             public string LastName { get; set; }
 
             [Required]
+            [Display(Name = "Специалност")]
             public DesignerType DesignerType { get; set; }
+
+            [Required]
+            [Phone]
+            [Display(Name = "Телефон")]
+            public string PhoneNumber { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -88,8 +94,8 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email, FirstName = this.Input.FirstName, Password = Hash(this.Input.Password), LastName = this.Input.LastName, DesignerType = this.Input.DesignerType};
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email, FirstName = this.Input.FirstName, Password = Hash(this.Input.Password), LastName = this.Input.LastName, DesignerType = this.Input.DesignerType, PhoneNumber = this.Input.PhoneNumber };
+                var result = await _userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
