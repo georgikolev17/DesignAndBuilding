@@ -8,7 +8,7 @@
 <h3 class="text-center">@this.ViewData["Title"]</h3>
 <div class="container align-center">
     <div class="row h-100 d-flex justify-content-around">
-        <div class="col-3 border my-auto table-info">
+        <div class="col-3 border table-info">
             <h4>Обект</h4>
             <p><b>Име: </b>@Model.Building.Name</p>
             <p><b>РЗП:</b> @Model.Building.TotalBuildUpArea</p>
@@ -132,3 +132,21 @@
 </div>
 <hr />
 <div id="disqus_thread"></div>
+
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function () { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = document.createElement('script');
+        s.src = 'https://designandbuilding.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (document.head || document.body).appendChild(s);
+    })();
+</script>

@@ -23,7 +23,7 @@
             Пожелаваме Ви приятна работа!
         </div>
     }
-    else
+    @if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
     {
         <div class="card p-5">
             <div class="font-weight-bold h3 p-4 card-header">
