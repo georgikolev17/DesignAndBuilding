@@ -7,10 +7,11 @@
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Building;
+    using Microsoft.AspNetCore.Http;
 
     public interface IAssignmentsService
     {
-        Task CreateAssignmentAsync(string description, DateTime endDate, DesignerType designerType, int buildingId);
+        Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, DesignerType designerType, int buildingId);
 
         Task<Assignment> GetAssignmentById(int id);
 
@@ -24,8 +25,12 @@
 
         bool HasUserCreatedAssignment(string userId, int assignmentId);
 
-        Task EditAssignment(DesignerType designerType, string description, DateTime endDate, int id);
+        Task EditAssignment(DesignerType designerType, List<IFormFile> description, DateTime endDate, int id);
 
         int GetAssignmentsCount();
+
+        Task<ICollection<DescriptionFile>> GetDescriptionFiles(List<IFormFile> files, Assignment assignment);
+
+        IEnumerable<DescriptionFile> GetFilesForAssignment(int assignmentId);
     }
 }

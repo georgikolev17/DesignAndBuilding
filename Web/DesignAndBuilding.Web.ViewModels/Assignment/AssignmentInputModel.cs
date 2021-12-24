@@ -1,15 +1,16 @@
 ﻿namespace DesignAndBuilding.Web.ViewModels.Assignment
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using DesignAndBuilding.Data.Models;
+    using Microsoft.AspNetCore.Http;
 
     public class AssignmentInputModel
     {
-        [Required]
         [Display(Name = "Описание")]
-        public string Description { get; set; }
+        public IEnumerable<IFormFile> Description { get; set; }
 
         [Required]
         [Display(Name = "Крайна дата")]

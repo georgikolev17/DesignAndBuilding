@@ -42,8 +42,6 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var id = this.userManager.GetUserId(this.User);
-
             if (!this.ModelState.IsValid)
             {
                 return this.View(buildingInputModel);
@@ -99,7 +97,7 @@
                 {
                     Id = a.Id,
                     CreatedOn = a.CreatedOn,
-                    Description = a.Description,
+                    Description = a.Description.ToList(),
                     DesignerType = a.DesignerType,
                     EndDate = a.EndDate,
                 }),

@@ -58,7 +58,7 @@
                     break;
             }
             <h4>Задание</h4>
-            <p><b>Описание: </b>@Model.Description</p>
+            <p><b>Описание: </b><a href="/assignments/download/@Model.AssignmentId">Изтегли</a></p>
             @switch (Model.DesignerType)
             {
                 case DesignAndBuilding.Data.Models.DesignerType.Architect:

@@ -1,9 +1,11 @@
 ﻿namespace DesignAndBuilding.Web.ViewModels.Building
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using DesignAndBuilding.Data.Models;
+    using Microsoft.AspNetCore.Http;
 
     public class BuildingDetailsAssignmentViewModel
     {
@@ -13,7 +15,7 @@
         public string BuildingName { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public ICollection<DescriptionFile> Description { get; set; }
 
         [Required]
         public DateTime EndDate { get; set; }

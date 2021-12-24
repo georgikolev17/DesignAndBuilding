@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using DesignAndBuilding.Data.Models;
+    using Microsoft.AspNetCore.Http;
 
     public class AssignmentViewModel
     {
@@ -14,7 +15,7 @@
         }
 
         [Required]
-        public string Description { get; set; }
+        public int AssignmentId { get; set; }
 
         [Required]
         public DateTime EndDate { get; set; }

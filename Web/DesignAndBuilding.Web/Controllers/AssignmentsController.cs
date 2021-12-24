@@ -2,18 +2,24 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.IO.Compression;
     using System.Linq;
+    using System.Net;
+    using System.Text;
     using System.Threading.Tasks;
-
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Bid;
+    using Dropbox.Api;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
 
     [Authorize]
     public class AssignmentsController : Controller
@@ -44,7 +50,7 @@
                 return this.View(assignment);
             }
 
-            await this.assignmentsService.CreateAssignmentAsync(assignment.Description, assignment.EndDate, assignment.DesignerType, assignment.BuildingId);
+            await this.assignmentsService.CreateAssignmentAsync(assignment.Description.ToList(), assignment.EndDate, assignment.DesignerType, assignment.BuildingId);
             return this.RedirectToAction("Details", "Buildings", new { id = assignment.BuildingId });
         }
 
@@ -60,8 +66,8 @@
 
             return this.View(new AssignmentViewModel()
             {
+                AssignmentId = id,
                 CreatedOn = assignment.CreatedOn,
-                Description = assignment.Description,
                 DesignerType = assignment.DesignerType,
                 EndDate = assignment.EndDate,
                 IsFinished = assignment.IsFinished,
@@ -145,7 +151,9 @@
             var assignmentViewModel = new AssignmentInputModel()
             {
                 BuildingId = assignment.BuildingId,
-                Description = assignment.Description,
+
+                // TODO: Fix desccription display
+                Description = new List<IFormFile>(),
                 DesignerType = assignment.DesignerType,
                 EndDate = assignment.EndDate,
             };
@@ -175,7 +183,7 @@
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
             }
 
-            await this.assignmentsService.EditAssignment(viewModel.DesignerType, viewModel.Description, viewModel.EndDate, id);
+            await this.assignmentsService.EditAssignment(viewModel.DesignerType, viewModel.Description.ToList(), viewModel.EndDate, id);
 
             return this.Redirect("/");
         }
@@ -217,6 +225,34 @@
                     return "ОВК инженер";
                 default:
                     return "друг";
+            }
+        }
+
+        public async Task<IActionResult> Download(int id)
+        {
+            var files = this.assignmentsService.GetFilesForAssignment(id).ToList();
+
+            using (var compressedFileStream = new MemoryStream())
+            {
+                // Create an archive and store the stream in memory.
+                using (var zipArchive = new ZipArchive(compressedFileStream, ZipArchiveMode.Create, false))
+                {
+                    foreach (var file in files)
+                    {
+                        // Create a zip entry for each attachment
+                        var zipEntry = zipArchive.CreateEntry(file.Name);
+
+                        // Get the stream of the attachment
+                        using (var originalFileStream = new MemoryStream(file.Content))
+                        using (var zipEntryStream = zipEntry.Open())
+                        {
+                            // Copy the attachment stream to the zip entry stream
+                            originalFileStream.CopyTo(zipEntryStream);
+                        }
+                    }
+                }
+
+                return new FileContentResult(compressedFileStream.ToArray(), "application/zip") { FileDownloadName = "Description.zip" };
             }
         }
     }

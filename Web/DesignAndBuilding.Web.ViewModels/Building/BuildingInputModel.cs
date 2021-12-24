@@ -5,19 +5,19 @@
     public class BuildingInputModel
     {
         [Required]
-        [MinLength(2, ErrorMessage = "Name should be at least 2 characters long!")]
-        [MaxLength(50, ErrorMessage = "Name should be at max 50 characters long!")]
+        [MinLength(2, ErrorMessage = "Името трябва да е между 2 и 50 символа!")]
+        [MaxLength(50, ErrorMessage = "Името трябва да е между 2 и 50 символа!")]
         [Display(Name = "Име")]
         public string Name { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "Town name should be between 3 and 20 characters long!")]
-        [MaxLength(20, ErrorMessage = "Town name should be between 3 and 20 characters long!")]
+        [MinLength(3, ErrorMessage = "Името на града трябва да е между 3 и 20 символа!")]
+        [MaxLength(20, ErrorMessage = "Името на града трябва да е между 3 и 20 символа!")]
         [Display(Name = "Град")]
         public string Town { get; set; }
 
         [Required]
-        [Range(10, double.MaxValue, ErrorMessage = "Total build-up area should be bigger than 10!")]
+        [Range(10, double.MaxValue, ErrorMessage = "РЗП трябва да е поне 10кв.м.")]
         [Display(Name = "РЗП")]
         public decimal TotalBuildUpArea { get; set; }
 

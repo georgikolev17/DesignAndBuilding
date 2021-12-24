@@ -32,6 +32,8 @@
 
         public DbSet<Notification> Notifications { get; set; }
 
+        public DbSet<DescriptionFile> DescriptionFiles { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

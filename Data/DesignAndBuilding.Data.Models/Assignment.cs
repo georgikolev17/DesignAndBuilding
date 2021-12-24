@@ -5,16 +5,15 @@
     using System.ComponentModel.DataAnnotations;
 
     using DesignAndBuilding.Data.Common.Models;
+    using Microsoft.AspNetCore.Http;
 
     public class Assignment : BaseDeletableModel<int>
     {
         public Assignment()
         {
             this.Bids = new HashSet<Bid>();
+            this.Description = new HashSet<DescriptionFile>();
         }
-
-        [Required]
-        public string Description { get; set; }
 
         [Required]
         public DateTime EndDate { get; set; }
@@ -30,5 +29,7 @@
         public virtual Building Building { get; set; }
 
         public virtual ICollection<Bid> Bids { get; set; }
+
+        public virtual ICollection<DescriptionFile> Description { get; set; }
     }
 }

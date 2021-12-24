@@ -1,10 +1,12 @@
 ﻿namespace DesignAndBuilding.Data.Seeding
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Data.Models;
+    using Microsoft.AspNetCore.Http;
 
     public class AssignmentSeeder : ISeeder
     {
@@ -15,12 +17,11 @@
             var assignment = new Assignment()
             {
                 BuildingId = buildingId,
-                Description = "That is seeded assignment for Electro Engineers",
                 DesignerType = DesignerType.ElectroEngineer,
                 EndDate = DateTime.Now + TimeSpan.FromDays(7),
             };
 
-            if (dbContext.Assignments.Any(x => x.Description == "That is seeded assignment for Electro Engineers"))
+            if (dbContext.Assignments.Any())
             {
                 return;
             }

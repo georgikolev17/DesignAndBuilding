@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -9,34 +10,43 @@
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Building;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
 
     public class AssignmentsService : IAssignmentsService
     {
+        private readonly string[] allowedExtensions = new[] { "xls", "pdf", "docx", "dvg" };
         private readonly IDeletableEntityRepository<Assignment> assignmentsRepository;
+        private readonly IDeletableEntityRepository<DescriptionFile> filesRepository;
         private readonly IUsersService usersService;
 
-        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository, IUsersService usersService)
+        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository, IDeletableEntityRepository<DescriptionFile> filesRepository, IUsersService usersService)
         {
             this.assignmentsRepository = assignmentsRepository;
+            this.filesRepository = filesRepository;
             this.usersService = usersService;
         }
 
-        public async Task CreateAssignmentAsync(string description, DateTime endDate, DesignerType designerType, int buildingId)
+        public AssignmentsService()
+        {
+        }
+
+        public async Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, DesignerType designerType, int buildingId)
         {
             var assignment = new Assignment()
             {
                 BuildingId = buildingId,
-                Description = description,
                 EndDate = endDate,
                 DesignerType = designerType,
             };
+
+            assignment.Description = await this.GetDescriptionFiles(description, assignment);
 
             await this.assignmentsRepository.AddAsync(assignment);
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
-        public async Task EditAssignment(DesignerType designerType, string description, DateTime endDate, int id)
+        public async Task EditAssignment(DesignerType designerType, List<IFormFile> description, DateTime endDate, int id)
         {
             var assignment = await this.assignmentsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
 
@@ -45,7 +55,7 @@
                 return;
             }
 
-            assignment.Description = description;
+            assignment.Description = await this.GetDescriptionFiles(description, assignment);
             assignment.DesignerType = designerType;
             assignment.EndDate = endDate;
 
@@ -128,6 +138,37 @@
         {
             this.assignmentsRepository.All().FirstOrDefault(x => x.Id == assignmentId).IsDeleted = true;
             await this.assignmentsRepository.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<DescriptionFile>> GetDescriptionFiles(List<IFormFile> files, Assignment assignment)
+        {
+            var descriptionFiles = new List<DescriptionFile>();
+
+            foreach (var file in files)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    using var stream = new MemoryStream();
+                    file.CopyTo(stream);
+                    byte[] bytes = stream.ToArray();
+
+                    descriptionFiles.Add(new DescriptionFile()
+                    {
+                        Assignment = assignment,
+                        Content = bytes,
+                        Name = file.FileName,
+                        ContentType = file.ContentType,
+                    });
+                    stream.Close();
+                }
+            }
+
+            return descriptionFiles;
+        }
+
+        public IEnumerable<DescriptionFile> GetFilesForAssignment(int assignmentId)
+        {
+            return this.filesRepository.All().Where(x => x.AssignmentId == assignmentId);
         }
     }
 }
