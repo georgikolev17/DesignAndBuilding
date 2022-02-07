@@ -64,10 +64,24 @@
         </div>
         <div class="col-9">
             <h3 class="text-center">Задания</h3>
+            <div>
+                <div class="form-group" style="display: inline-block; margin-right: 10px">
+                    <input type="radio" id="all-checkbox" name="assignment-type" />
+                    <label for="all-checkbox">Всички задания</label>
+                </div>
+                <div class="form-group" style="display: inline-block; margin-right: 10px">
+                    <input type="radio" id="active-checkbox" name="assignment-type" checked />
+                    <label for="active-checkbox">Активни задания</label>
+                </div>
+                <div class="form-group" style="display:inline-block">
+                    <input type="radio" id="finished-checkbox" name="assignment-type" />
+                    <label for="finished-checkbox">Завършили задания</label>
+                </div>
+            </div>
             <table class="table table-hover text-center">
                 <tr class="table-info text-center">
                     <th>Специалност</th>
-                    <th>Дата</th>
+                    <th>Дата на създаване</th>
                     <th>Оставащо време</th>
                     <th></th>
                     <th></th>
@@ -76,7 +90,7 @@
                 @foreach (var assignment in Model.Assignments)
                 {
                     timeLeft = assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString(@"dd\.hh\:mm\:ss") : "Приключило";
-                    <tr>
+                    <tr id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
                         @switch (assignment.DesignerType)
                         {
                             case DesignAndBuilding.Data.Models.DesignerType.Other:
@@ -120,3 +134,44 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{ 
+    <script>
+        $('#all-checkbox').click(() => {
+            let activeAssignments = document.querySelectorAll('#active');
+            let finishedAssignments = document.querySelectorAll('#finished');
+            for (let a of activeAssignments) {
+                a.style.display = '';
+            }
+            for (let a of finishedAssignments) {
+                a.style.display = '';
+            }
+        });
+        $('#active-checkbox').click(active);
+
+        $('#finished-checkbox').click(() => {
+            let activeAssignments = document.querySelectorAll('#active');
+            let finishedAssignments = document.querySelectorAll('#finished');
+            for (let a of activeAssignments) {
+                a.style.display = 'none';
+            }
+            for (let a of finishedAssignments) {
+                a.style.display = '';
+            }
+        });
+
+        function active() {
+            let activeAssignments = document.querySelectorAll('#active');
+            let finishedAssignments = document.querySelectorAll('#finished');
+            for (let a of activeAssignments) {
+                a.style.display = '';
+            }
+            for (let a of finishedAssignments) {
+                a.style.display = 'none';
+            }
+        }
+
+        active();
+    </script>
+}

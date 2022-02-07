@@ -9,13 +9,10 @@
     {
         public EngineerAssignmentsViewModel()
         {
-            this.FinishedAssignments = new List<BuildingDetailsAssignmentViewModel>();
-            this.ActiveAssignments = new List<BuildingDetailsAssignmentViewModel>();
+            this.Assignments = new List<BuildingDetailsAssignmentViewModel>();
         }
 
-        public IList<BuildingDetailsAssignmentViewModel> FinishedAssignments { get; set; }
-
-        public IList<BuildingDetailsAssignmentViewModel> ActiveAssignments { get; set; }
+        public IList<BuildingDetailsAssignmentViewModel> Assignments { get; set; }
 
         public DesignerType DesignerType { get; set; }
 

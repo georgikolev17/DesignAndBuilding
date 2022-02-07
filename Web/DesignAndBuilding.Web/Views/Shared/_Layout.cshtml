@@ -56,9 +56,6 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Notifications">Известия</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Поверителност</a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -84,6 +81,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/lib/signalr/dist/browser/signalr.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
+
     @await this.RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

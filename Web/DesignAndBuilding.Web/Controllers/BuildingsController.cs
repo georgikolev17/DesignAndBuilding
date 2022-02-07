@@ -100,7 +100,7 @@
                     Description = a.Description.ToList(),
                     DesignerType = a.DesignerType,
                     EndDate = a.EndDate,
-                }),
+                }).ToList(),
             };
             return this.View(buildingViewModel);
         }

@@ -1,214 +1,74 @@
 ﻿@using DesignAndBuilding.Web.ViewModels.Assignment
-@using DesignAndBuilding.Data.Models;
-@using System.Globalization;
 @model EngineerAssignmentsViewModel
 @{
-    int i = 0;
     this.ViewData["Title"] = "Начало";
 }
-<div id="alert"></div>
-<div id="container">
 
-    @*<div class="row">
-        <div class="col-md-4">
-            <form method="get">
-                <div class="form-group">
-                    <label asp-for="@Model.Search.SearchText"></label>
-                    <input asp-for="@Model.Search.SearchText" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Search.BuildingType"></label>
-                    <select asp-for="@Model.Search.BuildingType" class="form-control" asp-items="@Html.GetEnumSelectList<BuildingType>()"></select>
-                </div>
-                <button type="submit" class="btn btn-primary">Търси</button>
-            </form>
-        </div>
-    </div>*@
-
-            @switch (Model.DesignerType)
-            {
-                case DesignAndBuilding.Data.Models.DesignerType.Architect:
-                    <h3 class="text-center">Задания по част архитектура</h3>
-                    break;
-                case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
-                    <h3 class="text-center">Задания по част Електро</h3>
-                    break;
-                case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
-                    <h3 class="text-center">Задания по част Строителни конструкции</h3>
-                    break;
-                case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
-                    <h3 class="text-center">Задания по част ВиК</h3>
-                    break;
-                case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
-                    <h3 class="text-center">Задания по част ОВК</h3>
-                    break;
-                default:
-                    break;
-            }
-
-            <div class="text-center">
-                <br />
-                <button class="btn btn-secondary" id="active">Активни задания</button>
-                <button class="btn btn-secondary" id="finished">Завършили задания</button>
-                <br />
-                <br />
-            </div>
-
-            <table class="table table-hover text-center" id="active-table">
-                <tr class="table-info">
-                    <th>№</th>
-                    <th>Име</th>
-                    <th>Архитект</th>
-                    <th>Вашата най-добра оферта</th>
-                    <th>Най-добра оферта</th>
-                    <th>Оставащо време</th>
-                    <th></th>
-                </tr>
-                @foreach (var assignment in Model.ActiveAssignments)
-                {
-                    i++;
-                    @if (!assignment.UserPlacedBid)
-                    {
-                        <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button" class="font-weight-bold">
-                            <td>@i</td>
-                            <td>@assignment.BuildingName</td>
-                            <td>арх. @assignment.ArchitectName</td>
-                            <td>-</td>
-                            @if (@assignment.BestBid != null)
-                            {
-                                <td>@assignment.BestBid</td>
-                            }
-                            else
-                            {
-                                <td>-</td>
-                            }
-                            <td>@((assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss"))</td>
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button">
-                            <td>@i</td>
-                            <td>@assignment.BuildingName</td>
-                            <td>арх. @assignment.ArchitectName</td>
-                            @if (@assignment.UserBestBid != null)
-                            {
-                                <td>@assignment.UserBestBid</td>
-                            }
-                            else
-                            {
-                                <td>-</td>
-                            }
-                            @if (@assignment.BestBid != null)
-                            {
-                                <td>@assignment.BestBid</td>
-                            }
-                            else
-                            {
-                                <td>-</td>
-                            }
-                            <td>@((assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss"))</td>
-                            @if (assignment.BestBid == assignment.UserBestBid)
-                            {
-                                <td>✅</td>
-                            }
-                            else
-                            {
-                                <td>❌</td>
-                            }
-                        </tr>
-                    }
-                }
-            </table>
-
-            <table class="table table-hover text-center invisible" id="finished-table">
-                <tr class="table-info">
-                    <th>№</th>
-                    <th>Име</th>
-                    <th>Архитект</th>
-                    <th>Вашата най-добра оферта</th>
-                    <th>Най-добра оферта</th>
-                    <th>Оставащо време</th>
-                    <th></th>
-                </tr>
-                @{ i = 0; }
-                @foreach (var assignment in Model.FinishedAssignments)
-                {
-                    i++;
-                    @if (!assignment.UserPlacedBid)
-                    {
-                        <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button" class="font-weight-bold">
-                            <td>@i</td>
-                            <td>@assignment.BuildingName</td>
-                            <td>арх. @assignment.ArchitectName</td>
-                            <td>-</td>
-                            @if (@assignment.BestBid != null)
-                            {
-                                <td>@assignment.BestBid</td>
-                            }
-                            else
-                            {
-                                <td>-</td>
-                            }
-                            <td>Приключило</td>
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button">
-                            <td>@i</td>
-                            <td>@assignment.BuildingName</td>
-                            <td>арх. @assignment.ArchitectName</td>
-                            @if (@assignment.UserBestBid != null)
-                            {
-                                <td>@assignment.UserBestBid</td>
-                            }
-                            else
-                            {
-                                <td>-</td>
-                            }
-                            @if (@assignment.BestBid != null)
-                            {
-                                <td>@assignment.BestBid</td>
-                            }
-                            else
-                            {
-                                <td>-</td>
-                            }
-                            <td>Приключило</td>
-                            @if (assignment.BestBid == assignment.UserBestBid)
-                            {
-                                <td>✅</td>
-                            }
-                            else
-                            {
-                                <td>❌</td>
-                            }
-                        </tr>
-                    }
-                }
-            </table>
-        </div>
-
-        @section Scripts
+<partial name="_AssignmentsPartial" model="@Model">
+@section Scripts
 {
-            <script>
-                $('#finished').on('click', () => {
-                    let container = document.getElementById('container');
-                    let active = document.getElementById('active-table');
-                    let finished = document.getElementById('finished-table');
-                    container.insertBefore(finished, active);
-                    finished.classList.remove('invisible');
-                    active.classList.add('invisible');
-                })
+    <script>
+        setInterval(() => {
+            let timeElements = Array.from(document.querySelectorAll('#time-element'));
+            let endDates = document.querySelectorAll('#end-date');
+            for (let time of timeElements) {
+                if (time.textContent != 'Приключило') {
+                    let [date, month, years, hms] = endDates[timeElements.indexOf(time)].textContent.split('.');
+                    month = Number(month);
+                    month--;
+                    date = Number(date);
+                    let year = years.substr(0, 4);
+                    let [hours, minutes, seconds] = hms.split(':');
+                    let endDate = new Date(year, month, date, hours, minutes, seconds);
+                    let now = new Date();
+                    let timeLeft = endDate - now;
+                    if (timeLeft < 0) {
+                        time.textContent = 'Приключило'
+                    } else {
+                        var daysRemaining = ('00' + Math.floor(timeLeft / (1000 * 60 * 60 * 24))).slice(-2);
+                        var hoursRemaining = ('00' + Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
+                        var minutesRemaining = ('00' + Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
+                        var secondsRemaining = ('00' + Math.floor((timeLeft % (1000 * 60)) / 1000)).slice(-2);
+                        time.textContent = `${daysRemaining}:${hoursRemaining}:${minutesRemaining}:${secondsRemaining}`;
+                    }
+                }
+            }
+        }, 1000);
 
-                $('#active').on('click', () => {
-                    let container = document.getElementById('container');
-                    let active = document.getElementById('active-table');
-                    let finished = document.getElementById('finished-table');
-                    container.insertBefore(active, finished);
-                    active.classList.remove('invisible');
-                    finished.classList.add('invisible');
-                })
-            </script>
+        $('#all-checkbox').click(() => {
+            let activeAssignments = document.querySelectorAll('#active');
+            let finishedAssignments = document.querySelectorAll('#finished');
+            for (let a of activeAssignments) {
+                a.style.display = '';
+            }
+            for (let a of finishedAssignments) {
+                a.style.display = '';
+            }
+        });
+        $('#active-checkbox').click(active);
+
+        $('#finished-checkbox').click(() => {
+            let activeAssignments = document.querySelectorAll('#active');
+            let finishedAssignments = document.querySelectorAll('#finished');
+            for (let a of activeAssignments) {
+                a.style.display = 'none';
+            }
+            for (let a of finishedAssignments) {
+                a.style.display = '';
+            }
+        });
+
+        function active() {
+            let activeAssignments = document.querySelectorAll('#active');
+            let finishedAssignments = document.querySelectorAll('#finished');
+            for (let a of activeAssignments) {
+                a.style.display = '';
+            }
+            for (let a of finishedAssignments) {
+                a.style.display = 'none';
+            }
         }
+
+        active();
+    </script>
+}

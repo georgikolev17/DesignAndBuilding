@@ -37,17 +37,12 @@
 
             if (user != null && user.DesignerType != DesignerType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                var userBids = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id);
                 var assignments = this.assignmentsService
                     .GetAllAssignmentsForDesignerType(user.DesignerType, user.Id, search).ToList();
 
-                var activeAssignments = assignments.Where(x => x.EndDate > DateTime.Now).ToList();
-                var finishedAssignments = assignments.Where(x => x.EndDate <= DateTime.Now).ToList();
-
                 var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
                 {
-                    ActiveAssignments = activeAssignments,
-                    FinishedAssignments = finishedAssignments,
+                    Assignments = assignments,
                     DesignerType = user.DesignerType,
                     Search = search,
                 };
@@ -89,15 +84,12 @@
                         Id = x.Id,
                         BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
                         UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault().Price,
+                        UserPlacedBid = true,
                     }).ToList();
-
-            var activeAssignments = assignments.Where(x => x.EndDate > DateTime.Now).ToList();
-            var finishedAssignments = assignments.Where(x => x.EndDate <= DateTime.Now).ToList();
 
             var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
             {
-                ActiveAssignments = activeAssignments,
-                FinishedAssignments = finishedAssignments,
+                Assignments = assignments,
                 DesignerType = user.DesignerType,
             };
             return this.View(engineerAssignmentsViewModel);

@@ -1,0 +1,87 @@
+﻿@using DesignAndBuilding.Web.ViewModels.Assignment
+@model EngineerAssignmentsViewModel
+@{
+    int i = 0;
+}
+<div id="alert"></div>
+<div id="container">
+    <div>
+        <div class="form-group" style="display: inline-block; margin-right: 10px">
+            <input type="radio" id="all-checkbox" name="assignment-type" />
+            <label for="all-checkbox">Всички задания</label>
+        </div>
+        <div class="form-group" style="display: inline-block; margin-right: 10px">
+            <input type="radio" id="active-checkbox" name="assignment-type" checked />
+            <label for="active-checkbox">Активни задания</label>
+        </div>
+        <div class="form-group" style="display:inline-block">
+            <input type="radio" id="finished-checkbox" name="assignment-type" />
+            <label for="finished-checkbox">Завършили задания</label>
+        </div>
+    </div>
+
+    @*@switch (Model.DesignerType)
+        {
+            case DesignAndBuilding.Data.Models.DesignerType.Architect:
+                <h3 class="text-center">Задания по част архитектура</h3>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
+                <h3 class="text-center">Задания по част Електро</h3>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
+                <h3 class="text-center">Задания по част Строителни конструкции</h3>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
+                <h3 class="text-center">Задания по част ВиК</h3>
+                break;
+            case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
+                <h3 class="text-center">Задания по част ОВК</h3>
+                break;
+            default:
+                break;
+        }*@
+    @if (Model.Assignments.Count > 0)
+    {
+        <table class="table table-hover text-center" id="active-table">
+            <tr class="table-info">
+                <th>№</th>
+                <th>Име</th>
+                <th>Архитект</th>
+                <th>Вашата най-добра оферта</th>
+                <th>Най-добра оферта</th>
+                <th>Оставащо време</th>
+                <th>Крайна дата</th>
+                <th></th>
+            </tr>
+            @foreach (var assignment in Model.Assignments)
+            {
+                i++;
+                <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button" class="@(assignment.UserPlacedBid ? string.Empty : "font-weight-bold")" id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
+                    <td>@i</td>
+                    <td>@assignment.BuildingName</td>
+                    <td>арх. @assignment.ArchitectName</td>
+                    <td>@(assignment.UserBestBid != null ? assignment.UserBestBid : "-")</td>
+                    <td>@(assignment.BestBid != null ? assignment.BestBid : "-")</td>
+                    <td id="time-element">@(assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss") : "Приключило")</td>
+                    <td id="end-date">@assignment.EndDate.ToString("dd.MM.yyyy г. HH:mm:ss")</td>
+                    @if (assignment.UserPlacedBid && assignment.BestBid == assignment.UserBestBid)
+                    {
+                        <td>✔️</td>
+                    }
+                    else if (assignment.UserPlacedBid)
+                    {
+                        <td>❌</td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <div>Няма намерени задания</div>
+    }
+</div>

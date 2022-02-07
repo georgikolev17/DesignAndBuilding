@@ -17,10 +17,18 @@
                 <select asp-for="@Model.DesignerType" class="form-control" asp-items="@Html.GetEnumSelectList<DesignerType>()"></select>
                 <span asp-validation-for="@Model.DesignerType" class="text-danger"></span>
             </div>
+            <div class="form-group" hidden>
+                <label asp-for="Description"></label>
+                
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Description"></label>
-                <input asp-for="Description"/>
+                <input type="file" id="files" class="file" multiple />
+                <input asp-for="Description" type="file" id="files-hidden" class="file" multiple hidden/>
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div id="visualise-upload-files" hidden>
             </div>
             <div class="form-group">
                 <label asp-for="@Model.EndDate"></label>
@@ -31,3 +39,4 @@
         </form>
     </div>
 </div>
+<script src="~/js/upload-files.js" asp-append-version="true"></script>

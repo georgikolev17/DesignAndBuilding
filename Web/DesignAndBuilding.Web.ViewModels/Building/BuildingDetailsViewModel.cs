@@ -14,6 +14,6 @@
 
         public BuildingType BuildingType { get; set; }
 
-        public IEnumerable<BuildingDetailsAssignmentViewModel> Assignments { get; set; }
+        public IList<BuildingDetailsAssignmentViewModel> Assignments { get; set; }
     }
 }
