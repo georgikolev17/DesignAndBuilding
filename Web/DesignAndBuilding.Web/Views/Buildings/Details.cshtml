@@ -3,7 +3,6 @@
 @model BuildingDetailsViewModel
 @{
     this.ViewData["Title"] = "Детайли на проекта";
-    string timeLeft = "";
 }
 <div id="alert"></div>
 <h1>@this.ViewData["Title"]</h1>
@@ -82,14 +81,13 @@
                 <tr class="table-info text-center">
                     <th>Специалност</th>
                     <th>Дата на създаване</th>
-                    <th>Оставащо време</th>
+                    <th>Крайна дата</th>
                     <th></th>
                     <th></th>
                     <th></th>
                 </tr>
                 @foreach (var assignment in Model.Assignments)
                 {
-                    timeLeft = assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString(@"dd\.hh\:mm\:ss") : "Приключило";
                     <tr id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
                         @switch (assignment.DesignerType)
                         {
@@ -106,18 +104,18 @@
                                 <td>Строителни Конструкции</td>
                                 break;
                             case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
-                                <td>Строителни Конструкции</td>
+                                <td>ВиК</td>
                                 break;
                             case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
-                                <td>Строителни Конструкции</td>
+                                <td>ОВК</td>
                                 break;
                             default:
                                 break;
                         }
 
-                        <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy")г.</td>
+                        <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy") г.</td>
 
-                        <td>@timeLeft</td>
+                        <td>@assignment.EndDate.ToString(@"dd.MM.yyyy") г.</td>
 
                         <td>
                             <button class="btn btn-info" onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'">Детайли</button>
@@ -148,7 +146,7 @@
                 a.style.display = '';
             }
         });
-        $('#active-checkbox').click(active);
+        $('#active-checkbox').click(activate);
 
         $('#finished-checkbox').click(() => {
             let activeAssignments = document.querySelectorAll('#active');
@@ -161,7 +159,7 @@
             }
         });
 
-        function active() {
+        function activate() {
             let activeAssignments = document.querySelectorAll('#active');
             let finishedAssignments = document.querySelectorAll('#finished');
             for (let a of activeAssignments) {
@@ -172,6 +170,6 @@
             }
         }
 
-        active();
+        activate();
     </script>
 }

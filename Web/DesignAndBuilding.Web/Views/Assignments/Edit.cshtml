@@ -18,17 +18,34 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description"></label>
-                <input asp-for="Description" />
+                <input type="file" id="files" class="file" multiple />
+                <input asp-for="Description" type="file" id="files-hidden" class="file" multiple hidden />
                 <span asp-validation-for="Description" class="text-danger"></span>
-                <br />
-                <small class="text-muted">При редактиране трябва да качите отново <b>всички</b> файлове от описанието!</small>
+            </div>
+            <div id="visualise-upload-files">
+                @foreach (var file in Model.Description)
+                {
+                    <div id="file-visualise" style="display: inline">@file.Name</div>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="@Model.EndDate"></label>
                 <input asp-for="@Model.EndDate" class="form-control" />
                 <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Редактирай</button>
+            <button type="submit" class="btn btn-primary">Запазване на промените</button>
         </form>
     </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        let files = document.querySelectorAll('input')[1];
+        files.addEventListener('change', () => {
+            console.log('vvv');
+        });
+    </script>
+}
+
+<script src="~/js/upload-files.js" asp-append-version="true"></script>

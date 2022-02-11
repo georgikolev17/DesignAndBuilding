@@ -55,10 +55,26 @@
                 return;
             }
 
-            assignment.Description = await this.GetDescriptionFiles(description, assignment);
+            var files = await this.GetDescriptionFiles(description, assignment);
+
+            foreach (var file in assignment.Description)
+            {
+                if (!files.Contains(file))
+                {
+                    file.IsDeleted = true;
+                    this.filesRepository.All().FirstOrDefault(x => x == file).IsDeleted = true;
+                }
+            }
+
+            foreach (var file in files)
+            {
+                assignment.Description.Add(file);
+            }
+
             assignment.DesignerType = designerType;
             assignment.EndDate = endDate;
 
+            await this.filesRepository.SaveChangesAsync();
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
@@ -107,6 +123,7 @@
                 .Include(x => x.Bids)
                 .ThenInclude(x => x.Designer)
                 .Include(x => x.Building)
+                .Include(x => x.Description)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return assignment;
@@ -154,7 +171,7 @@
 
                     descriptionFiles.Add(new DescriptionFile()
                     {
-                        Assignment = assignment,
+                        AssignmentId = assignment.Id,
                         Content = bytes,
                         Name = file.FileName,
                         ContentType = file.ContentType,

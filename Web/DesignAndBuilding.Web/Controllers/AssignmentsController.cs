@@ -114,7 +114,7 @@
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Невалидно наддаване" });
             }
 
-            await this.bidsService.CreateBidAsync(user.Id, bidViewModel.Id, decimal.Parse(bidViewModel.BidPrice));
+            await this.bidsService.CreateBidAsync(user.Id, bidViewModel.Id, bidViewModel.BidPrice);
 
             var usersToSendNotification = this.assignmentsService.GetAllUsersBidInAssignment(assignment.Id);
 
@@ -148,12 +148,20 @@
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
             }
 
+            var files = new List<IFormFile>();
+
+            foreach (var file in assignment.Description)
+            {
+                var stream = new MemoryStream(file.Content);
+                files.Add(new FormFile(stream, 0, file.Content.Length, file.Name, file.Name));
+            }
+
             var assignmentViewModel = new AssignmentInputModel()
             {
                 BuildingId = assignment.BuildingId,
 
                 // TODO: Fix desccription display
-                Description = new List<IFormFile>(),
+                Description = files,
                 DesignerType = assignment.DesignerType,
                 EndDate = assignment.EndDate,
             };
@@ -192,7 +200,9 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (await this.assignmentsService.GetAssignmentById(id) == null)
+            var assignment = await this.assignmentsService.GetAssignmentById(id);
+
+            if (assignment == null)
             {
                 return this.NotFound();
             }
@@ -204,7 +214,7 @@
 
             await this.assignmentsService.RemoveAssignment(id);
 
-            return this.Redirect("/");
+            return this.Redirect($"/buildings/details/{assignment.BuildingId}");
         }
 
         private static string DisplayDesignertypeInBulgarian(DesignerType designerType)

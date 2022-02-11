@@ -9,7 +9,7 @@
 
         [Required]
         [Display(Name = "Цена лв/кв.м.")]
-        [RegularExpression(@"^[-+]?[0-9]*\,?[0-9]+([eE][-+]?[0-9]+)?$")]
-        public string BidPrice { get; set; }
+        [Range(0, 20)]
+        public decimal BidPrice { get; set; }
     }
 }

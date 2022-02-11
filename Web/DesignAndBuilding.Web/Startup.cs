@@ -1,7 +1,7 @@
 ﻿namespace DesignAndBuilding.Web
 {
     using System.Reflection;
-    using AutoMapper;
+
     using DesignAndBuilding.Data;
     using DesignAndBuilding.Data.Common;
     using DesignAndBuilding.Data.Common.Repositories;
@@ -9,7 +9,6 @@
     using DesignAndBuilding.Data.Repositories;
     using DesignAndBuilding.Data.Seeding;
     using DesignAndBuilding.Services;
-    using DesignAndBuilding.Services.Data;
     using DesignAndBuilding.Services.Mapping;
     using DesignAndBuilding.Services.Messaging;
     using DesignAndBuilding.Web.Hubs;

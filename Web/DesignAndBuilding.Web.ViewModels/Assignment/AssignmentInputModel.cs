@@ -10,7 +10,7 @@
     public class AssignmentInputModel
     {
         [Display(Name = "Описание")]
-        public IEnumerable<IFormFile> Description { get; set; }
+        public IList<IFormFile> Description { get; set; }
 
         [Required]
         [Display(Name = "Крайна дата")]

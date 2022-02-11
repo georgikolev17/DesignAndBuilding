@@ -4,7 +4,7 @@
     this.ViewData["Title"] = "Моите обекти";
 }
 <div id="alert"></div>
-<h1>@this.ViewData["Title"]</h1>
+<h3>@this.ViewData["Title"]</h3>
 <table class="table table-hover">
     <tr class="table-info">
         <th>Име</th>
@@ -73,8 +73,6 @@
             <td>
                 <button onclick="window.location.href='@Url.Action("delete", "buildings", new { id = building.Id})'" class="btn btn-danger">Изтрий</button>
             </td>
-            <td></td>
-            <td></td>
         </tr>
     }
 </table>

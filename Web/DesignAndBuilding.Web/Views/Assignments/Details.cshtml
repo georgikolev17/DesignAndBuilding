@@ -5,7 +5,6 @@
     this.ViewData["Title"] = "Детайли на заданието";
 }
 <div id="alert"></div>
-<h3 class="text-center">@this.ViewData["Title"]</h3>
 <div class="container align-center">
     <div class="row h-100 d-flex justify-content-around">
         <div class="col-3 border table-info">
@@ -80,8 +79,8 @@
                     <p><b>Специалност: </b>Друга</p>
                     break;
             }
-            <p><b>Краен срок: </b>@Model.EndDate</p>
-            <p><b>Дата на създаване: </b>@Model.CreatedOn</p>
+            <p><b>Краен срок: </b>@Model.EndDate.ToString("dd.MM.yyyy г. HH:mm")</p>
+            <p><b>Дата на създаване: </b>@Model.CreatedOn.ToString("dd.MM.yyyy г.")</p>
         </div>
         <div class="col-8">
             <h4 class="text-center">Оферти</h4>
