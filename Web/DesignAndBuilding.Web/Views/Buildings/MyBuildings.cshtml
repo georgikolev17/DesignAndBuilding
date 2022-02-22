@@ -5,8 +5,8 @@
 }
 <div id="alert"></div>
 <h3>@this.ViewData["Title"]</h3>
-<table class="table table-hover">
-    <tr class="table-info">
+<table class="table table-hover text-center">
+    <tr class="background-cyan">
         <th>Име</th>
         <th>РЗП</th>
         <th>Тип на сградата</th>
@@ -65,7 +65,7 @@
                     break;
             }
             <td>
-                <button onclick="window.location.href='@Url.Action("details", "buildings", new { id = building.Id})'" class="btn btn-info">Детайли</button>
+                <button onclick="window.location.href='@Url.Action("details", "buildings", new { id = building.Id})'" class="btn btn-secondary">Детайли</button>
             </td>
             <td>
                 <button onclick="window.location.href='@Url.Action("edit", "buildings", new { id = building.Id})'" class="btn btn-primary">Редактирай</button>

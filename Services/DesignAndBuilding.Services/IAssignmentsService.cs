@@ -15,7 +15,7 @@
 
         Task<Assignment> GetAssignmentById(int id);
 
-        List<BuildingDetailsAssignmentViewModel> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId, AssignmentSearchInputModel search);
+        List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId);
 
         List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId);
 

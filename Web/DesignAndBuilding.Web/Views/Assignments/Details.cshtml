@@ -7,7 +7,7 @@
 <div id="alert"></div>
 <div class="container align-center">
     <div class="row h-100 d-flex justify-content-around">
-        <div class="col-3 border table-info">
+        <div class="col-3 border background-cyan p-3 rounded">
             <h4>Обект</h4>
             <p><b>Име: </b>@Model.Building.Name</p>
             <p><b>РЗП:</b> @Model.Building.TotalBuildUpArea</p>
@@ -102,7 +102,7 @@
                         <td></td>
                         <td></td>
                     }
-                    <td>@bid.Price лв.</td>
+                    <td>@bid.Price лв/кв.м</td>
                     @if (Model.IsFinished && Model.HasUserCreatedAssignment)
                     {
                         <td></td>
@@ -120,7 +120,7 @@
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="@Model.BidPrice"></label>
-                        <input asp-for="@Model.BidPrice" class="form-control" />
+                        <input asp-for="@Model.BidPrice" class="form-control w-25"/>
                         <span asp-validation-for="@Model.BidPrice" class="text-danger"></span>
                     </div>
                     <button type="submit" class="btn btn-primary">Предложи цена</button>

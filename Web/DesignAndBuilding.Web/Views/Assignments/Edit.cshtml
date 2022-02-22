@@ -21,12 +21,9 @@
                 <input type="file" id="files" class="file" multiple />
                 <input asp-for="Description" type="file" id="files-hidden" class="file" multiple hidden />
                 <span asp-validation-for="Description" class="text-danger"></span>
+                <p id="upload-warning" class="text-danger">Отново прикачете всички файлове преди да запазите промените</p>
             </div>
             <div id="visualise-upload-files">
-                @foreach (var file in Model.Description)
-                {
-                    <div id="file-visualise" style="display: inline">@file.Name</div>
-                }
             </div>
             <div class="form-group">
                 <label asp-for="@Model.EndDate"></label>
@@ -42,9 +39,15 @@
 {
     <script>
         let files = document.querySelectorAll('input')[1];
+        let pEl = document.getElementById('upload-warning');
         files.addEventListener('change', () => {
-            console.log('vvv');
-        });
+            console.log(files.files.length);
+            if (files.files.length > 0) {
+                pEl.hidden = true;
+            } else {
+                pEl.hidden = false;
+            }
+        })
     </script>
 }
 

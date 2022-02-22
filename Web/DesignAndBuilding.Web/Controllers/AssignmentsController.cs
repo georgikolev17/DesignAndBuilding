@@ -193,7 +193,7 @@
 
             await this.assignmentsService.EditAssignment(viewModel.DesignerType, viewModel.Description.ToList(), viewModel.EndDate, id);
 
-            return this.Redirect("/");
+            return this.Redirect($"/buildings/details/{assignment.BuildingId}");
         }
 
         public async Task<IActionResult> Delete(int id)

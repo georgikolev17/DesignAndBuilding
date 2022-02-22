@@ -5,10 +5,10 @@
     this.ViewData["Title"] = "Детайли на проекта";
 }
 <div id="alert"></div>
-<h1>@this.ViewData["Title"]</h1>
-<div class="container">
+<div class="">
     <div class="row">
-        <div class="col-3 border">
+        <div class="col-3">
+            <h3>@this.ViewData["Title"]</h3>
             <br />
             <p><b>Име на обекта: </b>@Model.Name</p>
             <p><b>РЗП:</b> @Model.TotalBuildUpArea</p>
@@ -63,7 +63,7 @@
         </div>
         <div class="col-9">
             <h3 class="text-center">Задания</h3>
-            <div>
+            <div class="text-center">
                 <div class="form-group" style="display: inline-block; margin-right: 10px">
                     <input type="radio" id="all-checkbox" name="assignment-type" />
                     <label for="all-checkbox">Всички задания</label>
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <table class="table table-hover text-center">
-                <tr class="table-info text-center">
+                <tr class="background-cyan text-center">
                     <th>Специалност</th>
                     <th>Дата на създаване</th>
                     <th>Крайна дата</th>
@@ -118,7 +118,7 @@
                         <td>@assignment.EndDate.ToString(@"dd.MM.yyyy") г.</td>
 
                         <td>
-                            <button class="btn btn-info" onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'">Детайли</button>
+                            <button class="btn btn-secondary" onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'">Детайли</button>
                         </td>
                         <td>
                             <button class="btn btn-primary" onclick="window.location.href='@Url.Action("edit", "assignments", new { id = assignment.Id})'">Редактирай</button>

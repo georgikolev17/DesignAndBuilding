@@ -15,7 +15,5 @@
         public IList<BuildingDetailsAssignmentViewModel> Assignments { get; set; }
 
         public DesignerType DesignerType { get; set; }
-
-        public AssignmentSearchInputModel Search { get; set; }
     }
 }

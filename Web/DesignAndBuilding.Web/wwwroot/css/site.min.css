@@ -19,3 +19,17 @@ a.navbar-brand{white-space:normal;text-align:center;word-break:break-all}a{color
     margin-left: 10px;
     text-align: center;
 }
+
+.background-cyan {
+    background-color:#234465;
+    color: lightgray;
+}
+
+body {
+    background-color: rgb(238, 239, 241);
+}
+
+.assignment-details {
+    border-radius: 50px;
+    font: 900;
+}

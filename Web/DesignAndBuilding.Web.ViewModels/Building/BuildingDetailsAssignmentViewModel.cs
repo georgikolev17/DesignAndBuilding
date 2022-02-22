@@ -12,7 +12,7 @@
         public int Id { get; set; }
 
         [Required]
-        public string BuildingName { get; set; }
+        public BuildingType BuildingType { get; set; }
 
         [Required]
         public ICollection<DescriptionFile> Description { get; set; }

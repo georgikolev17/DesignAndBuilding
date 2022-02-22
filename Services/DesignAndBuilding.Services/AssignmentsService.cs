@@ -78,28 +78,15 @@
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
-        public List<BuildingDetailsAssignmentViewModel> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId, AssignmentSearchInputModel search)
+        public List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId)
         {
             var assignments = this.assignmentsRepository
                 .All()
+                .Where(x => x.DesignerType == designerType)
                 .Include(x => x.Building)
                 .ThenInclude(x => x.Architect)
                 .Include(x => x.Bids)
-                .Where(x => x.DesignerType == designerType && (string.IsNullOrEmpty(search.SearchText) || (x.Building.Architect.FirstName + " " + x.Building.Architect.LastName + " " + x.Building.Name + " " + x.Description + " " + x.Building.Town).ToLower().Contains(search.SearchText)) && (search.BuildingType == null || x.Building.BuildingType == search.BuildingType))
                 .OrderBy(x => x.EndDate)
-                .Select(x => new BuildingDetailsAssignmentViewModel
-                {
-                    BuildingName = x.Building.Name,
-                    CreatedOn = x.CreatedOn,
-                    ArchitectName = this.usersService.GetUserById(userId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
-                    Description = x.Description,
-                    DesignerType = x.DesignerType,
-                    EndDate = x.EndDate,
-                    Id = x.Id,
-                    UserPlacedBid = this.GetAssignmentsWhereUserPlacedBid(userId).Contains(x),
-                    BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault() == null ? null : x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
-                    UserBestBid = x.Bids.Where(x => x.DesignerId == userId).OrderBy(x => x.Price).FirstOrDefault() != null ? x.Bids.Where(x => x.DesignerId == userId).OrderBy(x => x.Price).FirstOrDefault().Price : null,
-                })
                 .ToList();
 
             return assignments;

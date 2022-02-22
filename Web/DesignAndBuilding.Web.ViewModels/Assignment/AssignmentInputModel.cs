@@ -9,6 +9,7 @@
 
     public class AssignmentInputModel
     {
+        [Required]
         [Display(Name = "Описание")]
         public IList<IFormFile> Description { get; set; }
 

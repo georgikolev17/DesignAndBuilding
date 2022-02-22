@@ -16,7 +16,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light table-info border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark border-bottom box-shadow mb-3 background-cyan">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -25,35 +25,35 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 navbar-dark">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
                         </li>
                         @if (user != null && user.DesignerType == DesignerType.Architect)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="buildings" asp-action="create">Създай обект</a>
+                                <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="create">Създай обект</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="buildings" asp-action="MyBuildings">Моите обекти</a>
+                                <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="MyBuildings">Моите обекти</a>
                             </li>
                         }
                         @if (user != null && user.DesignerType != DesignerType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="mybids">Моите наддавания</a>
+                                <a class="nav-link" asp-area="" asp-controller="home" asp-action="mybids">Моите наддавания</a>
                             </li>
                         }
                         @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="administration" asp-controller="dashboard" asp-action="allbuildings">Всички обекти</a>
+                                <a class="nav-link" asp-area="administration" asp-controller="dashboard" asp-action="allbuildings">Всички обекти</a>
                             </li>
                         }
                         @if (user != null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Notifications">Известия</a>
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Notifications">Известия</a>
                             </li>
                         }
                     </ul>

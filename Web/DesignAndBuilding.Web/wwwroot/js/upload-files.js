@@ -28,17 +28,6 @@ function scripts() {
         }
         descriptionElement.files = dT.files;
     });
-
-    let files = document.querySelectorAll('#file-visualise');
-    for (const file of files) {
-        file.addEventListener('click', () => {
-            const dataTransfer = new DataTransfer();
-            for (const file of descriptionElement.files) {
-                dataTransfer.items.add(file);
-            }
-            console.log(dataTransfer.files);
-        })
-    }
 }
 
 scripts();
