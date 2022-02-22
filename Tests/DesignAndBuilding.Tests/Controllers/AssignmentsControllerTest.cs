@@ -5,6 +5,7 @@
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Bid;
+    using Microsoft.AspNetCore.Http;
     using MyTested.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
@@ -48,7 +49,7 @@
                 {
                     BuildingId = 1,
                     EndDate = DateTime.UtcNow + TimeSpan.FromDays(5),
-                    Description = "This is some discription",
+                    Description = new List<IFormFile>(),
                     DesignerType = DesignerType.ElectroEngineer,
                 }))
                 .ShouldHave()
@@ -121,7 +122,7 @@
                     user.WithIdentifier(ControllerConstants.UserId);
                     user.WithUsername(ControllerConstants.Username);
                 })
-                .Calling(c => c.Details(new PlaceBidViewModel() { Id = 1, BidPrice = null }))
+                .Calling(c => c.Details(new PlaceBidViewModel() { Id = 1, BidPrice = 21 }))
                 .ShouldHave()
                 .InvalidModelState()
                 .AndAlso()
@@ -139,7 +140,7 @@
                     user.WithIdentifier(ControllerConstants.UserId);
                     user.WithUsername(ControllerConstants.Username);
                 })
-                .Calling(c => c.Details(new PlaceBidViewModel() { Id = 1, BidPrice = null }))
+                .Calling(c => c.Details(new PlaceBidViewModel() { Id = 1, BidPrice = 21 }))
                 .ShouldHave()
                 .InvalidModelState()
                 .AndAlso()
@@ -158,7 +159,7 @@
                     user.WithIdentifier(ControllerConstants.UserId);
                     user.WithUsername(ControllerConstants.Username);
                 })
-                .Calling(c => c.Details(new PlaceBidViewModel() { BidPrice = "1", Id = 1 }))
+                .Calling(c => c.Details(new PlaceBidViewModel() { BidPrice = 1, Id = 1 }))
                 .ShouldHave()
                 .ValidModelState()
                 .AndAlso()
@@ -237,7 +238,7 @@
                     user.WithIdentifier(ControllerConstants.UserId);
                     user.WithUsername(ControllerConstants.Username);
                 })
-                .Calling(c => c.Edit(1, new AssignmentInputModel() { Description = "test description", EndDate = DateTime.Now + TimeSpan.FromDays(5), BuildingId = 1, DesignerType = DesignerType.Other }))
+                .Calling(c => c.Edit(1, new AssignmentInputModel() { Description = new List<IFormFile>(), EndDate = DateTime.Now + TimeSpan.FromDays(5), BuildingId = 1, DesignerType = DesignerType.Other }))
                 .ShouldReturn()
                 .View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
 
@@ -259,15 +260,15 @@
                     user.WithIdentifier(ControllerConstants.UserId);
                     user.WithUsername(ControllerConstants.Username);
                 })
-                .Calling(c => c.Edit(1, new AssignmentInputModel() { BuildingId = 1, Description = "Changed description", DesignerType = DesignerType.ElectroEngineer, EndDate = DateTime.Now + TimeSpan.FromDays(5) }))
+                .Calling(c => c.Edit(1, new AssignmentInputModel() { BuildingId = 1, Description = new List<IFormFile>(), DesignerType = DesignerType.ElectroEngineer, EndDate = DateTime.Now + TimeSpan.FromDays(5) }))
                 .ShouldHave()
                 .Data(data => data.WithSet<Assignment>(set =>
                 {
-                    Assert.NotNull(set.SingleOrDefault(a => a.Description == "Changed description" && a.BuildingId == 1 && a.DesignerType == DesignerType.ElectroEngineer));
+                    Assert.NotNull(set.SingleOrDefault(a => a.BuildingId == 1 && a.DesignerType == DesignerType.ElectroEngineer));
                 }))
                 .AndAlso()
                 .ShouldReturn()
-                .Redirect("/");
+                .Redirect("/buildings/details/1");
 
         [Fact]
         public void DeleteShouldReturnNotFoundWhenIdIsInvalid()
@@ -311,7 +312,7 @@
                     }))
                 .AndAlso()
                 .ShouldReturn()
-                .Redirect("/");
+                .Redirect("/buildings/details/1");
 
         private static IEnumerable<Bid> Get10UsersBidForAssignment(int assignmentId = 1)
         {

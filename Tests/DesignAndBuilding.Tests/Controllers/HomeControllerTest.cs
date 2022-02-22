@@ -10,6 +10,7 @@
     using System;
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Notification;
+    using Microsoft.AspNetCore.Http;
 
     public class HomeControllerTest
     {
@@ -55,7 +56,7 @@
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<EngineerAssignmentsViewModel>()
-                    .Passing(m => Assert.Equal(expectedAssignmentsCount, m.ActiveAssignments.Count)));
+                    .Passing(m => Assert.Equal(expectedAssignmentsCount, m.Assignments.Count)));
         }
 
         [Fact]
@@ -90,7 +91,7 @@
                 .ShouldReturn()
                 .View(view => view
                 .WithModelOfType<EngineerAssignmentsViewModel>()
-                .Passing(v => Assert.Equal(v.ActiveAssignments.Count + v.FinishedAssignments.Count, bidsCount)));
+                .Passing(v => Assert.Equal(v.Assignments.Count, bidsCount)));
 
         [Theory]
         [InlineData(ControllerConstants.UserId, 10)]
@@ -127,7 +128,7 @@
                         ArchitectId = ControllerConstants.UserId,
                     },
                     CreatedOn = DateTime.UtcNow,
-                    Description = ControllerConstants.Description,
+                    Description = new List<DescriptionFile>(),
                     DesignerType = designerType,
                     EndDate = DateTime.UtcNow + TimeSpan.FromDays(5),
                 });
