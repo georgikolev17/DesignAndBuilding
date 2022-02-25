@@ -4,6 +4,7 @@ function scripts() {
 
     uploadFilesElement.addEventListener('change', () => {
         let uploadFiles = uploadFilesElement.files;
+        let infoElement = document.getElementById('remove-info');
         const dT = new DataTransfer();
 
         let visualiseUploadFilesElement = document.getElementById('visualise-upload-files');
@@ -20,6 +21,9 @@ function scripts() {
                 divElement.remove();
                 dT.items.remove(file);
                 descriptionElement.files = dT.files;
+                if (descriptionElement.files.length == 0) {
+                    infoElement.hidden = true;
+                }
             });
             visualiseUploadFilesElement.appendChild(divElement);
         }
@@ -27,6 +31,10 @@ function scripts() {
             dT.items.add(file);
         }
         descriptionElement.files = dT.files;
+        if (descriptionElement.files.length > 0) {
+            console.log(descriptionElement.files.length)
+            infoElement.hidden = false;
+        }
     });
 }
 
