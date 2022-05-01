@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\DesignAndBuilding.Data.Models\DesignAndBuilding.Data.Models.csproj" />
     <ProjectReference Include="..\..\Web\DesignAndBuilding.Web.ViewModels\DesignAndBuilding.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\DesignAndBuilding.Services\DesignAndBuilding.Services.csproj" />
   </ItemGroup>
 
 </Project>

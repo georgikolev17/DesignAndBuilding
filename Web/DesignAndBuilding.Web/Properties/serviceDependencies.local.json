@@ -1,11 +1,7 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:DefaultConnection"
-    },
     "mssql2": {
-      "type": "mssql",
+      "type": "mssql.local",
       "connectionId": "ConnectionStrings:DesignAndBuildingWebContextConnection"
     }
   }

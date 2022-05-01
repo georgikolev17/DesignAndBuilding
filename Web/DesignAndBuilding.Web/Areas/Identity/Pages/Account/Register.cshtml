@@ -1,7 +1,7 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Регистрация";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
+            <h4>Създаване на акаунт</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -47,7 +47,7 @@
                 <select asp-for="Input.DesignerType" class="form-control" asp-items="@Html.GetEnumSelectList<DesignerType>()"></select>
                 <span asp-validation-for="Input.DesignerType" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">Регистрация</button>
         </form>
     </div>
 </div>

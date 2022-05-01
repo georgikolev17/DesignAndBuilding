@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AutoMapper;
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
@@ -25,13 +26,15 @@
         private readonly IBidsService bidsService;
         private readonly INotificationsService notificationsService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IMapper mapper;
 
-        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager)
+        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             this.assignmentsService = assignmentsService;
             this.bidsService = bidsService;
             this.notificationsService = notificationsService;
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         public IActionResult Create()
@@ -61,32 +64,11 @@
                 return this.NotFound();
             }
 
-            return this.View(new AssignmentViewModel()
-            {
-                AssignmentId = id,
-                CreatedOn = assignment.CreatedOn,
-                DesignerType = assignment.DesignerType,
-                EndDate = assignment.EndDate,
-                IsFinished = assignment.IsFinished,
-                HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id),
-                Building = new AssignmentBuildingViewModel()
-                {
-                    TotalBuildUpArea = assignment.Building.TotalBuildUpArea,
-                    BuildingType = assignment.Building.BuildingType,
-                    Name = assignment.Building.Name,
-                },
-                Bids = assignment.Bids
-                    .Select(x => new AssignmentBidViewModel()
-                    {
-                        Price = x.Price,
-                        TimePlaced = x.TimePlaced,
-                        UserFullName = x.Designer.FirstName + " " + x.Designer.LastName,
-                        PhoneNumber = x.Designer.PhoneNumber,
-                        Email = x.Designer.Email,
-                    })
-                    .OrderBy(x => x.Price)
-                    .ToList(),
-            });
+            var viewModel = this.mapper.Map<AssignmentViewModel>(assignment);
+            viewModel.HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id);
+            viewModel.Bids = viewModel.Bids.OrderBy(x => x.Price).ToList();
+
+            return this.View(viewModel);
         }
 
         // Place bids

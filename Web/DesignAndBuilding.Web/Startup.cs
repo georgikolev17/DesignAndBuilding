@@ -2,6 +2,7 @@
 {
     using System.Reflection;
 
+    using AutoMapper;
     using DesignAndBuilding.Data;
     using DesignAndBuilding.Data.Common;
     using DesignAndBuilding.Data.Common.Repositories;
@@ -82,6 +83,12 @@
             services.AddTransient<IAssignmentsService, AssignmentsService>();
             services.AddTransient<IBidsService, BidsService>();
             services.AddTransient<INotificationsService, NotificationsService>();
+
+            // Auto Mapper Configurations
+            services.AddSingleton(provider => new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            }).CreateMapper());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

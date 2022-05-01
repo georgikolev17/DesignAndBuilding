@@ -82,3 +82,9 @@ body {
     border: solid;
     font-size: larger;
 }
+
+.login {
+    text-align:center;
+    margin:auto;
+    font-style:italic;
+}
