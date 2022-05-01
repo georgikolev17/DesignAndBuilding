@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using DesignAndBuilding.Data.Common.Repositories;
@@ -52,6 +53,7 @@
 
         public async Task<bool> DeleteNotification(int notificationId, string userId)
         {
+            // Check if there is such notification
             if (!this.IsNotificationUsers(userId, notificationId))
             {
                 return false;
@@ -90,6 +92,7 @@
 
         public async Task<bool> MarkNotificationAsRead(int notificationId, string userId)
         {
+            // Check if notification is for current user
             if (!this.IsNotificationUsers(userId, notificationId))
             {
                 return false;

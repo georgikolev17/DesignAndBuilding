@@ -21,8 +21,7 @@
         [Required]
         public DesignerType DesignerType { get; set; }
 
-        // Due to short deadline: TODO: Fix Dates
-        public bool IsFinished => this.EndDate < DateTime.Now.AddHours(2);
+        public bool IsFinished => this.EndDate < DateTime.Now;
 
         [Required]
         public int BuildingId { get; set; }

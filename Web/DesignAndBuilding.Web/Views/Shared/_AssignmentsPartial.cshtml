@@ -19,27 +19,6 @@
             <label for="finished-checkbox">Завършили задания</label>
         </div>
     </div>
-
-    @*@switch (Model.DesignerType)
-        {
-            case DesignAndBuilding.Data.Models.DesignerType.Architect:
-                <h3 class="text-center">Задания по част архитектура</h3>
-                break;
-            case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
-                <h3 class="text-center">Задания по част Електро</h3>
-                break;
-            case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
-                <h3 class="text-center">Задания по част Строителни конструкции</h3>
-                break;
-            case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
-                <h3 class="text-center">Задания по част ВиК</h3>
-                break;
-            case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
-                <h3 class="text-center">Задания по част ОВК</h3>
-                break;
-            default:
-                break;
-        }*@
     @if (Model.Assignments.Count > 0)
     {
         <table class="table table-hover text-center" id="active-table">
@@ -56,9 +35,7 @@
             @foreach (var assignment in Model.Assignments)
             {
                 i++;
-                // Due to short deadline: TODO: Fix Dates
-        <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button" class="@(assignment.UserPlacedBid ? string.Empty : "font-weight-bold")" id="@(assignment.EndDate > DateTime.Now.AddHours(2) ? "active" : "finished")">
-            @*<td>@i</td>*@
+        <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button" class="@(assignment.UserPlacedBid ? string.Empty : "font-weight-bold")" id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
             @switch (assignment.BuildingType)
             {
                 case DesignAndBuilding.Data.Models.BuildingType.Other:
@@ -71,10 +48,10 @@
                     <td>Детска градина</td>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.SingleFamilyHouse:
-                    <td>Тип: Еднофамилна къща</td>
+                    <td>Еднофамилна къща</td>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.MultiFamiyHouse:
-                    <td>Тип: Многофамилна къща</td>
+                    <td>Многофамилна къща</td>
                     break;
                 case DesignAndBuilding.Data.Models.BuildingType.Hospital:
                     <td>Болница</td>
@@ -108,8 +85,7 @@
             <td>@(assignment.UserBestBid != null ? assignment.UserBestBid : "-")</td>
             <td>@(assignment.BestBid != null ? assignment.BestBid : "-")</td>
             <td id="end-date">@assignment.EndDate.ToString("dd.MM.yyyy г. HH:mm:ss")</td>
-            @*// Due to short deadline: TODO: Fix Dates*@
-            <td id="time-element">@(assignment.EndDate.ToUniversalTime() > DateTime.Now.AddHours(2) ? (assignment.EndDate - DateTime.Now.AddHours(2)).ToString(@"dd\:hh\:mm\:ss") : "Приключило")</td>
+            <td id="time-element">@(assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss") : "Приключило")</td>
             @if (assignment.UserPlacedBid && assignment.BestBid == assignment.UserBestBid)
             {
                 <td>✔️</td>

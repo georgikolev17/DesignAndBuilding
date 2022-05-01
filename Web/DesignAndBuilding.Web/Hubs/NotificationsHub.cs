@@ -3,9 +3,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.SignalR;
 
     public class NotificationsHub : Hub
@@ -21,6 +19,7 @@
         {
             do
             {
+                // Check if there are new notifications
                 var newNotifications = await this.notificationsService.NewNotificationsForUser(this.Context.UserIdentifier);
 
                 var newNotificationsMessages = newNotifications.Select(x => x.Message);

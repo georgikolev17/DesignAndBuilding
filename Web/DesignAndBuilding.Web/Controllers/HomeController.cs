@@ -37,14 +37,6 @@
 
             if (user != null && user.DesignerType != DesignerType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                /*var assignments = this.assignmentsService
-                    .GetAllAssignmentsForDesignerType(user.DesignerType, user.Id).ToList();
-
-                var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
-                {
-                    Assignments = assignments,
-                    DesignerType = user.DesignerType,
-                };*/
                 var test = this.assignmentsService
                     .GetAllAssignmentsForDesignerType(user.DesignerType, user.Id);
                 var assignments = this.assignmentsService

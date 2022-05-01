@@ -5,21 +5,18 @@
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
-    using System.Net;
-    using System.Text;
     using System.Threading.Tasks;
+
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Bid;
-    using Dropbox.Api;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Configuration;
 
     [Authorize]
     public class AssignmentsController : Controller
@@ -104,6 +101,7 @@
                 return this.NotFound();
             }
 
+            // Check if current user is of correct designer type
             if (user.DesignerType != assignment.DesignerType)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Само {DisplayDesignertypeInBulgarian(assignment.DesignerType)}и могат да наддават за това задание!" });
@@ -143,6 +141,7 @@
                 return this.NotFound();
             }
 
+            // Check if current user is author of the assignment
             if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
@@ -160,7 +159,6 @@
             {
                 BuildingId = assignment.BuildingId,
 
-                // TODO: Fix desccription display
                 Description = files,
                 DesignerType = assignment.DesignerType,
                 EndDate = assignment.EndDate,
@@ -174,6 +172,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            // Validate input data
             var assignment = await this.assignmentsService.GetAssignmentById(id);
 
             if (assignment == null)
@@ -186,6 +185,7 @@
                 return this.View(viewModel);
             }
 
+            // Check if current user is author of the assignment
             if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
@@ -207,6 +207,7 @@
                 return this.NotFound();
             }
 
+            // Check if current user is author of the assignment
             if (!this.assignmentsService.HasUserCreatedAssignment(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го изтрие!" });
@@ -215,27 +216,6 @@
             await this.assignmentsService.RemoveAssignment(id);
 
             return this.Redirect($"/buildings/details/{assignment.BuildingId}");
-        }
-
-        private static string DisplayDesignertypeInBulgarian(DesignerType designerType)
-        {
-            switch (designerType)
-            {
-                case DesignerType.Other:
-                    return "друг";
-                case DesignerType.Architect:
-                    return "архитект";
-                case DesignerType.BuildingConstructionEngineer:
-                    return "строителни конструктор";
-                case DesignerType.ElectroEngineer:
-                    return "електро инженер";
-                case DesignerType.PlumbingEngineer:
-                    return "ВиК инженер";
-                case DesignerType.HVACEngineer:
-                    return "ОВК инженер";
-                default:
-                    return "друг";
-            }
         }
 
         public async Task<IActionResult> Download(int id)
@@ -263,6 +243,27 @@
                 }
 
                 return new FileContentResult(compressedFileStream.ToArray(), "application/zip") { FileDownloadName = "Description.zip" };
+            }
+        }
+
+        private static string DisplayDesignertypeInBulgarian(DesignerType designerType)
+        {
+            switch (designerType)
+            {
+                case DesignerType.Other:
+                    return "друг";
+                case DesignerType.Architect:
+                    return "архитект";
+                case DesignerType.BuildingConstructionEngineer:
+                    return "строителни конструктор";
+                case DesignerType.ElectroEngineer:
+                    return "електро инженер";
+                case DesignerType.PlumbingEngineer:
+                    return "ВиК инженер";
+                case DesignerType.HVACEngineer:
+                    return "ОВК инженер";
+                default:
+                    return "друг";
             }
         }
     }

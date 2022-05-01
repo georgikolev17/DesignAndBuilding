@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
@@ -29,6 +30,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            // Check if current user is architect
             if (user.DesignerType != DesignerType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават обекти!" });
@@ -42,11 +44,13 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            // Validate input data
             if (!this.ModelState.IsValid)
             {
                 return this.View(buildingInputModel);
             }
 
+            // Check if current user is architect
             if (user.DesignerType != DesignerType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават обекти!" });
@@ -63,6 +67,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            // Check if current user is architect
             if (user.DesignerType != DesignerType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да достъпват тази страница!" });
@@ -82,6 +87,7 @@
                 return this.NotFound();
             }
 
+            // Check if current user is author of the building
             if (building.ArchitectId != user.Id && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да вижда детейлите му!" });
@@ -116,6 +122,7 @@
                 return this.NotFound(0);
             }
 
+            // Check if current user is author of the assignment
             if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира!" });
@@ -142,6 +149,7 @@
                 return this.NotFound();
             }
 
+            // Check if current user is author of the assignment
             if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го редактира!" });
@@ -161,6 +169,7 @@
                 return this.NotFound();
             }
 
+            // Check if current user is author of the assignment
             if (!await this.buildingsService.HasUserCreatedBuilding(user.Id, id) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да го изтрие!" });

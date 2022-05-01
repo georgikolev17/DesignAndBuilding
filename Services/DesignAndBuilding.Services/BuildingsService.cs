@@ -100,6 +100,7 @@
         {
             var building = await this.buildingsRepository.All().FirstOrDefaultAsync(x => x.Id == buildingId);
 
+            // Check if such building exists
             if (building == null)
             {
                 return false;

@@ -8,23 +8,18 @@
 
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
-    using DesignAndBuilding.Web.ViewModels.Assignment;
-    using DesignAndBuilding.Web.ViewModels.Building;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
 
     public class AssignmentsService : IAssignmentsService
     {
-        private readonly string[] allowedExtensions = new[] { "xls", "pdf", "docx", "dvg" };
         private readonly IDeletableEntityRepository<Assignment> assignmentsRepository;
         private readonly IDeletableEntityRepository<DescriptionFile> filesRepository;
-        private readonly IUsersService usersService;
 
         public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository, IDeletableEntityRepository<DescriptionFile> filesRepository, IUsersService usersService)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.filesRepository = filesRepository;
-            this.usersService = usersService;
         }
 
         public AssignmentsService()
@@ -50,6 +45,7 @@
         {
             var assignment = await this.assignmentsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
 
+            // Check if such assignment exists
             if (assignment == null)
             {
                 return;
@@ -152,6 +148,7 @@
             {
                 if (file != null && file.Length > 0)
                 {
+                    // IFormFile to DescriptionFile
                     using var stream = new MemoryStream();
                     file.CopyTo(stream);
                     byte[] bytes = stream.ToArray();

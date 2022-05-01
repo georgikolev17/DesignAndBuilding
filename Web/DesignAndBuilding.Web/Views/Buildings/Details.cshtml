@@ -88,8 +88,7 @@
                 </tr>
                 @foreach (var assignment in Model.Assignments)
                 {
-                    // Due to short deadline: TODO: Fix Dates
-                    <tr id="@(assignment.EndDate > DateTime.Now.AddHours(2) ? "active" : "finished")">
+                    <tr id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
                         @switch (assignment.DesignerType)
                         {
                             case DesignAndBuilding.Data.Models.DesignerType.Other:
