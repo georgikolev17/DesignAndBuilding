@@ -52,7 +52,7 @@
                     LastName = lastNames[i],
                     Email = email,
                     UserName = email,
-                    DesignerType = DesignerType.ElectroEngineer,
+                    UserType = UserType.ElectroEngineer,
                     PhoneNumber = phoneNumber,
                     Password = password,
                 };
@@ -76,7 +76,7 @@
                 LastName = "Ivanov",
                 Email = "architect@abv.bg",
                 UserName = "architect@abv.bg",
-                DesignerType = DesignerType.Architect,
+                UserType = UserType.Architect,
                 PhoneNumber = "0899111111",
                 Password = "123456",
             };

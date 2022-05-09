@@ -1,0 +1,32 @@
+﻿@using DesignAndBuilding.Data.Models
+@model UserType
+
+<div class="form-group" id="div-user-type">
+    Вие сте
+    <select class="form-control" id="user-type">
+        <option selected="selected" disabled>Изберете едно</option>
+        <option id="designer">Проектант</option>
+        <option id="investment-company">Инвестиционна фирма</option>
+        <option id="investor">Инвеститор (физ. лице)</option>
+        <option id="building-company">Строителна фирма</option>
+    </select>
+</div>
+
+@section Scripts 
+{
+    <script>
+        let designer = document.getElementById('user-type');
+        designer.addEventListener('click', () => {
+            let value = designer.value;
+            if(value=="Проектант")
+            {
+                window.location.href = "/Identity/Account/Register?designer";
+            }
+            else if (value == 'Инвестиционна фирма' || value == 'Строителна фирма')
+            {
+                window.location.href = `/Identity/Account/RegisterCompany`;
+            }
+        })
+        console.log(designer)
+    </script>
+}

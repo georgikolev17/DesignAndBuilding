@@ -19,7 +19,7 @@
 
         [Required]
         [Display(Name = "Предназначено за")]
-        public DesignerType DesignerType { get; set; }
+        public UserType UserType { get; set; }
 
         [Required]
         public int BuildingId { get; set; }

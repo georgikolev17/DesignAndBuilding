@@ -11,11 +11,11 @@
 
     public interface IAssignmentsService
     {
-        Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, DesignerType designerType, int buildingId);
+        Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType UserType, int buildingId);
 
         Task<Assignment> GetAssignmentById(int id);
 
-        List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId);
+        List<Assignment> GetAllAssignmentsForUserType(UserType UserType, string userId);
 
         List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId);
 
@@ -25,7 +25,7 @@
 
         bool HasUserCreatedAssignment(string userId, int assignmentId);
 
-        Task EditAssignment(DesignerType designerType, List<IFormFile> description, DateTime endDate, int id);
+        Task EditAssignment(UserType UserType, List<IFormFile> description, DateTime endDate, int id);
 
         int GetAssignmentsCount();
 

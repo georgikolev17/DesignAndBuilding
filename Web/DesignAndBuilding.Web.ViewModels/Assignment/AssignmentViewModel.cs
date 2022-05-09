@@ -21,7 +21,7 @@
         public DateTime EndDate { get; set; }
 
         [Required]
-        public DesignerType DesignerType { get; set; }
+        public UserType UserType { get; set; }
 
         [Required]
         public DateTime CreatedOn { get; set; }

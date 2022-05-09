@@ -50,7 +50,7 @@
                     BuildingId = 1,
                     EndDate = DateTime.UtcNow + TimeSpan.FromDays(5),
                     Description = new List<IFormFile>(),
-                    DesignerType = DesignerType.ElectroEngineer,
+                    UserType = UserType.ElectroEngineer,
                 }))
                 .ShouldHave()
                 .ActionAttributes(a => a.RestrictingForHttpMethod(HttpMethod.Post))
@@ -84,7 +84,7 @@
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment(1))
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -115,8 +115,8 @@
         public void DetailsPostShouldReturnErrorViewWithCorrectErrorMessageWhenModelStateIsInvalid()
             => MyController<AssignmentsController>
                 .Instance()
-                .WithData(GetAssignment(1, DesignerType.ElectroEngineer))
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetAssignment(1, UserType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -134,7 +134,7 @@
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment(1))
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -151,9 +151,9 @@
         public void DetailsPostShouldCreateBidAndSendNotificationsToAllUsersWhoHaveBidForThisAssignmentAndToAssignmentsCreator()
             => MyController<AssignmentsController>
                 .Instance()
-                .WithData(GetAssignment(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetAssignment(designerType: UserType.ElectroEngineer))
                 .WithData(Get10UsersBidForAssignment())
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -191,7 +191,7 @@
         public void EditGetSHouldReturnErrorViewWithCorrectExceptionMessageIfUserHasntCreatedAssignment()
             => MyController<AssignmentsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -206,7 +206,7 @@
         public void EditGetShouldReturnViewWithCorrectModelAndDataIfUserHasCreatedAssignment()
             => MyController<AssignmentsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -216,7 +216,7 @@
                 .Calling(c => c.Edit(1))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<AssignmentInputModel>(model => model.DesignerType == DesignerType.Other));
+                    .WithModelOfType<AssignmentInputModel>(model => model.UserType == UserType.Other));
 
         //Edit - POST
 
@@ -232,13 +232,13 @@
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment())
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
                     user.WithUsername(ControllerConstants.Username);
                 })
-                .Calling(c => c.Edit(1, new AssignmentInputModel() { Description = new List<IFormFile>(), EndDate = DateTime.Now + TimeSpan.FromDays(5), BuildingId = 1, DesignerType = DesignerType.Other }))
+                .Calling(c => c.Edit(1, new AssignmentInputModel() { Description = new List<IFormFile>(), EndDate = DateTime.Now + TimeSpan.FromDays(5), BuildingId = 1, UserType = UserType.Other }))
                 .ShouldReturn()
                 .View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
 
@@ -254,17 +254,17 @@
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment(architectId: "1"))
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
                     user.WithUsername(ControllerConstants.Username);
                 })
-                .Calling(c => c.Edit(1, new AssignmentInputModel() { BuildingId = 1, Description = new List<IFormFile>(), DesignerType = DesignerType.ElectroEngineer, EndDate = DateTime.Now + TimeSpan.FromDays(5) }))
+                .Calling(c => c.Edit(1, new AssignmentInputModel() { BuildingId = 1, Description = new List<IFormFile>(), UserType = UserType.ElectroEngineer, EndDate = DateTime.Now + TimeSpan.FromDays(5) }))
                 .ShouldHave()
                 .Data(data => data.WithSet<Assignment>(set =>
                 {
-                    Assert.NotNull(set.SingleOrDefault(a => a.BuildingId == 1 && a.DesignerType == DesignerType.ElectroEngineer));
+                    Assert.NotNull(set.SingleOrDefault(a => a.BuildingId == 1 && a.UserType == UserType.ElectroEngineer));
                 }))
                 .AndAlso()
                 .ShouldReturn()
@@ -282,7 +282,7 @@
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment())
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -297,7 +297,7 @@
             => MyController<AssignmentsController>
                 .Instance()
                 .WithData(GetAssignment(architectId: ControllerConstants.UserId))
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -331,19 +331,19 @@
             return bids;
         }
 
-        private static Assignment GetAssignment(int id = 1, DesignerType designerType = DesignerType.Other, string architectId = ControllerConstants.Architectid)
+        private static Assignment GetAssignment(int id = 1, UserType designerType = UserType.Other, string architectId = ControllerConstants.Architectid)
         {
             return new Assignment()
             {
                 Id = id,
                 Building = new Building() { ArchitectId = architectId },
-                DesignerType = designerType,
+                UserType = designerType,
             };
         }
 
-        private static ApplicationUser GetUser(DesignerType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
+        private static ApplicationUser GetUser(UserType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
         {
-            var user = new ApplicationUser() { DesignerType = designerType, Id = userId, UserName = username, };
+            var user = new ApplicationUser() { UserType = designerType, Id = userId, UserName = username, };
 
             return user;
         }

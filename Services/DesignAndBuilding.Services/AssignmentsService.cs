@@ -26,13 +26,13 @@
         {
         }
 
-        public async Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, DesignerType designerType, int buildingId)
+        public async Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType UserType, int buildingId)
         {
             var assignment = new Assignment()
             {
                 BuildingId = buildingId,
                 EndDate = endDate,
-                DesignerType = designerType,
+                UserType = UserType,
             };
 
             assignment.Description = await this.GetDescriptionFiles(description, assignment);
@@ -41,7 +41,7 @@
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
-        public async Task EditAssignment(DesignerType designerType, List<IFormFile> description, DateTime endDate, int id)
+        public async Task EditAssignment(UserType UserType, List<IFormFile> description, DateTime endDate, int id)
         {
             var assignment = await this.assignmentsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
 
@@ -67,18 +67,18 @@
                 assignment.Description.Add(file);
             }
 
-            assignment.DesignerType = designerType;
+            assignment.UserType = UserType;
             assignment.EndDate = endDate;
 
             await this.filesRepository.SaveChangesAsync();
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
-        public List<Assignment> GetAllAssignmentsForDesignerType(DesignerType designerType, string userId)
+        public List<Assignment> GetAllAssignmentsForUserType(UserType UserType, string userId)
         {
             var assignments = this.assignmentsRepository
                 .All()
-                .Where(x => x.DesignerType == designerType)
+                .Where(x => x.UserType == UserType)
                 .Include(x => x.Building)
                 .ThenInclude(x => x.Architect)
                 .Include(x => x.Bids)

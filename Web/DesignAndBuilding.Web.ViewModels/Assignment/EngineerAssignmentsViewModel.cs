@@ -14,6 +14,6 @@
 
         public IList<BuildingDetailsAssignmentViewModel> Assignments { get; set; }
 
-        public DesignerType DesignerType { get; set; }
+        public UserType UserType { get; set; }
     }
 }

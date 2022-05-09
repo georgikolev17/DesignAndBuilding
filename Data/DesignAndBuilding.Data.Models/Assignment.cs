@@ -19,7 +19,7 @@
         public DateTime EndDate { get; set; }
 
         [Required]
-        public DesignerType DesignerType { get; set; }
+        public UserType UserType { get; set; }
 
         public bool IsFinished => this.EndDate < DateTime.Now;
 

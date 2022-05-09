@@ -31,7 +31,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             // Check if current user is architect
-            if (user.DesignerType != DesignerType.Architect)
+            if (user.UserType != UserType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават обекти!" });
             }
@@ -51,7 +51,7 @@
             }
 
             // Check if current user is architect
-            if (user.DesignerType != DesignerType.Architect)
+            if (user.UserType != UserType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават обекти!" });
             }
@@ -68,7 +68,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             // Check if current user is architect
-            if (user.DesignerType != DesignerType.Architect)
+            if (user.UserType != UserType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да достъпват тази страница!" });
             }
@@ -104,7 +104,7 @@
                     Id = a.Id,
                     CreatedOn = a.CreatedOn,
                     Description = a.Description.ToList(),
-                    DesignerType = a.DesignerType,
+                    UserType = a.UserType,
                     EndDate = a.EndDate,
                 }).ToList(),
             };

@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public enum DesignerType
+    public enum UserType
     {
         [Display(Name = "Друг")]
         Other = 0,
@@ -16,5 +16,11 @@
         PlumbingEngineer = 4,
         [Display(Name = "ОВК инженер")]
         HVACEngineer = 5,
+        [Display(Name = "Строителна компания")]
+        BuildingCompany = 6,
+        [Display(Name = "Инвестиционна компания")]
+        InvestmentCompany = 7,
+        [Display(Name = "Инвеститор (физическо лице)")]
+        InvestmentPerson = 8,
     }
 }

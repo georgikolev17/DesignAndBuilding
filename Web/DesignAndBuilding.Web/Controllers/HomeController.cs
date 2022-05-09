@@ -35,19 +35,19 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (user != null && user.DesignerType != DesignerType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            if (user != null && user.UserType != UserType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var test = this.assignmentsService
-                    .GetAllAssignmentsForDesignerType(user.DesignerType, user.Id);
+                    .GetAllAssignmentsForUserType(user.UserType, user.Id);
                 var assignments = this.assignmentsService
-                    .GetAllAssignmentsForDesignerType(user.DesignerType, user.Id)
+                    .GetAllAssignmentsForUserType(user.UserType, user.Id)
                     .Select(x => new BuildingDetailsAssignmentViewModel
                     {
                         BuildingType = x.Building.BuildingType,
                         CreatedOn = x.CreatedOn,
                         ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
                         Description = x.Description,
-                        DesignerType = x.DesignerType,
+                        UserType = x.UserType,
                         EndDate = x.EndDate,
                         Id = x.Id,
                         UserPlacedBid = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id).Contains(x),
@@ -58,7 +58,7 @@
                 var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
                 {
                     Assignments = assignments,
-                    DesignerType = user.DesignerType,
+                    UserType = user.UserType,
                 };
 
                 return this.View("EngineerIndex", engineerAssignmentsViewModel);
@@ -93,7 +93,7 @@
                         CreatedOn = x.CreatedOn,
                         ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
                         Description = x.Description,
-                        DesignerType = x.DesignerType,
+                        UserType = x.UserType,
                         EndDate = x.EndDate,
                         Id = x.Id,
                         BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
@@ -104,7 +104,7 @@
             var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
             {
                 Assignments = assignments,
-                DesignerType = user.DesignerType,
+                UserType = user.UserType,
             };
             return this.View(engineerAssignmentsViewModel);
         }

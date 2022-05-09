@@ -13,9 +13,9 @@
         <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="@Model.DesignerType"></label>
-                <select asp-for="@Model.DesignerType" class="form-control" asp-items="@Html.GetEnumSelectList<DesignerType>()"></select>
-                <span asp-validation-for="@Model.DesignerType" class="text-danger"></span>
+                <label asp-for="@Model.UserType"></label>
+                <select asp-for="@Model.UserType" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()"></select>
+                <span asp-validation-for="@Model.UserType" class="text-danger"></span>
             </div>
             <div class="form-group" hidden>
                 <label asp-for="Description"></label>

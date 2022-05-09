@@ -32,18 +32,18 @@
                 .View();
 
         [Theory]
-        [InlineData(DesignerType.ElectroEngineer, 10)]
+        [InlineData(UserType.ElectroEngineer, 10)]
         // Default user is Electro engineer so he shouldn't see other engineer's assignments
-        [InlineData(DesignerType.BuildingConstructionEngineer, 0)]
-        [InlineData(DesignerType.PlumbingEngineer, 0)]
-        [InlineData(DesignerType.HVACEngineer, 0)]
-        [InlineData(DesignerType.Other, 0)]
-        public void IndexShouldReturnCorrectViewWithCoreectDataAndModelForLoggedUserAndShouldHaveAttributes(DesignerType designerType, int expectedAssignmentsCount)
+        [InlineData(UserType.BuildingConstructionEngineer, 0)]
+        [InlineData(UserType.PlumbingEngineer, 0)]
+        [InlineData(UserType.HVACEngineer, 0)]
+        [InlineData(UserType.Other, 0)]
+        public void IndexShouldReturnCorrectViewWithCoreectDataAndModelForLoggedUserAndShouldHaveAttributes(UserType designerType, int expectedAssignmentsCount)
         {
             MyController<HomeController>
                 .Instance()
                 .WithData(Get10Assignments(designerType))
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -78,7 +78,7 @@
             => MyController<HomeController>
                 .Instance()
                 .WithData(Get10AssignmentsWhereUserBid(userIdForbids))
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -100,7 +100,7 @@
             => MyController<HomeController>
                 .Instance()
                 .WithData(Get10NotificationsForUser(userIdForNotifications))
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -115,7 +115,7 @@
                 .WithModelOfType<AllNotificationsViewModel>()
                 .Passing(v => Assert.Equal(v.Notifications.Count(), notificationsCount)));
 
-        private static IEnumerable<Assignment> Get10Assignments(DesignerType designerType)
+        private static IEnumerable<Assignment> Get10Assignments(UserType designerType)
         {
             var assignments = new List<Assignment>();
             for (int i = 1; i <= 10; i++)
@@ -129,7 +129,7 @@
                     },
                     CreatedOn = DateTime.UtcNow,
                     Description = new List<DescriptionFile>(),
-                    DesignerType = designerType,
+                    UserType = designerType,
                     EndDate = DateTime.UtcNow + TimeSpan.FromDays(5),
                 });
             }
@@ -137,9 +137,9 @@
             return assignments;
         }
 
-        private static ApplicationUser GetUser(DesignerType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
+        private static ApplicationUser GetUser(UserType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
         {
-            var user = new ApplicationUser() { DesignerType = designerType, Id = userId, UserName = username, };
+            var user = new ApplicationUser() { UserType = designerType, Id = userId, UserName = username, };
 
             return user;
         }

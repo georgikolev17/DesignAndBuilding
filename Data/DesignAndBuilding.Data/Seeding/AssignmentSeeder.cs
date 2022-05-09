@@ -17,7 +17,7 @@
             var assignment = new Assignment()
             {
                 BuildingId = buildingId,
-                DesignerType = DesignerType.ElectroEngineer,
+                UserType = UserType.ElectroEngineer,
                 EndDate = DateTime.Now + TimeSpan.FromDays(7),
             };
 

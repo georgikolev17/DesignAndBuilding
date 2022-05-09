@@ -3,49 +3,62 @@
 @{
     ViewData["Title"] = "Регистрация";
 }
-
-<h1>@ViewData["Title"]</h1>
-
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4" style="margin:auto">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Създаване на акаунт</h4>
+            <h4>Създаване на акаунт за</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div id="all-users-register">
+                <div class="form-group">
+                    <label asp-for="Input.UserType"></label>
+                    <select asp-for="Input.UserType" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()"></select>
+                    <span asp-validation-for="Input.UserType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.ConfirmPassword"></label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.PhoneNumber"></label>
+                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div id="person-users-register">
+                <div class="form-group">
+                    <label asp-for="Input.FirstName"></label>
+                    <input asp-for="Input.FirstName" class="form-control" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.LastName"></label>
+                    <input asp-for="Input.LastName" class="form-control" />
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.FirstName"></label>
-                <input asp-for="Input.FirstName" class="form-control" />
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.LastName"></label>
-                <input asp-for="Input.LastName" class="form-control" />
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.DesignerType"></label>
-                <select asp-for="Input.DesignerType" class="form-control" asp-items="@Html.GetEnumSelectList<DesignerType>()"></select>
-                <span asp-validation-for="Input.DesignerType" class="text-danger"></span>
+            <div id="company-users-register">
+                <div class="form-group">
+                    <label asp-for="Input.CompanyName"></label>
+                    <input asp-for="Input.CompanyName" class="form-control" />
+                    <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Bulstat"></label>
+                    <input asp-for="Input.Bulstat" class="form-control" />
+                    <span asp-validation-for="Input.Bulstat" class="text-danger"></span>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Регистрация</button>
         </form>
@@ -54,4 +67,8 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        
+    </script>
 }

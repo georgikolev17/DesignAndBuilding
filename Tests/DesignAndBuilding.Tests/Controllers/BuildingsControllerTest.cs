@@ -23,7 +23,7 @@
         public void CreateGetShouldReturnView()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -37,7 +37,7 @@
         public void CreateGetShouldReturnErrorViewWhenTriedToBeAccessedByUserWhoIsNotArchitect()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -52,7 +52,7 @@
         public void CreatePostShouldHavePostAttribute()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -66,7 +66,7 @@
         public void CreatePostShouldReturnViewWithCorrectModelWhenModelStateIsInvalid()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user => 
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -81,7 +81,7 @@
         public void CreatePostShouldReturnErrorViewWhenTriedToBeAccessedByUserWhoIsNotArchitect()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -95,7 +95,7 @@
         public void CreatePostShouldCreateNewBuildingWhenModelStateIsValidAndUserIsArchitect()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -119,7 +119,7 @@
         public void MyBuildingsShouldReturnErrorViewWhenUserIsNotArchitect()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.ElectroEngineer))
+                .WithData(GetUser(designerType: UserType.ElectroEngineer))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -133,7 +133,7 @@
         public void myBuildingsShouldReturnViewWithCorrectModelAndDataWhenUserIsArchietct()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithData(Get10BuildingsForArchitect())
                 .WithUser(user =>
                 {
@@ -161,7 +161,7 @@
             => MyController<BuildingsController>
                 .Instance()
                 .WithData(Get10BuildingsForArchitect("2"))
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -176,7 +176,7 @@
             => MyController<BuildingsController>
                 .Instance()
                 .WithData(Get1BuildingDetails())
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -202,7 +202,7 @@
             => MyController<BuildingsController>
                 .Instance()
                 .WithData(Get10BuildingsForArchitect("2"))
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -217,7 +217,7 @@
         public void EditGetShouldReturnViewWithCorrectModelAndData()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -252,7 +252,7 @@
             => MyController<BuildingsController>
                 .Instance()
                 .WithData(Get10BuildingsForArchitect("2"))
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -266,7 +266,7 @@
         public void EditPostShouldEditBuildingAndRedirectToMyBuildings()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -300,7 +300,7 @@
             => MyController<BuildingsController>
                 .Instance()
                 .WithData(Get10BuildingsForArchitect("2"))
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -314,7 +314,7 @@
         public void DeleteShouldDeleteBuildingAndRedirectToMyBuildings()
             => MyController<BuildingsController>
                 .Instance()
-                .WithData(GetUser(designerType: DesignerType.Architect))
+                .WithData(GetUser(designerType: UserType.Architect))
                 .WithUser(user =>
                 {
                     user.WithIdentifier(ControllerConstants.UserId);
@@ -334,9 +334,9 @@
 
         //Static methods
 
-        private static ApplicationUser GetUser(DesignerType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
+        private static ApplicationUser GetUser(UserType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
         {
-            var user = new ApplicationUser() { DesignerType = designerType, Id = userId, UserName = username, };
+            var user = new ApplicationUser() { UserType = designerType, Id = userId, UserName = username, };
 
             return user;
         }

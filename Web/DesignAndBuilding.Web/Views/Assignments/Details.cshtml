@@ -58,21 +58,21 @@
             }
             <h4>Задание</h4>
             <p><b>Описание: </b><a href="/assignments/download/@Model.AssignmentId">Изтегли</a></p>
-            @switch (Model.DesignerType)
+            @switch (Model.UserType)
             {
-                case DesignAndBuilding.Data.Models.DesignerType.Architect:
+                case DesignAndBuilding.Data.Models.UserType.Architect:
                     <p><b>Специалност: </b>Архитектура</p>
                     break;
-                case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
+                case DesignAndBuilding.Data.Models.UserType.ElectroEngineer:
                     <p><b>Специалност: </b>Електро</p>
                     break;
-                case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
+                case DesignAndBuilding.Data.Models.UserType.BuildingConstructionEngineer:
                     <p><b>Специалност: </b>Строителни конструкции</p>
                     break;
-                case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
+                case DesignAndBuilding.Data.Models.UserType.PlumbingEngineer:
                     <p><b>Специалност: </b>ВиК</p>
                     break;
-                case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
+                case DesignAndBuilding.Data.Models.UserType.HVACEngineer:
                     <p><b>Специалност: </b>ОВК</p>
                     break;
                 default:

@@ -50,7 +50,7 @@
                 return this.View(assignment);
             }
 
-            await this.assignmentsService.CreateAssignmentAsync(assignment.Description.ToList(), assignment.EndDate, assignment.DesignerType, assignment.BuildingId);
+            await this.assignmentsService.CreateAssignmentAsync(assignment.Description.ToList(), assignment.EndDate, assignment.UserType, assignment.BuildingId);
             return this.RedirectToAction("Details", "Buildings", new { id = assignment.BuildingId });
         }
 
@@ -84,9 +84,9 @@
             }
 
             // Check if current user is of correct designer type
-            if (user.DesignerType != assignment.DesignerType)
+            if (user.UserType != assignment.UserType)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Само {DisplayDesignertypeInBulgarian(assignment.DesignerType)}и могат да наддават за това задание!" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Само {DisplayUserTypeInBulgarian(assignment.UserType)}и могат да наддават за това задание!" });
             }
 
             if (!this.ModelState.IsValid)
@@ -142,7 +142,7 @@
                 BuildingId = assignment.BuildingId,
 
                 Description = files,
-                DesignerType = assignment.DesignerType,
+                UserType = assignment.UserType,
                 EndDate = assignment.EndDate,
             };
 
@@ -173,7 +173,7 @@
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал заданието, може да го редактира" });
             }
 
-            await this.assignmentsService.EditAssignment(viewModel.DesignerType, viewModel.Description.ToList(), viewModel.EndDate, id);
+            await this.assignmentsService.EditAssignment(viewModel.UserType, viewModel.Description.ToList(), viewModel.EndDate, id);
 
             return this.Redirect($"/buildings/details/{assignment.BuildingId}");
         }
@@ -228,21 +228,21 @@
             }
         }
 
-        private static string DisplayDesignertypeInBulgarian(DesignerType designerType)
+        private static string DisplayUserTypeInBulgarian(UserType UserType)
         {
-            switch (designerType)
+            switch (UserType)
             {
-                case DesignerType.Other:
+                case UserType.Other:
                     return "друг";
-                case DesignerType.Architect:
+                case UserType.Architect:
                     return "архитект";
-                case DesignerType.BuildingConstructionEngineer:
+                case UserType.BuildingConstructionEngineer:
                     return "строителни конструктор";
-                case DesignerType.ElectroEngineer:
+                case UserType.ElectroEngineer:
                     return "електро инженер";
-                case DesignerType.PlumbingEngineer:
+                case UserType.PlumbingEngineer:
                     return "ВиК инженер";
-                case DesignerType.HVACEngineer:
+                case UserType.HVACEngineer:
                     return "ОВК инженер";
                 default:
                     return "друг";

@@ -89,24 +89,24 @@
                 @foreach (var assignment in Model.Assignments)
                 {
                     <tr id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
-                        @switch (assignment.DesignerType)
+                        @switch (assignment.UserType)
                         {
-                            case DesignAndBuilding.Data.Models.DesignerType.Other:
+                            case DesignAndBuilding.Data.Models.UserType.Other:
                                 <td>Друг</td>
                                 break;
-                            case DesignAndBuilding.Data.Models.DesignerType.Architect:
+                            case DesignAndBuilding.Data.Models.UserType.Architect:
                                 <td>Архитект</td>
                                 break;
-                            case DesignAndBuilding.Data.Models.DesignerType.ElectroEngineer:
+                            case DesignAndBuilding.Data.Models.UserType.ElectroEngineer:
                                 <td>Електро</td>
                                 break;
-                            case DesignAndBuilding.Data.Models.DesignerType.BuildingConstructionEngineer:
+                            case DesignAndBuilding.Data.Models.UserType.BuildingConstructionEngineer:
                                 <td>Строителни Конструкции</td>
                                 break;
-                            case DesignAndBuilding.Data.Models.DesignerType.PlumbingEngineer:
+                            case DesignAndBuilding.Data.Models.UserType.PlumbingEngineer:
                                 <td>ВиК</td>
                                 break;
-                            case DesignAndBuilding.Data.Models.DesignerType.HVACEngineer:
+                            case DesignAndBuilding.Data.Models.UserType.HVACEngineer:
                                 <td>ОВК</td>
                                 break;
                             default:

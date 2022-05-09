@@ -39,7 +39,7 @@
         public void DeleteShouldRetturnCorrectJsonIfUserCantDeleteNotification()
             => MyController<NotificationsApiController>
                 .Instance()
-                .WithData(GetUser(DesignerType.ElectroEngineer))
+                .WithData(GetUser(UserType.ElectroEngineer))
                 .WithData(GetNotificationForUser("2"))
                 .WithUser(user =>
                 {
@@ -54,7 +54,7 @@
         public void DeleteShouldRetturnCorrectJson()
             => MyController<NotificationsApiController>
                 .Instance()
-                .WithData(GetUser(DesignerType.ElectroEngineer, userId: "2"))
+                .WithData(GetUser(UserType.ElectroEngineer, userId: "2"))
                 .WithData(GetNotificationForUser("2"))
                 .WithUser(user =>
                 {
@@ -92,7 +92,7 @@
         public void MarkAsReadShouldRetturnCorrectJsonIfUserCantDeleteNotification()
             => MyController<NotificationsApiController>
                 .Instance()
-                .WithData(GetUser(DesignerType.ElectroEngineer))
+                .WithData(GetUser(UserType.ElectroEngineer))
                 .WithData(GetNotificationForUser("2"))
                 .WithUser(user =>
                 {
@@ -107,7 +107,7 @@
         public void MarkAsReadShouldRetturnCorrectJson()
             => MyController<NotificationsApiController>
                 .Instance()
-                .WithData(GetUser(DesignerType.ElectroEngineer, userId: "2"))
+                .WithData(GetUser(UserType.ElectroEngineer, userId: "2"))
                 .WithData(GetNotificationForUser("2"))
                 .WithUser(user =>
                 {
@@ -126,9 +126,9 @@
                 .Json(true);
 
         // Static methods
-        private static ApplicationUser GetUser(DesignerType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
+        private static ApplicationUser GetUser(UserType designerType, string userId = ControllerConstants.UserId, string username = ControllerConstants.Username)
         {
-            var user = new ApplicationUser() { DesignerType = designerType, Id = userId, UserName = username, };
+            var user = new ApplicationUser() { UserType = designerType, Id = userId, UserName = username, };
 
             return user;
         }

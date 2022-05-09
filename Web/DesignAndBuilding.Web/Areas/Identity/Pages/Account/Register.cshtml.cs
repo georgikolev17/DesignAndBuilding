@@ -62,19 +62,23 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Required]
             [StringLength(20, ErrorMessage = "Фамилията трябва да е между 3 и 20 символа!", MinimumLength = 3)]
             [Display(Name = "Име")]
             public string FirstName { get; set; }
 
-            [Required]
             [StringLength(20, ErrorMessage = "Фамилията трябва да е между 3 и 20 символа!", MinimumLength = 3)]
             [Display(Name = "Фамилия")]
             public string LastName { get; set; }
 
+            [Display(Name = "Име на компанията")]
+            public string CompanyName { get; set; }
+
+            [Display(Name = "Булстат")]
+            public string Bulstat { get; set; }
+
             [Required]
-            [Display(Name = "Специалност")]
-            public DesignerType DesignerType { get; set; }
+            [Display(Name = "Роля")]
+            public UserType UserType { get; set; }
 
             [Required]
             [Phone]
@@ -94,7 +98,7 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email, FirstName = this.Input.FirstName, Password = Hash(this.Input.Password), LastName = this.Input.LastName, DesignerType = this.Input.DesignerType, PhoneNumber = this.Input.PhoneNumber };
+                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email, FirstName = this.Input.FirstName, Password = Hash(this.Input.Password), LastName = this.Input.LastName, UserType = this.Input.UserType, PhoneNumber = this.Input.PhoneNumber, CompanyName = this.Input.CompanyName, Bulstat = this.Input.Bulstat };
                 var result = await _userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
