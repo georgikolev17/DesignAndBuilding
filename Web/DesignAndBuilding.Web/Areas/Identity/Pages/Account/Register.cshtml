@@ -6,15 +6,17 @@
 <div class="row">
     <div class="col-md-4" style="margin:auto">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Създаване на акаунт за</h4>
+            <h4 class="text-center">Създаване на акаунт</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div id="all-users-register">
-                <div class="form-group">
-                    <label asp-for="Input.UserType"></label>
-                    <select asp-for="Input.UserType" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()"></select>
-                    <span asp-validation-for="Input.UserType" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="Input.UserType"></label>
+                <select asp-for="Input.UserType" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()" id="user-type-choice">
+                    <option disabled selected>Изберете едно</option>
+                </select>
+                <span asp-validation-for="Input.UserType" class="text-danger"></span>
+            </div>
+            <div id="all-users-register" hidden>
                 <div class="form-group">
                     <label asp-for="Input.Email"></label>
                     <input asp-for="Input.Email" class="form-control" />
@@ -36,7 +38,7 @@
                     <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
-            <div id="person-users-register">
+            <div id="person-users-register" hidden>
                 <div class="form-group">
                     <label asp-for="Input.FirstName"></label>
                     <input asp-for="Input.FirstName" class="form-control" />
@@ -48,7 +50,7 @@
                     <span asp-validation-for="Input.LastName" class="text-danger"></span>
                 </div>
             </div>
-            <div id="company-users-register">
+            <div id="company-users-register" hidden>
                 <div class="form-group">
                     <label asp-for="Input.CompanyName"></label>
                     <input asp-for="Input.CompanyName" class="form-control" />
@@ -69,6 +71,23 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        
+        let companyFields = document.getElementById('company-users-register');
+        let peopleFields = document.getElementById('person-users-register');
+        let allUsersFields = document.getElementById('all-users-register');
+        let choice = document.getElementById('user-type-choice');
+        choice.addEventListener('change', onChange);
+
+        function onChange() {
+            console.log(choice.value);
+            let numberValue = Number(choice.value);
+            allUsersFields.hidden = false;
+            if (numberValue <= 5 || numberValue == 8) {
+                peopleFields.hidden = false;
+                companyFields.hidden = true;
+            } else {
+                peopleFields.hidden = true;
+                companyFields.hidden = false;
+            }
+        }
     </script>
 }
