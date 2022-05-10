@@ -30,10 +30,10 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            // Check if current user is architect
-            if (user.UserType != UserType.Architect)
+            // Check if current user is architect or investor
+            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentCompany && user.UserType != UserType.InvestmentPerson)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават обекти!" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават обекти!" });
             }
 
             return this.View();
@@ -50,10 +50,10 @@
                 return this.View(buildingInputModel);
             }
 
-            // Check if current user is architect
-            if (user.UserType != UserType.Architect)
+            // Check if current user is architect or investor
+            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentCompany && user.UserType != UserType.InvestmentPerson)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават обекти!" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават обекти!" });
             }
 
             var userId = await this.userManager.GetUserIdAsync(await this.userManager.GetUserAsync(this.User));
@@ -68,9 +68,9 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             // Check if current user is architect
-            if (user.UserType != UserType.Architect)
+            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentCompany && user.UserType != UserType.InvestmentPerson)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да достъпват тази страница!" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да достъпват тази страница!" });
             }
 
             return this.View(this.buildingsService.GetAllBuildingsOfCurrentUserById(user.Id));

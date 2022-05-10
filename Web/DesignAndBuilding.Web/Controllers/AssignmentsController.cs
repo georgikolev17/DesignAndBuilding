@@ -37,20 +37,36 @@
             this.mapper = mapper;
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            // Check if current user is architect or investor
+            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentPerson && user.UserType != UserType.InvestmentCompany)
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават задания" });
+            }
+
             return this.View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(AssignmentInputModel assignment)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            // Check if current user is architect or investor
+            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentPerson && user.UserType != UserType.InvestmentCompany)
+            {
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават задания" });
+            }
+
             if (!this.ModelState.IsValid || assignment.EndDate < DateTime.UtcNow)
             {
                 return this.View(assignment);
             }
 
-            await this.assignmentsService.CreateAssignmentAsync(assignment.Description.ToList(), assignment.EndDate, assignment.UserType, assignment.BuildingId);
+            await this.assignmentsService.CreateAssignmentAsync(assignment.Description.ToList(), assignment.EndDate, assignment.UserType, assignment.BuildingId, user.UserType);
             return this.RedirectToAction("Details", "Buildings", new { id = assignment.BuildingId });
         }
 
@@ -228,9 +244,9 @@
             }
         }
 
-        private static string DisplayUserTypeInBulgarian(UserType UserType)
+        private static string DisplayUserTypeInBulgarian(UserType userType)
         {
-            switch (UserType)
+            switch (userType)
             {
                 case UserType.Other:
                     return "друг";
@@ -244,6 +260,12 @@
                     return "ВиК инженер";
                 case UserType.HVACEngineer:
                     return "ОВК инженер";
+                case UserType.BuildingCompany:
+                    return "строителни компани";
+                case UserType.InvestmentCompany:
+                    return "инвестиционни компани";
+                case UserType.InvestmentPerson:
+                    return "инвеститор";
                 default:
                     return "друг";
             }

@@ -21,6 +21,9 @@
         [Required]
         public UserType UserType { get; set; }
 
+        [Required]
+        public AssignmentType AssignmentType { get; set; }
+
         public bool IsFinished => this.EndDate < DateTime.Now;
 
         [Required]

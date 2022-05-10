@@ -29,7 +29,7 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
                         </li>
-                        @if (user != null && user.UserType == UserType.Architect)
+                        @if (user != null && (user.UserType == UserType.Architect || user.UserType == UserType.InvestmentCompany || user.UserType == UserType.InvestmentPerson))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="create">Създай обект</a>
@@ -38,10 +38,10 @@
                                 <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="MyBuildings">Моите обекти</a>
                             </li>
                         }
-                        @if (user != null && user.UserType != UserType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        @if (user != null && user.UserType != UserType.Architect && user.UserType != UserType.InvestmentCompany && user.UserType != UserType.InvestmentPerson && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="home" asp-action="mybids">Моите наддавания</a>
+                                <a class="nav-link" asp-area="" asp-controller="home" asp-action="mybids">Моите оферти</a>
                             </li>
                         }
                         @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))

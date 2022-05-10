@@ -11,7 +11,9 @@
 
     public interface IAssignmentsService
     {
-        Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType UserType, int buildingId);
+        ICollection<Assignment> GetAllInvestmentAssignments();
+
+        Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType UserType, int buildingId, UserType creatorType);
 
         Task<Assignment> GetAssignmentById(int id);
 

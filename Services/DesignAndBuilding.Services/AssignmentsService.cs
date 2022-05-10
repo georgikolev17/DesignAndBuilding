@@ -26,13 +26,14 @@
         {
         }
 
-        public async Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType UserType, int buildingId)
+        public async Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType userType, int buildingId, UserType creatorType)
         {
             var assignment = new Assignment()
             {
                 BuildingId = buildingId,
                 EndDate = endDate,
-                UserType = UserType,
+                UserType = userType,
+                AssignmentType = creatorType == UserType.Architect ? AssignmentType.DesignAsignment : AssignmentType.InvestmentAssignment,
             };
 
             assignment.Description = await this.GetDescriptionFiles(description, assignment);
@@ -78,7 +79,7 @@
         {
             var assignments = this.assignmentsRepository
                 .All()
-                .Where(x => x.UserType == UserType)
+                .Where(x => x.UserType == UserType && x.AssignmentType == AssignmentType.DesignAsignment)
                 .Include(x => x.Building)
                 .ThenInclude(x => x.Architect)
                 .Include(x => x.Bids)
@@ -170,6 +171,14 @@
         public IEnumerable<DescriptionFile> GetFilesForAssignment(int assignmentId)
         {
             return this.filesRepository.All().Where(x => x.AssignmentId == assignmentId);
+        }
+
+        public ICollection<Assignment> GetAllInvestmentAssignments()
+        {
+            return this.assignmentsRepository.All()
+                .Where(x => x.AssignmentType == AssignmentType.InvestmentAssignment)
+                .Include(x => x.Building)
+                .ToList();
         }
     }
 }

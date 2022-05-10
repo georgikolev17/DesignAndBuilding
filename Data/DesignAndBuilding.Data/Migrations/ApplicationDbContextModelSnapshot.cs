@@ -165,6 +165,9 @@ namespace DesignAndBuilding.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int>("AssignmentType")
+                        .HasColumnType("int");
+
                     b.Property<int>("BuildingId")
                         .HasColumnType("int");
 

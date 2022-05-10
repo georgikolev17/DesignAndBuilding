@@ -1,6 +1,7 @@
 ﻿namespace DesignAndBuilding.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
@@ -35,33 +36,54 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (user != null && user.UserType != UserType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            if (user != null && user.UserType != UserType.Architect && user.UserType != UserType.InvestmentPerson && user.UserType != UserType.InvestmentCompany && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                var test = this.assignmentsService
-                    .GetAllAssignmentsForUserType(user.UserType, user.Id);
-                var assignments = this.assignmentsService
-                    .GetAllAssignmentsForUserType(user.UserType, user.Id)
-                    .Select(x => new BuildingDetailsAssignmentViewModel
-                    {
-                        BuildingType = x.Building.BuildingType,
-                        CreatedOn = x.CreatedOn,
-                        ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
-                        Description = x.Description,
-                        UserType = x.UserType,
-                        EndDate = x.EndDate,
-                        Id = x.Id,
-                        UserPlacedBid = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id).Contains(x),
-                        BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault() == null ? null : x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
-                        UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault() != null ? x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault().Price : null,
-                    }).ToList();
+                List<BuildingDetailsAssignmentViewModel> assignments = new List<BuildingDetailsAssignmentViewModel>();
 
-                var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
+                if (user.UserType == UserType.BuildingCompany)
+                {
+                    assignments = this.assignmentsService
+                       .GetAllInvestmentAssignments()
+                       .Select(x => new BuildingDetailsAssignmentViewModel
+                       {
+                           BuildingType = x.Building.BuildingType,
+                           CreatedOn = x.CreatedOn,
+                           ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).CompanyName,
+                           Description = x.Description,
+                           UserType = x.UserType,
+                           EndDate = x.EndDate,
+                           Id = x.Id,
+                           UserPlacedBid = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id).Contains(x),
+                           BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault() == null ? null : x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
+                           UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault() != null ? x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault().Price : null,
+                       }).ToList();
+                }
+                else
+                {
+                    assignments = this.assignmentsService
+                        .GetAllAssignmentsForUserType(user.UserType, user.Id)
+                        .Select(x => new BuildingDetailsAssignmentViewModel
+                        {
+                            BuildingType = x.Building.BuildingType,
+                            CreatedOn = x.CreatedOn,
+                            ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
+                            Description = x.Description,
+                            UserType = x.UserType,
+                            EndDate = x.EndDate,
+                            Id = x.Id,
+                            UserPlacedBid = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id).Contains(x),
+                            BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault() == null ? null : x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
+                            UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault() != null ? x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault().Price : null,
+                        }).ToList();
+                }
+
+                var assignmentsViewModel = new EngineerAssignmentsViewModel
                 {
                     Assignments = assignments,
                     UserType = user.UserType,
                 };
 
-                return this.View("EngineerIndex", engineerAssignmentsViewModel);
+                return this.View("EngineerIndex", assignmentsViewModel);
             }
 
             return this.View();

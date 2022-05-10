@@ -14,13 +14,10 @@
             Добре дошли в администраторския панел на платформата. Чрез менютата <strong>Всички обекти</strong> и <strong>Admin</strong> може да следите и контролирате данните в приложението.
         </div>
     }
-    @if (user != null && user.UserType == UserType.Architect)
+    @if (user != null && (user.UserType == UserType.Architect || user.UserType == UserType.InvestmentCompany || user.UserType == UserType.InvestmentPerson))
     {
         <div class="h4">
-            Здравейте, арх. @(user.FirstName + " " + user.LastName)!
-        </div>
-        <div class="h4">
-            Пожелаваме Ви приятна работа!
+            Здравейте! Пожелаваме Ви приятна работа!
         </div>
     }
     @if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))

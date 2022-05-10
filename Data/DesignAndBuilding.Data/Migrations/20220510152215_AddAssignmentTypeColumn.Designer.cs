@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesignAndBuilding.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220510082134_AddBulstatAndCompanyNameColumns")]
-    partial class AddBulstatAndCompanyNameColumns
+    [Migration("20220510152215_AddAssignmentTypeColumn")]
+    partial class AddAssignmentTypeColumn
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -166,6 +166,9 @@ namespace DesignAndBuilding.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<int>("AssignmentType")
+                        .HasColumnType("int");
 
                     b.Property<int>("BuildingId")
                         .HasColumnType("int");
