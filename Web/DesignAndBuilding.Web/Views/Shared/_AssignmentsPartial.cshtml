@@ -26,6 +26,10 @@
                 @*<th>№</th>*@
                 <th>Тип</th>
                 <th>Създател</th>
+                @if(Model.UserType == DesignAndBuilding.Data.Models.UserType.BuildingCompany)
+                {
+                    <th>Специалност</th>
+                }
                 <th>Вашата най-добра оферта</th>
                 <th>Най-добра оферта</th>
                 <th>Крайна дата</th>
@@ -82,6 +86,30 @@
                     break;
             }
             <td>@assignment.ArchitectName</td>
+            @if(Model.UserType == DesignAndBuilding.Data.Models.UserType.BuildingCompany)
+            {
+                @switch (assignment.UserType)
+                {
+                    case DesignAndBuilding.Data.Models.UserType.Architect:
+                        <td>Архитектура</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.UserType.ElectroEngineer:
+                        <td>Електро</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.UserType.BuildingConstructionEngineer:
+                        <td>Строителни конструкции</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.UserType.PlumbingEngineer:
+                        <td>ВиК</td>
+                        break;
+                    case DesignAndBuilding.Data.Models.UserType.HVACEngineer:
+                        <td>ОВК</td>
+                        break;
+                    default:
+                        <td>Друга</td>
+                        break;
+                }
+            }
             <td>@(assignment.UserBestBid != null ? assignment.UserBestBid : "-")</td>
             <td>@(assignment.BestBid != null ? assignment.BestBid : "-")</td>
             <td id="end-date">@assignment.EndDate.ToString("dd.MM.yyyy г. HH:mm:ss")</td>
