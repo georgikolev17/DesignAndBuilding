@@ -14,7 +14,8 @@
     using DesignAndBuilding.Services.Messaging;
     using DesignAndBuilding.Web.Hubs;
     using DesignAndBuilding.Web.ViewModels;
-
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -36,12 +37,6 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR(
-                options =>
-                {
-                    options.EnableDetailedErrors = true;
-                })
-                .AddMessagePackProtocol();
             services.AddMvc();
 
             services.AddDbContext<ApplicationDbContext>(
@@ -49,6 +44,11 @@
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            })
+            .AddMessagePackProtocol();
 
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -83,6 +83,7 @@
             services.AddTransient<IAssignmentsService, AssignmentsService>();
             services.AddTransient<IBidsService, BidsService>();
             services.AddTransient<INotificationsService, NotificationsService>();
+            services.AddTransient<AuthenticationService>();
 
             // Auto Mapper Configurations
             services.AddSingleton(provider => new MapperConfiguration(mc =>
@@ -102,6 +103,7 @@
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 dbContext.Database.Migrate();
+
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
@@ -129,6 +131,7 @@
                 endpoints =>
                     {
                         endpoints.MapHub<NotificationsHub>("/notificationshub");
+                        endpoints.MapHub<BidsHub>("/bidshub");
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();

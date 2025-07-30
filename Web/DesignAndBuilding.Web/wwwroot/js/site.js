@@ -1,6 +1,5 @@
-﻿let connection = null;
-
-setupConnection = async function start() {
+﻿setupConnection = async function start() {
+    let connection = null;
     connection = await new signalR.HubConnectionBuilder()
         .withUrl("/notificationshub")
         .build();

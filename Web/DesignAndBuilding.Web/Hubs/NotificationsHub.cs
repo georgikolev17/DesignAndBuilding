@@ -17,7 +17,7 @@
 
         public async Task CheckForNewNotifications()
         {
-            do
+            /*do
             {
                 // Check if there are new notifications
                 var newNotifications = await this.notificationsService.NewNotificationsForUser(this.Context.UserIdentifier);
@@ -29,7 +29,7 @@
                     await this.Clients.Caller.SendAsync("RecieveNewNotificationMessage", newNotificationsMessages);
                 }
             }
-            while (true);
+            while (true);*/
         }
     }
 }

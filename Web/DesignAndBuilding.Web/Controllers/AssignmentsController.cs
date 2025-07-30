@@ -5,19 +5,25 @@
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading.Tasks;
 
     using AutoMapper;
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
+    using DesignAndBuilding.Web.Hubs;
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Bid;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR.Client;
+    using Microsoft.Extensions.DependencyInjection;
 
     [Authorize]
     public class AssignmentsController : Controller
@@ -82,7 +88,7 @@
 
             var viewModel = this.mapper.Map<AssignmentViewModel>(assignment);
             viewModel.HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id);
-            viewModel.Bids = viewModel.Bids.OrderBy(x => x.Price).ToList();
+            viewModel.Bids = viewModel.Bids.OrderBy(x => x.Price).ThenByDescending(x => x.TimePlaced).ToList();
 
             return this.View(viewModel);
         }
@@ -125,7 +131,32 @@
             // All other users placed bids for this assignment will recieve this notification
             await this.notificationsService.AddNotificationAsync(usersToSendNotification, $"Има ново наддаване в {assignment.Building.Name} - {bidViewModel.BidPrice} лв.");
 
-            return this.Redirect($"/assignments/details/{bidViewModel.Id}");
+            var strId = bidViewModel.Id.ToString();
+
+            // Retrieve the access token for the authenticated user
+            var cookie = this.Request.Cookies[".AspNetCore.Identity.Application"];
+            System.Net.Cookie cook = new System.Net.Cookie(".AspNetCore.Identity.Application", cookie, "/bidshub") { Domain = "localhost"};
+            var connection = new HubConnectionBuilder()
+                .AddMessagePackProtocol()
+                .WithUrl($"https://{this.Request.Host}/bidshub", options =>
+                {
+                    // options.UseDefaultCredentials = true;
+                    /*options.HttpMessageHandlerFactory = _ => new HttpClientHandler
+                    {
+                        CookieContainer = new System.Net.CookieContainer(),
+                        UseCookies = true,
+                    };*/
+                    options.Headers[".AspNetCore.Identity.Application"] = cookie;
+                    options.Cookies.Add(cook);
+                })
+                .WithAutomaticReconnect()
+                .Build();
+            await connection.StartAsync();
+            await connection.InvokeAsync("NewBid", strId, user.Id, bidViewModel.BidPrice);
+            await connection.DisposeAsync();
+            return this.Ok();
+
+            // return this.Redirect($"/assignments/details/{bidViewModel.Id}");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -146,7 +177,6 @@
             }
 
             var files = new List<IFormFile>();
-
             foreach (var file in assignment.Description)
             {
                 var stream = new MemoryStream(file.Content);
