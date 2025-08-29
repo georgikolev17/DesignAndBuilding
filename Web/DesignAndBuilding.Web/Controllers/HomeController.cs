@@ -46,7 +46,7 @@
                        .GetAllInvestmentAssignments()
                        .Select(x => new BuildingDetailsAssignmentViewModel
                        {
-                           BuildingType = x.Building.BuildingType,
+                           BuildingName = x.Building.Name,
                            CreatedOn = x.CreatedOn,
                            ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).CompanyName,
                            Description = x.Description,
@@ -64,7 +64,7 @@
                         .GetAllAssignmentsForUserType(user.UserType, user.Id)
                         .Select(x => new BuildingDetailsAssignmentViewModel
                         {
-                            BuildingType = x.Building.BuildingType,
+                            BuildingName = x.Building.Name,
                             CreatedOn = x.CreatedOn,
                             ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FullNameWithTitle,
                             Description = x.Description,
@@ -111,7 +111,7 @@
                     .GetAssignmentsWhereUserPlacedBid(user.Id)
                     .Select(x => new BuildingDetailsAssignmentViewModel
                     {
-                        BuildingType = x.Building.BuildingType,
+                        BuildingName = x.Building.Name,
                         CreatedOn = x.CreatedOn,
                         ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FullNameWithTitle,
                         Description = x.Description,

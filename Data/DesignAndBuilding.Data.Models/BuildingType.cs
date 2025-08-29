@@ -10,9 +10,9 @@
         Hotel = 1,
         [Display(Name = "Детска градина")]
         Kindergarten = 2,
-        [Display(Name = "Еднофамилна къща")]
+        [Display(Name = "Еднофамилна жилищна сграда")]
         SingleFamilyHouse = 3,
-        [Display(Name = "Многофамилна къща")]
+        [Display(Name = "Многофамилна жилищна сграда")]
         MultiFamiyHouse = 4,
         [Display(Name = "Болница")]
         Hospital = 5,

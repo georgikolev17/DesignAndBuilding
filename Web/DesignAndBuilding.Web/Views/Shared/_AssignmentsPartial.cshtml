@@ -24,12 +24,8 @@
         <table class="table table-hover text-center" id="active-table">
             <tr class="background-cyan">
                 @*<th>№</th>*@
-                <th>Тип</th>
+                <th>Име</th>
                 <th>Създател</th>
-                @if(Model.UserType == DesignAndBuilding.Data.Models.UserType.BuildingCompany)
-                {
-                    <th>Специалност</th>
-                }
                 <th>Вашата най-добра оферта</th>
                 <th>Най-добра оферта</th>
                 <th>Крайна дата</th>
@@ -40,76 +36,9 @@
             {
                 i++;
         <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button" class="@(assignment.UserPlacedBid ? string.Empty : "font-weight-bold")" id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
-            @switch (assignment.BuildingType)
-            {
-                case DesignAndBuilding.Data.Models.BuildingType.Other:
-                    <td>Друг</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Hotel:
-                    <td>Хотел</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Kindergarten:
-                    <td>Детска градина</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.SingleFamilyHouse:
-                    <td>Еднофамилна къща</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.MultiFamiyHouse:
-                    <td>Многофамилна къща</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Hospital:
-                    <td>Болница</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Factory:
-                    <td>Производствено предприятие</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.AdministrationBuilding:
-                    <td>Административна сграда</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.School:
-                    <td>Училище</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.University:
-                    <td>Университет</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.ComercialBuilding:
-                    <td>Търговска сграда</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.SportBuilding:
-                    <td>Спортна сграда</td>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.ArtAndCultureBuilding:
-                    <td>Сграда за изкуство и култура</td>
-                    break;
-                default:
-                    <td>Неизвестен</td>
-                    break;
-            }
+            @*<td>@i</td>*@
+            <td>@assignment.BuildingName</td>
             <td>@assignment.ArchitectName</td>
-            @if(Model.UserType == DesignAndBuilding.Data.Models.UserType.BuildingCompany)
-            {
-                @switch (assignment.UserType)
-                {
-                    case DesignAndBuilding.Data.Models.UserType.Architect:
-                        <td>Архитектура</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.UserType.ElectroEngineer:
-                        <td>Електро</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.UserType.BuildingConstructionEngineer:
-                        <td>Строителни конструкции</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.UserType.PlumbingEngineer:
-                        <td>ВиК</td>
-                        break;
-                    case DesignAndBuilding.Data.Models.UserType.HVACEngineer:
-                        <td>ОВК</td>
-                        break;
-                    default:
-                        <td>Друга</td>
-                        break;
-                }
-            }
             <td>@(assignment.UserBestBid != null ? assignment.UserBestBid : "-")</td>
             <td>@(assignment.BestBid != null ? assignment.BestBid : "-")</td>
             <td id="end-date">@assignment.EndDate.ToString("dd.MM.yyyy г. HH:mm:ss")</td>

@@ -1,5 +1,6 @@
 ﻿@using DesignAndBuilding.Web.ViewModels.Building
 @using System.Globalization;
+@using DesignAndBuilding.Common
 @model BuildingDetailsViewModel
 @{
     this.ViewData["Title"] = "Детайли на проекта";
@@ -12,7 +13,8 @@
             <br />
             <p><b>Име на обекта: </b>@Model.Name</p>
             <p><b>РЗП:</b> @Model.TotalBuildUpArea</p>
-            @switch (@Model.BuildingType)
+            <p><b>Тип на обекта: </b>@Model.BuildingType.GetDisplayName()</p>
+            @* @switch (@Model.BuildingType)
             {
                 case DesignAndBuilding.Data.Models.BuildingType.Other:
                     <p><b>Тип на обекта: </b>Друг</p>
@@ -56,7 +58,7 @@
                 default:
                     <p><b>Тип на обекта: </b>Неизвестен</p>
                     break;
-            }
+            } *@
             <div class="btn btn-primary" onclick="window.location.href='@Url.Action("create", "assignments", new { buildingId = Model.Id})'" role="button">Добави задание</div>
             <br />
             <br />
