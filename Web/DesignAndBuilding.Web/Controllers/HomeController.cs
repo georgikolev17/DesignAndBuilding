@@ -66,7 +66,7 @@
                         {
                             BuildingType = x.Building.BuildingType,
                             CreatedOn = x.CreatedOn,
-                            ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
+                            ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FullNameWithTitle,
                             Description = x.Description,
                             UserType = x.UserType,
                             EndDate = x.EndDate,
@@ -113,7 +113,7 @@
                     {
                         BuildingType = x.Building.BuildingType,
                         CreatedOn = x.CreatedOn,
-                        ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FirstName + " " + this.usersService.GetUserById(x.Building.ArchitectId).LastName,
+                        ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FullNameWithTitle,
                         Description = x.Description,
                         UserType = x.UserType,
                         EndDate = x.EndDate,

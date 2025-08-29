@@ -21,7 +21,7 @@
                 .ReverseMap();
 
             this.CreateMap<Bid, AssignmentBidViewModel>()
-                .ForMember(x => x.UserFullName, y => y.MapFrom(i => i.Designer.FirstName + i.Designer.LastName))
+                .ForMember(x => x.UserFullName, y => y.MapFrom(i => i.Designer.FullNameWithTitle))
                 .ForMember(x => x.PhoneNumber, y => y.MapFrom(i => i.Designer.PhoneNumber))
                 .ForMember(x => x.Email, y => y.MapFrom(i => i.Designer.Email))
                 .ReverseMap();

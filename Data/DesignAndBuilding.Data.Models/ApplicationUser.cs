@@ -58,5 +58,7 @@ namespace DesignAndBuilding.Data.Models
         public virtual ICollection<Building> Buildings { get; set; }
 
         public virtual ICollection<Notification> Notifications { get; set; }
+
+        public string FullNameWithTitle => (this.UserType == UserType.Architect ? "арх. " : "инж. ") + $"{this.FirstName} {this.LastName}";
     }
 }
