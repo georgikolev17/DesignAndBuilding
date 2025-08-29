@@ -135,7 +135,7 @@
 
             // Retrieve the access token for the authenticated user
             var cookie = this.Request.Cookies[".AspNetCore.Identity.Application"];
-            System.Net.Cookie cook = new System.Net.Cookie(".AspNetCore.Identity.Application", cookie, "/bidshub") { Domain = "localhost"};
+            System.Net.Cookie cook = new System.Net.Cookie(".AspNetCore.Identity.Application", cookie, "/bidshub") { Domain = this.Request.Host.Host };
             var connection = new HubConnectionBuilder()
                 .AddMessagePackProtocol()
                 .WithUrl($"https://{this.Request.Host}/bidshub", options =>
@@ -154,9 +154,9 @@
             await connection.StartAsync();
             await connection.InvokeAsync("NewBid", strId, user.Id, bidViewModel.BidPrice);
             await connection.DisposeAsync();
-            return this.Ok();
+            // return this.Ok();
 
-            // return this.Redirect($"/assignments/details/{bidViewModel.Id}");
+            return this.Redirect($"/assignments/details/{bidViewModel.Id}");
         }
 
         public async Task<IActionResult> Edit(int id)

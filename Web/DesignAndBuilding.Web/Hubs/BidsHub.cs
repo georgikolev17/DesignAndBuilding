@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.SignalR;
 
@@ -46,6 +46,12 @@
             }
 
             await base.OnDisconnectedAsync(exception);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            this.userManager?.Dispose();
+            base.Dispose(disposing);
         }
 
         // Returns all assignments where user has placed bid

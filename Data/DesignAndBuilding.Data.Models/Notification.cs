@@ -10,7 +10,7 @@
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Message { get; set; }
 
         [Required]
