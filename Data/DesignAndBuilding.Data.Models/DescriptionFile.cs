@@ -4,9 +4,17 @@
 
     public class DescriptionFile : BaseDeletableModel<int>
     {
+        public DescriptionFile(string name, int size, string contentType, int assignmentId)
+        {
+            this.Name = name;
+            this.Size = size;
+            this.ContentType = contentType;
+            this.AssignmentId = assignmentId;
+        }
+
         public string Name { get; set; }
 
-        public byte[] Content { get; set; }
+        public int Size { get; set; }
 
         public string ContentType { get; set; }
 

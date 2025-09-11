@@ -361,3 +361,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Web/DesignAndBuilding.Web/appsettings.Production.json
+/Services/DesignAndBuilding.Services/Storage/R2CloudflareConfig.cs

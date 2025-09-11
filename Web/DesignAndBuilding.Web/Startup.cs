@@ -1,7 +1,7 @@
 ﻿namespace DesignAndBuilding.Web
 {
-    using System.Reflection;
-
+    using Amazon.Runtime;
+    using Amazon.S3;
     using AutoMapper;
     using DesignAndBuilding.Data;
     using DesignAndBuilding.Data.Common;
@@ -12,6 +12,7 @@
     using DesignAndBuilding.Services;
     using DesignAndBuilding.Services.Mapping;
     using DesignAndBuilding.Services.Messaging;
+    using DesignAndBuilding.Services.Storage;
     using DesignAndBuilding.Web.Hubs;
     using DesignAndBuilding.Web.ViewModels;
     using Microsoft.AspNetCore.Authentication;
@@ -24,6 +25,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using System.Reflection;
 
     public class Startup
     {
@@ -77,6 +79,18 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
+            services.AddSingleton<IAmazonS3>(sp => {
+                var s3cfg = new Amazon.S3.AmazonS3Config
+                {
+                    ServiceURL = $"https://{R2CloudflareConfig.AccountId}.r2.cloudflarestorage.com",
+                    ForcePathStyle = true,
+                };
+                return new AmazonS3Client(
+                    new BasicAWSCredentials(R2CloudflareConfig.AccessKeyId, R2CloudflareConfig.SecretAccessKey),
+                    s3cfg
+                );
+            });
+            services.AddTransient<IObjectStorageService, R2StorageService>();
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<IBuildingsService, BuildingsService>();
             services.AddTransient<IUsersService, UsersService>();
@@ -84,6 +98,8 @@
             services.AddTransient<IBidsService, BidsService>();
             services.AddTransient<INotificationsService, NotificationsService>();
             services.AddTransient<AuthenticationService>();
+            services.AddTransient<IFilesService, FilesService>();
+            services.AddTransient<IDescriptionFilesService, DescriptionFilesService>();
 
             // Auto Mapper Configurations
             services.AddSingleton(provider => new MapperConfiguration(mc =>

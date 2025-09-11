@@ -8,6 +8,7 @@
 
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Services.DTOs;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +16,13 @@
     {
         private readonly IDeletableEntityRepository<Assignment> assignmentsRepository;
         private readonly IDeletableEntityRepository<DescriptionFile> filesRepository;
+        private readonly IFilesService filesService;
 
-        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository, IDeletableEntityRepository<DescriptionFile> filesRepository, IUsersService usersService)
+        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentsRepository, IDeletableEntityRepository<DescriptionFile> filesRepository, IUsersService usersService, IFilesService filesService)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.filesRepository = filesRepository;
+            this.filesService = filesService;
         }
 
         public AssignmentsService()
@@ -36,43 +39,52 @@
                 AssignmentType = creatorType == UserType.Architect ? AssignmentType.DesignAsignment : AssignmentType.InvestmentAssignment,
             };
 
-            assignment.Description = await this.GetDescriptionFiles(description, assignment);
-
             await this.assignmentsRepository.AddAsync(assignment);
             await this.assignmentsRepository.SaveChangesAsync();
+
+            var descriptionDtos = new List<NewDescriptionFileDto>();
+            foreach (var desc in description)
+            {
+                using var stream = new MemoryStream();
+                desc.CopyTo(stream);
+                descriptionDtos.Add(new NewDescriptionFileDto(stream.ToArray(), desc.FileName, desc.ContentType, assignment.Id));
+            }
+
+            await this.filesService.AddDescriptionFilesAsync(descriptionDtos);
         }
 
+        // WARNING: This functionality does not work now. Decide whether to support it.
         public async Task EditAssignment(UserType UserType, List<IFormFile> description, DateTime endDate, int id)
         {
-            var assignment = await this.assignmentsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            //var assignment = await this.assignmentsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
 
-            // Check if such assignment exists
-            if (assignment == null)
-            {
-                return;
-            }
+            //// Check if such assignment exists
+            //if (assignment == null)
+            //{
+            //    return;
+            //}
 
-            var files = await this.GetDescriptionFiles(description, assignment);
+            //var files = await this.GetDescriptionFiles(description, assignment);
 
-            foreach (var file in assignment.Description)
-            {
-                if (!files.Contains(file))
-                {
-                    file.IsDeleted = true;
-                    this.filesRepository.All().FirstOrDefault(x => x == file).IsDeleted = true;
-                }
-            }
+            //foreach (var file in assignment.Description)
+            //{
+            //    if (!files.Contains(file))
+            //    {
+            //        file.IsDeleted = true;
+            //        this.filesRepository.All().FirstOrDefault(x => x == file).IsDeleted = true;
+            //    }
+            //}
 
-            foreach (var file in files)
-            {
-                assignment.Description.Add(file);
-            }
+            //foreach (var file in files)
+            //{
+            //    assignment.Description.Add(file);
+            //}
 
-            assignment.UserType = UserType;
-            assignment.EndDate = endDate;
+            //assignment.UserType = UserType;
+            //assignment.EndDate = endDate;
 
-            await this.filesRepository.SaveChangesAsync();
-            await this.assignmentsRepository.SaveChangesAsync();
+            //await this.filesRepository.SaveChangesAsync();
+            //await this.assignmentsRepository.SaveChangesAsync();
         }
 
         public List<Assignment> GetAllAssignmentsForUserType(UserType UserType, string userId)
@@ -141,33 +153,7 @@
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
-        public async Task<ICollection<DescriptionFile>> GetDescriptionFiles(List<IFormFile> files, Assignment assignment)
-        {
-            var descriptionFiles = new List<DescriptionFile>();
-
-            foreach (var file in files)
-            {
-                if (file != null && file.Length > 0)
-                {
-                    // IFormFile to DescriptionFile
-                    using var stream = new MemoryStream();
-                    file.CopyTo(stream);
-                    byte[] bytes = stream.ToArray();
-
-                    descriptionFiles.Add(new DescriptionFile()
-                    {
-                        AssignmentId = assignment.Id,
-                        Content = bytes,
-                        Name = file.FileName,
-                        ContentType = file.ContentType,
-                    });
-                    stream.Close();
-                }
-            }
-
-            return descriptionFiles;
-        }
-
+        // TODO: There is the same method in DescriptionFilesService. Refactor.
         public IEnumerable<DescriptionFile> GetFilesForAssignment(int assignmentId)
         {
             return this.filesRepository.All().Where(x => x.AssignmentId == assignmentId);

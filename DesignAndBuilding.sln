@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignAndBuilding.Web.ViewM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignAndBuilding.Tests", "Tests\DesignAndBuilding.Tests\DesignAndBuilding.Tests.csproj", "{85FCAC9F-5779-4C66-99CF-5C279D7F5FB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{6683A46B-A605-49C2-A9F6-6251411D4553}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,10 @@ Global
 		{85FCAC9F-5779-4C66-99CF-5C279D7F5FB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85FCAC9F-5779-4C66-99CF-5C279D7F5FB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85FCAC9F-5779-4C66-99CF-5C279D7F5FB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6683A46B-A605-49C2-A9F6-6251411D4553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6683A46B-A605-49C2-A9F6-6251411D4553}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6683A46B-A605-49C2-A9F6-6251411D4553}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6683A46B-A605-49C2-A9F6-6251411D4553}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

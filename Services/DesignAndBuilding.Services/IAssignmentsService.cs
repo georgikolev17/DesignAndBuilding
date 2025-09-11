@@ -31,8 +31,6 @@
 
         int GetAssignmentsCount();
 
-        Task<ICollection<DescriptionFile>> GetDescriptionFiles(List<IFormFile> files, Assignment assignment);
-
         IEnumerable<DescriptionFile> GetFilesForAssignment(int assignmentId);
     }
 }

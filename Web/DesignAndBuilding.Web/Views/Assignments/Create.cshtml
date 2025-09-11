@@ -1,43 +1,86 @@
-﻿@using DesignAndBuilding.Web.ViewModels.Assignment;
-@using DesignAndBuilding.Data.Models;
-@model AssignmentInputModel
+﻿@model DesignAndBuilding.Web.ViewModels.Assignment.AssignmentInputModel
+@using DesignAndBuilding.Data.Models
+
 @{
-    this.ViewData["Title"] = "Създай задание";
+    ViewData["Title"] = "Създай задание";
 }
-<div id="alert"></div>
 
-<h1>@ViewData["Title"]</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data">
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-6 p-4 border rounded bg-light shadow">
+        <h1 class="text-center">@ViewData["Title"]</h1>
+
+        <!-- Main form -->
+        <form id="main-assignment-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="@Model.UserType"></label>
-                <select asp-for="@Model.UserType" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()"></select>
-                <span asp-validation-for="@Model.UserType" class="text-danger"></span>
+                <label asp-for="UserType"></label>
+                <select asp-for="UserType" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()"></select>
+                <span asp-validation-for="UserType" class="text-danger"></span>
             </div>
-            <div class="form-group" hidden>
-                <label asp-for="Description"></label>
-                
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Description"></label>
-                <input type="file" id="files" class="file" multiple />
-                <input asp-for="Description" type="file" id="files-hidden" class="file" multiple hidden/>
+
+                <!-- Dropzone container -->
+                <div id="assignment-dropzone" class="dropzone dropzone-previews">
+                    <div class="dz-message">Пуснете файлове тук или кликнете</div>
+                </div>
+
+                <input name="Description" type="file" id="files-hidden" class="file" multiple hidden />
+
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div id="visualise-upload-files" hidden>
-            </div>
-            <p id="remove-info" hidden>Натиснете върху файла, за да го ппремахнете.</p>
+
             <div class="form-group">
-                <label asp-for="@Model.EndDate"></label>
-                <input asp-for="@Model.EndDate" class="form-control" />
-                <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
+                <label asp-for="EndDate"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Създай</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-3">Създай</button>
+            </div>
         </form>
     </div>
 </div>
-<script src="~/js/upload-files.js" asp-append-version="true"></script>
+
+<script>
+    Dropzone.autoDiscover = false;
+
+    // Store selected files in JS array
+    var dropzoneFiles = [];
+
+    let hiddenFilesElement = document.getElementById("files-hidden");
+
+    var myDropzone = new Dropzone("#assignment-dropzone", {
+        url: "/", // dummy URL
+        autoProcessQueue: false, // don’t upload immediately
+        addRemoveLinks: true,
+        dictRemoveFile: "Премахни файл",
+        previewsContainer: ".dropzone-previews"
+    });
+
+    // Add file to hidden input on Dropzone add
+    myDropzone.on("addedfile", function(file){
+        var dt = new DataTransfer();
+        // Copy existing files
+        for (var f of hiddenFilesElement.files) dt.items.add(f);
+        // Add new file
+        dt.items.add(file);
+        hiddenFilesElement.files = dt.files;
+    });
+
+    // Remove file from hidden input on Dropzone remove
+    myDropzone.on("removedfile", function(file){
+        var dt = new DataTransfer();
+        for (var f of hiddenFilesElement.files) {
+            if (f !== file) dt.items.add(f);
+        }
+        hiddenFilesElement.files = dt.files;
+    });
+
+</script>

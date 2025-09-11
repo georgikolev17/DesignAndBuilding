@@ -32,14 +32,16 @@
         private readonly IBidsService bidsService;
         private readonly INotificationsService notificationsService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IFilesService filesService;
         private readonly IMapper mapper;
 
-        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager, IMapper mapper)
+        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager, IFilesService filesService, IMapper mapper)
         {
             this.assignmentsService = assignmentsService;
             this.bidsService = bidsService;
             this.notificationsService = notificationsService;
             this.userManager = userManager;
+            this.filesService=filesService;
             this.mapper = mapper;
         }
 
@@ -86,9 +88,7 @@
                 return this.NotFound();
             }
 
-            var viewModel = this.mapper.Map<AssignmentViewModel>(assignment);
-            viewModel.HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id);
-            viewModel.Bids = viewModel.Bids.OrderBy(x => x.Price).ThenByDescending(x => x.TimePlaced).ToList();
+            var viewModel = await this.ProcessAssignmentToViewModel(assignment);
 
             return this.View(viewModel);
         }
@@ -113,7 +113,8 @@
 
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = $"Невалидно наддаване" });
+                var viewModel = await this.ProcessAssignmentToViewModel(assignment);
+                return this.View(viewModel);
             }
 
             await this.bidsService.CreateBidAsync(user.Id, bidViewModel.Id, bidViewModel.BidPrice);
@@ -159,6 +160,7 @@
             return this.Redirect($"/assignments/details/{bidViewModel.Id}");
         }
 
+        // WARNING: This functionality does not work now. Decide whether to support it.
         public async Task<IActionResult> Edit(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
@@ -177,11 +179,12 @@
             }
 
             var files = new List<IFormFile>();
-            foreach (var file in assignment.Description)
-            {
-                var stream = new MemoryStream(file.Content);
-                files.Add(new FormFile(stream, 0, file.Content.Length, file.Name, file.Name));
-            }
+            // WARNING: The foreach below is commented because it gives errors. This is done for the sake of compilation. Fix it if this functionality is to be supported.
+            //foreach (var file in assignment.Description)
+            //{
+            //    var stream = new MemoryStream(file.Content);
+            //    files.Add(new FormFile(stream, 0, file.Content.Length, file.Name, file.Name));
+            //}
 
             var assignmentViewModel = new AssignmentInputModel()
             {
@@ -195,6 +198,8 @@
             return this.View(assignmentViewModel);
         }
 
+
+        // WARNING: This functionality does not work now. Decide whether to support it.
         [HttpPost]
         public async Task<IActionResult> Edit(int id, AssignmentInputModel viewModel)
         {
@@ -248,7 +253,7 @@
 
         public async Task<IActionResult> Download(int id)
         {
-            var files = this.assignmentsService.GetFilesForAssignment(id).ToList();
+            var files = await this.filesService.GetDescriptionFilesForAssignmentAsync(id);
 
             using (var compressedFileStream = new MemoryStream())
             {
@@ -257,11 +262,21 @@
                 {
                     foreach (var file in files)
                     {
+                        string fileName = file.Key;
+                        Stream fileData = file.Value;
+
+                        //using (var fileStream = System.IO.File.Create(@"D:\TUe\Year-2\Q1\Algebra for Security\tatko original 2.pdf"))
+                        //{
+                        //    await fileData.CopyToAsync(fileStream);
+                        //}
+
                         // Create a zip entry for each attachment
-                        var zipEntry = zipArchive.CreateEntry(file.Name);
+                        var zipEntry = zipArchive.CreateEntry(fileName);
 
                         // Get the stream of the attachment
-                        using (var originalFileStream = new MemoryStream(file.Content))
+                        using var originalFileStream = new MemoryStream();
+                        fileData.CopyTo(originalFileStream);
+                        originalFileStream.Position = 0;
                         using (var zipEntryStream = zipEntry.Open())
                         {
                             // Copy the attachment stream to the zip entry stream
@@ -299,6 +314,16 @@
                 default:
                     return "друг";
             }
+        }
+
+        private async Task<AssignmentViewModel> ProcessAssignmentToViewModel(Assignment assignment)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            var viewModel = this.mapper.Map<AssignmentViewModel>(assignment);
+
+            viewModel.HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id);
+            viewModel.Bids = viewModel.Bids.OrderBy(x => x.Price).ThenByDescending(x => x.TimePlaced).ToList();
+            return viewModel;
         }
     }
 }
