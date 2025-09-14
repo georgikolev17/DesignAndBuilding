@@ -17,7 +17,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm text-black-50 border-bottom box-shadow mb-3 background-cyan">
+        <nav class="navbar navbar-expand-sm border-bottom box-shadow mb-3 bg-light">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -30,7 +30,7 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
                         </li>
-                        @if (user != null && (user.UserType == UserType.Architect || user.UserType == UserType.InvestmentCompany || user.UserType == UserType.InvestmentPerson))
+                        @if (user != null && (user.UserType == UserType.Architect))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="create">Създай обект</a>
@@ -39,7 +39,7 @@
                                 <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="MyBuildings">Моите обекти</a>
                             </li>
                         }
-                        @if (user != null && user.UserType != UserType.Architect && user.UserType != UserType.InvestmentCompany && user.UserType != UserType.InvestmentPerson && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        @if (user != null && user.UserType != UserType.Architect &&  !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="home" asp-action="mybids">Моите оферти</a>

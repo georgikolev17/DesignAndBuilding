@@ -31,7 +31,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             // Check if current user is architect or investor
-            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentCompany && user.UserType != UserType.InvestmentPerson)
+            if (user.UserType != UserType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават обекти!" });
             }
@@ -51,7 +51,7 @@
             }
 
             // Check if current user is architect or investor
-            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentCompany && user.UserType != UserType.InvestmentPerson)
+            if (user.UserType != UserType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават обекти!" });
             }
@@ -68,7 +68,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             // Check if current user is architect
-            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentCompany && user.UserType != UserType.InvestmentPerson)
+            if (user.UserType != UserType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да достъпват тази страница!" });
             }

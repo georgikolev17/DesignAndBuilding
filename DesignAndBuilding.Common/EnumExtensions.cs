@@ -21,5 +21,19 @@
             }
             return enumValue.ToString();
         }
+
+        public static string GetDisplayShortName(this Enum enumValue)
+        {
+            var memberInfo = enumValue.GetType().GetMember(enumValue.ToString());
+            if (memberInfo.Length > 0)
+            {
+                var displayAttr = memberInfo[0].GetCustomAttribute<DisplayAttribute>();
+                if (displayAttr != null)
+                {
+                    return displayAttr.ShortName;
+                }
+            }
+            return enumValue.ToString();
+        }
     }
 }

@@ -6,10 +6,10 @@
     this.ViewData["Title"] = "Създай обект";
 }
 <div id="alert"></div>
-<h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-6 p-4 border rounded bg-light shadow">
+        <h3 class="text-center">@ViewData["Title"]</h3>
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -32,7 +32,9 @@
                 <select asp-for="@Model.BuildingType" class="form-control" asp-items="@Html.GetEnumSelectList<BuildingType>()"></select>
                 <span asp-validation-for="@Model.BuildingType" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Създай</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary text-center">Създай</button>
+            </div>
         </form>
     </div>
 </div>

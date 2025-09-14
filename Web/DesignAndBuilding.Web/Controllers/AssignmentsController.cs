@@ -50,7 +50,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             // Check if current user is architect or investor
-            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentPerson && user.UserType != UserType.InvestmentCompany)
+            if (user.UserType != UserType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават задания" });
             }
@@ -64,7 +64,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             // Check if current user is architect or investor
-            if (user.UserType != UserType.Architect && user.UserType != UserType.InvestmentPerson && user.UserType != UserType.InvestmentCompany)
+            if (user.UserType != UserType.Architect)
             {
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават задания" });
             }
@@ -289,6 +289,7 @@
             }
         }
 
+        // TODO: This is not needed . Remove it.
         private static string DisplayUserTypeInBulgarian(UserType userType)
         {
             switch (userType)
@@ -305,12 +306,6 @@
                     return "ВиК инженер";
                 case UserType.HVACEngineer:
                     return "ОВК инженер";
-                case UserType.BuildingCompany:
-                    return "строителни компани";
-                case UserType.InvestmentCompany:
-                    return "инвестиционни компани";
-                case UserType.InvestmentPerson:
-                    return "инвеститор";
                 default:
                     return "друг";
             }

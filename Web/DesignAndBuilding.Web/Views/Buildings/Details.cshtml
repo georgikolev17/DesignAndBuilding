@@ -14,51 +14,6 @@
             <p><b>Име на обекта: </b>@Model.Name</p>
             <p><b>РЗП:</b> @Model.TotalBuildUpArea</p>
             <p><b>Тип на обекта: </b>@Model.BuildingType.GetDisplayName()</p>
-            @* @switch (@Model.BuildingType)
-            {
-                case DesignAndBuilding.Data.Models.BuildingType.Other:
-                    <p><b>Тип на обекта: </b>Друг</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Hotel:
-                    <p><b>Тип на обекта: </b>Хотел</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Kindergarten:
-                    <p><b>Тип на обекта: </b>Детска градина</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.SingleFamilyHouse:
-                    <p><b>Тип на обекта: </b>Еднофамилна къща</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.MultiFamiyHouse:
-                    <p><b>Тип на обекта: </b>Многофамилна къща</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Hospital:
-                    <p><b>Тип на обекта: </b>Болница</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Factory:
-                    <p><b>Тип на обекта: </b>Производствено предприятие</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.AdministrationBuilding:
-                    <p><b>Тип на обекта: </b>Административна сграда</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.School:
-                    <p><b>Тип на обекта: </b>Училище</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.University:
-                    <p><b>Тип на обекта: </b>Университет</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.ComercialBuilding:
-                    <p><b>Тип на обекта: </b>Търговска сграда</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.SportBuilding:
-                    <p><b>Тип на обекта: </b>Спортна сграда</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.ArtAndCultureBuilding:
-                    <p><b>Тип на обекта: </b>Сграда за изкуство и култура</p>
-                    break;
-                default:
-                    <p><b>Тип на обекта: </b>Неизвестен</p>
-                    break;
-            } *@
             <div class="btn btn-primary" onclick="window.location.href='@Url.Action("create", "assignments", new { buildingId = Model.Id})'" role="button">Добави задание</div>
             <br />
             <br />
@@ -81,7 +36,7 @@
             </div>
             <table class="table table-hover text-center">
                 <tr class="background-cyan text-center">
-                    <th>Специалност</th>
+                    <th>Част</th>
                     <th>Дата на създаване</th>
                     <th>Крайна дата</th>
                     <th></th>
@@ -91,29 +46,7 @@
                 @foreach (var assignment in Model.Assignments)
                 {
                     <tr id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
-                        @switch (assignment.UserType)
-                        {
-                            case DesignAndBuilding.Data.Models.UserType.Other:
-                                <td>Друг</td>
-                                break;
-                            case DesignAndBuilding.Data.Models.UserType.Architect:
-                                <td>Архитект</td>
-                                break;
-                            case DesignAndBuilding.Data.Models.UserType.ElectroEngineer:
-                                <td>Електро</td>
-                                break;
-                            case DesignAndBuilding.Data.Models.UserType.BuildingConstructionEngineer:
-                                <td>Строителни Конструкции</td>
-                                break;
-                            case DesignAndBuilding.Data.Models.UserType.PlumbingEngineer:
-                                <td>ВиК</td>
-                                break;
-                            case DesignAndBuilding.Data.Models.UserType.HVACEngineer:
-                                <td>ОВК</td>
-                                break;
-                            default:
-                                break;
-                        }
+                        <td>@assignment.UserType.GetDisplayShortName()</td>
 
                         <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy") г.</td>
 
@@ -122,9 +55,10 @@
                         <td>
                             <button class="btn btn-secondary" onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'">Детайли</button>
                         </td>
-                        <td>
+                        @* Temporarily removed. Under revision whether this will be supported.*@
+                        @* <td>
                             <button class="btn btn-primary" onclick="window.location.href='@Url.Action("edit", "assignments", new { id = assignment.Id})'">Редактирай</button>
-                        </td>
+                        </td> *@
                         <td>
                             <button class="btn btn-danger" onclick="window.location.href='@Url.Action("delete", "assignments", new { id = assignment.Id})'">Изтрий</button>
                         </td>

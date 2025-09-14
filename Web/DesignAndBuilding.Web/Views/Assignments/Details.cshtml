@@ -1,4 +1,5 @@
-﻿@using DesignAndBuilding.Web.ViewModels.Assignment 
+﻿@using DesignAndBuilding.Web.ViewModels.Assignment
+@using DesignAndBuilding.Common
 @model AssignmentViewModel
 @{ 
     int i = 0;
@@ -11,74 +12,11 @@
             <h4>Обект</h4>
             <p><b>Име: </b>@Model.Building.Name</p>
             <p><b>РЗП:</b> @Model.Building.TotalBuildUpArea</p>
-            @switch (@Model.Building.BuildingType)
-            {
-                case DesignAndBuilding.Data.Models.BuildingType.Other:
-                    <p><b>Тип: </b>Друг</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Hotel:
-                    <p><b>Тип: </b>Хотел</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Kindergarten:
-                    <p><b>Тип: </b>Детска градина</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.SingleFamilyHouse:
-                    <p><b>Тип: </b>Еднофамилна къща</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.MultiFamiyHouse:
-                    <p><b>Тип: </b>Многофамилна къща</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Hospital:
-                    <p><b>Тип: </b>Болница</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.Factory:
-                    <p><b>Тип: </b>Производствено предприятие</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.AdministrationBuilding:
-                    <p><b>Тип: </b>Административна сграда</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.School:
-                    <p><b>Тип: </b>Училище</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.University:
-                    <p><b>Тип: </b>Университет</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.ComercialBuilding:
-                    <p><b>Тип: </b>Търговска сграда</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.SportBuilding:
-                    <p><b>Тип: </b>Спортна сграда</p>
-                    break;
-                case DesignAndBuilding.Data.Models.BuildingType.ArtAndCultureBuilding:
-                    <p><b>Тип: </b>Сграда за изкуство и култура</p>
-                    break;
-                default:
-                    <p><b>Тип: </b>Неизвестен</p>
-                    break;
-            }
+            <p><b>Тип: </b>@Model.Building.BuildingType.GetDisplayName()</p>
             <h4>Задание</h4>
             <p><b>Описание: </b><a href="/assignments/download/@Model.AssignmentId">Изтегли</a></p>
-            @switch (Model.UserType)
-            {
-                case DesignAndBuilding.Data.Models.UserType.Architect:
-                    <p><b>Специалност: </b>Архитектура</p>
-                    break;
-                case DesignAndBuilding.Data.Models.UserType.ElectroEngineer:
-                    <p><b>Специалност: </b>Електро</p>
-                    break;
-                case DesignAndBuilding.Data.Models.UserType.BuildingConstructionEngineer:
-                    <p><b>Специалност: </b>Строителни конструкции</p>
-                    break;
-                case DesignAndBuilding.Data.Models.UserType.PlumbingEngineer:
-                    <p><b>Специалност: </b>ВиК</p>
-                    break;
-                case DesignAndBuilding.Data.Models.UserType.HVACEngineer:
-                    <p><b>Специалност: </b>ОВК</p>
-                    break;
-                default:
-                    <p><b>Специалност: </b>Друга</p>
-                    break;
-            }
+            <p><b>Част: </b>@Model.UserType.GetDisplayShortName()</p>
+
             <p><b>Краен срок: </b>@Model.EndDate.ToString("dd.MM.yyyy г. HH:mm")</p>
             <p><b>Дата на създаване: </b>@Model.CreatedOn.ToString("dd.MM.yyyy г.")</p>
         </div>
@@ -121,7 +59,6 @@
                     <div class="form-group">
                         <label asp-for="@Model.BidPrice"></label>
                         <input asp-for="@Model.BidPrice" class="form-control w-25"/>
-                        @* <span asp-validation-for="@Model.BidPrice" class="text-danger"></span> *@
                     </div>
                     <button type="submit" class="btn btn-primary">Предложи цена</button>
                 </form>

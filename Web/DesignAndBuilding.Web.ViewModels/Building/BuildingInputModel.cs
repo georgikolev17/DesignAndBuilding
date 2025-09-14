@@ -7,7 +7,7 @@
         [Required]
         [MinLength(2, ErrorMessage = "Името трябва да е между 2 и 50 символа!")]
         [MaxLength(50, ErrorMessage = "Името трябва да е между 2 и 50 символа!")]
-        [Display(Name = "Име")]
+        [Display(Name = "Име на обект")]
         public string Name { get; set; }
 
         [Required]

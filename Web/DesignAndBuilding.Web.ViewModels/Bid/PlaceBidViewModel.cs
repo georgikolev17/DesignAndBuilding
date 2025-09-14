@@ -9,7 +9,7 @@
 
         [Required]
         [Display(Name = "Цена лв/кв.м.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Предлаганата цена трябва да е по-голяма от 0 лв./кв.м.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Предлаганата цена трябва да е поне 1 лв./кв.м.")]
         public decimal BidPrice { get; set; }
     }
 }
