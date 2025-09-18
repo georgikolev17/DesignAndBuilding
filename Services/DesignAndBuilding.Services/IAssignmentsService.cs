@@ -31,6 +31,6 @@
 
         int GetAssignmentsCount();
 
-        IEnumerable<DescriptionFile> GetFilesForAssignment(int assignmentId);
+        Task<IEnumerable<DescriptionFile>> GetFilesForAssignment(int assignmentId);
     }
 }

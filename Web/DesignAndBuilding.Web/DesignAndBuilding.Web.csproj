@@ -23,6 +23,9 @@
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\launchSettings.Development.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />

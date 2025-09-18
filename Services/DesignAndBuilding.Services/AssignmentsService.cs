@@ -149,14 +149,22 @@
 
         public async Task RemoveAssignment(int assignmentId)
         {
+            // Remove associated description files
+            var files = await this.GetFilesForAssignment(assignmentId);
+            foreach (var file in files)
+            {
+                // Remove file from object storage
+                await this.filesService.DeleteDescriptionFileAsync(file.Name, assignmentId);
+            }
+
             this.assignmentsRepository.All().FirstOrDefault(x => x.Id == assignmentId).IsDeleted = true;
             await this.assignmentsRepository.SaveChangesAsync();
         }
 
         // TODO: There is the same method in DescriptionFilesService. Refactor.
-        public IEnumerable<DescriptionFile> GetFilesForAssignment(int assignmentId)
+        public async Task<IEnumerable<DescriptionFile>> GetFilesForAssignment(int assignmentId)
         {
-            return this.filesRepository.All().Where(x => x.AssignmentId == assignmentId);
+            return await this.filesRepository.All().Where(x => x.AssignmentId == assignmentId).ToListAsync();
         }
 
         public ICollection<Assignment> GetAllInvestmentAssignments()

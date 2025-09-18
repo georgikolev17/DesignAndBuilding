@@ -52,9 +52,16 @@
         {
             var description = await this.GetDescriptionFileAsync(name, assignmentId);
             if (description != null)
-            {
-                this.descriptionFiles.Delete(description);
-                await this.descriptionFiles.SaveChangesAsync();
+            { 
+                description.IsDeleted = true;
+                try
+                {
+                    await descriptionFiles.SaveChangesAsync(); // DbContext
+                }
+                catch (Exception ex)
+                {
+                    throw; // rethrow so you see it in dev
+                }
             }
         }
 

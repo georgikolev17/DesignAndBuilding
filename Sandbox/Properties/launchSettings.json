@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Sandbox": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "STORAGE_BUCKET": "build-net"
+      }
+    }
+  }
+}

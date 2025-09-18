@@ -62,9 +62,10 @@
 
             var descriptions = await this.descriptionFilesService.GetAllDescriptionFilesForAssignmentAsync(assignmentId);
 
+            var bucket = R2CloudflareConfig.Bucket;
             foreach (var desc in descriptions)
             {
-                var descData = await this.objectStorageService.DownloadAsync(R2CloudflareConfig.Bucket, $"{assignmentId}/{desc.Name}");
+                var descData = await this.objectStorageService.DownloadAsync(bucket, $"{assignmentId}/{desc.Name}");
                 result.Add(desc.Name, descData);
             }
 
