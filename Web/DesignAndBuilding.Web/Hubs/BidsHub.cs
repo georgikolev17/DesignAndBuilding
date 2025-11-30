@@ -11,11 +11,18 @@
     using Microsoft.AspNetCore.SignalR;
 
     // [Authorize]
-    public class BidsHub(IAssignmentsService assignmentsService, IUsersService usersService, UserManager<ApplicationUser> userManager) : Hub
+    public class BidsHub : Hub
     {
-        private readonly IAssignmentsService assignmentsService = assignmentsService;
-        private readonly IUsersService usersService = usersService;
-        private readonly UserManager<ApplicationUser> userManager = userManager;
+        public BidsHub(IAssignmentsService assignmentsService, IUsersService usersService, UserManager<ApplicationUser> userManager)
+        {
+            this.userManager = userManager;
+            this.assignmentsService = assignmentsService;
+            this.usersService = usersService;
+        }
+
+        private readonly IAssignmentsService assignmentsService;
+        private readonly IUsersService usersService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public void NewBid(string assignmentId, string userId, decimal price)
         {

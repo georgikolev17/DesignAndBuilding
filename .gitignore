@@ -362,3 +362,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Web/DesignAndBuilding.Web/appsettings.Production.json
 /Services/DesignAndBuilding.Services/Storage/R2CloudflareConfig.cs
+/Web/DesignAndBuilding.Web/smtp-secrets.bat

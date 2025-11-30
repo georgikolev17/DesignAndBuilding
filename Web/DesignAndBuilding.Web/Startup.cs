@@ -79,6 +79,11 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
+            services.Configure<SmtpOptions>(this.configuration.GetSection("Smtp"));
+
+            // TODO: set IEmailSender implementation
+            services.AddTransient<IEmailSender, SmtpEmailSender>();
+
             services.AddSingleton<IAmazonS3>(sp => {
                 var s3cfg = new Amazon.S3.AmazonS3Config
                 {
@@ -91,7 +96,6 @@
                 );
             });
             services.AddTransient<IObjectStorageService, R2StorageService>();
-            services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<IBuildingsService, BuildingsService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IAssignmentsService, AssignmentsService>();

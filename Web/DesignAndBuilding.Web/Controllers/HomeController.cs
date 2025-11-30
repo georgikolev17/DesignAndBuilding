@@ -9,6 +9,7 @@
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
+    using DesignAndBuilding.Services.Messaging;
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Building;
@@ -16,6 +17,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Options;
 
     public class HomeController : BaseController
     {
@@ -24,12 +26,28 @@
         private readonly IUsersService usersService;
         private readonly INotificationsService notificationsService;
 
-        public HomeController(UserManager<ApplicationUser> userManager, IAssignmentsService assignmentsService, IUsersService usersService, INotificationsService notificationsService)
+        public HomeController(UserManager<ApplicationUser> userManager, IAssignmentsService assignmentsService, IUsersService usersService, INotificationsService notificationsService, IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.assignmentsService = assignmentsService;
             this.usersService = usersService;
             this.notificationsService = notificationsService;
+            //Task.Run(async () =>
+            //{
+            //    try
+            //    {
+            //        await emailSender.SendEmailAsync(
+            //            to: "g.t.kolev1@gmail.com",        // test target
+            //            subject: "Test email from BuildNet",
+            //            htmlContent: "<h2>Hello!</h2><p>This is a test email from your ASP.NET Core app.</p>"
+            //        );
+            //        Console.WriteLine("Test email sent successfully.");
+            //    }
+            //    catch (System.Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //    }
+            //});
         }
 
         public async Task<IActionResult> Index()
