@@ -41,7 +41,7 @@
             this.bidsService = bidsService;
             this.notificationsService = notificationsService;
             this.userManager = userManager;
-            this.filesService=filesService;
+            this.filesService = filesService;
             this.mapper = mapper;
         }
 

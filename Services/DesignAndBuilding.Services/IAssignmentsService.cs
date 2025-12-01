@@ -17,7 +17,7 @@
 
         Task<Assignment> GetAssignmentById(int id);
 
-        List<Assignment> GetAllAssignmentsForUserType(UserType UserType, string userId);
+        List<Assignment> GetAllAssignmentsForUserType(UserType userType);
 
         List<Assignment> GetAssignmentsWhereUserPlacedBid(string userId);
 

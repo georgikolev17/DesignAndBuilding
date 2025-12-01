@@ -87,11 +87,11 @@
             //await this.assignmentsRepository.SaveChangesAsync();
         }
 
-        public List<Assignment> GetAllAssignmentsForUserType(UserType UserType, string userId)
+        public List<Assignment> GetAllAssignmentsForUserType(UserType userType)
         {
             var assignments = this.assignmentsRepository
                 .All()
-                .Where(x => x.UserType == UserType && x.AssignmentType == AssignmentType.DesignAsignment)
+                .Where(x => x.UserType == userType && x.AssignmentType == AssignmentType.DesignAsignment)
                 .Include(x => x.Building)
                 .ThenInclude(x => x.Architect)
                 .Include(x => x.Bids)

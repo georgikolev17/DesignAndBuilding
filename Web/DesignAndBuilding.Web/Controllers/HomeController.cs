@@ -5,7 +5,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using AutoMapper;
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
@@ -25,29 +25,15 @@
         private readonly IAssignmentsService assignmentsService;
         private readonly IUsersService usersService;
         private readonly INotificationsService notificationsService;
+        private readonly IMapper mapper;
 
-        public HomeController(UserManager<ApplicationUser> userManager, IAssignmentsService assignmentsService, IUsersService usersService, INotificationsService notificationsService, IEmailSender emailSender)
+        public HomeController(UserManager<ApplicationUser> userManager, IAssignmentsService assignmentsService, IUsersService usersService, INotificationsService notificationsService, IMapper mapper)
         {
             this.userManager = userManager;
             this.assignmentsService = assignmentsService;
             this.usersService = usersService;
             this.notificationsService = notificationsService;
-            //Task.Run(async () =>
-            //{
-            //    try
-            //    {
-            //        await emailSender.SendEmailAsync(
-            //            to: "g.t.kolev1@gmail.com",        // test target
-            //            subject: "Test email from BuildNet",
-            //            htmlContent: "<h2>Hello!</h2><p>This is a test email from your ASP.NET Core app.</p>"
-            //        );
-            //        Console.WriteLine("Test email sent successfully.");
-            //    }
-            //    catch (System.Exception ex)
-            //    {
-            //        Console.WriteLine(ex.Message);
-            //    }
-            //});
+            this.mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -56,22 +42,12 @@
 
             if (user != null && user.UserType != UserType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                List<BuildingDetailsAssignmentViewModel> assignments = new List<BuildingDetailsAssignmentViewModel>();
-                assignments = this.assignmentsService
-                    .GetAllAssignmentsForUserType(user.UserType, user.Id)
-                    .Select(x => new BuildingDetailsAssignmentViewModel
-                    {
-                        BuildingName = x.Building.Name,
-                        CreatedOn = x.CreatedOn,
-                        ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FullNameWithTitle,
-                        Description = x.Description,
-                        UserType = x.UserType,
-                        EndDate = x.EndDate,
-                        Id = x.Id,
-                        UserPlacedBid = this.assignmentsService.GetAssignmentsWhereUserPlacedBid(user.Id).Contains(x),
-                        BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault() == null ? null : x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
-                        UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault() != null ? x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault().Price : null,
-                    }).ToList();
+                var assignmentsList = this.assignmentsService.GetAllAssignmentsForUserType(user.UserType);
+
+                var assignments = this.mapper.Map<List<BuildingDetailsAssignmentViewModel>>(
+                    assignmentsList,
+                    opt => opt.Items["UserId"] = user.Id
+                );
 
                 var assignmentsViewModel = new EngineerAssignmentsViewModel
                 {
@@ -103,21 +79,12 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var assignments = this.assignmentsService
-                    .GetAssignmentsWhereUserPlacedBid(user.Id)
-                    .Select(x => new BuildingDetailsAssignmentViewModel
-                    {
-                        BuildingName = x.Building.Name,
-                        CreatedOn = x.CreatedOn,
-                        ArchitectName = this.usersService.GetUserById(x.Building.ArchitectId).FullNameWithTitle,
-                        Description = x.Description,
-                        UserType = x.UserType,
-                        EndDate = x.EndDate,
-                        Id = x.Id,
-                        BestBid = x.Bids.OrderBy(x => x.Price).FirstOrDefault().Price,
-                        UserBestBid = x.Bids.Where(x => x.DesignerId == user.Id).OrderBy(x => x.Price).FirstOrDefault().Price,
-                        UserPlacedBid = true,
-                    }).ToList();
+            var assignmentsList = this.assignmentsService.GetAllAssignmentsForUserType(user.UserType);
+
+            var assignments = this.mapper.Map<List<BuildingDetailsAssignmentViewModel>>(
+                assignmentsList,
+                opt => opt.Items["UserId"] = user.Id
+            );
 
             var engineerAssignmentsViewModel = new EngineerAssignmentsViewModel
             {
