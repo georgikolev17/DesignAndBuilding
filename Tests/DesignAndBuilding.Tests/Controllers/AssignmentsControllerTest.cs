@@ -93,7 +93,7 @@
                 .Calling(c => c.Details(1))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<AssignmentViewModel>());
+                    .WithModelOfType<AssignmentDetailsViewModel>());
 
         // Details - POST
 

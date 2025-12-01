@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using DesignAndBuilding.Data.Models;
 using DesignAndBuilding.Services.Mapping;
-using DesignAndBuilding.Web.ViewModels.Building;
+using DesignAndBuilding.Web.ViewModels.Assignment;
 using Xunit;
 
 namespace DesignAndBuilding.Tests.Services
@@ -60,7 +60,7 @@ namespace DesignAndBuilding.Tests.Services
 
             // Act
             // Pass the custom UserId via the Items dictionary
-            var viewModel = this.mapper.Map<BuildingDetailsAssignmentViewModel>(
+            var viewModel = this.mapper.Map<AssignmentListViewModel>(
                 assignment,
                 opts => opts.Items["UserId"] = targetUserId
             );
@@ -99,7 +99,7 @@ namespace DesignAndBuilding.Tests.Services
             };
 
             // Act
-            var viewModel = this.mapper.Map<BuildingDetailsAssignmentViewModel>(
+            var viewModel = this.mapper.Map<AssignmentListViewModel>(
                 assignment,
                 opts => opts.Items["UserId"] = targetUserId
             );

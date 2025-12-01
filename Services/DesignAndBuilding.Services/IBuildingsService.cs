@@ -10,7 +10,7 @@
     {
         Task<int> CreateBuildingAsync(string architectId, string name, string town, decimal totalBuildUpArea, string buildingType);
 
-        IEnumerable<MyBuildingsViewModel> GetAllBuildingsOfCurrentUserById(string id);
+        IEnumerable<BuildingSummaryViewModel> GetAllBuildingsOfCurrentUserById(string id);
 
         Task<Building> GetBuildingById(int id);
 

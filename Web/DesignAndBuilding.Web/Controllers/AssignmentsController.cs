@@ -311,10 +311,10 @@
             }
         }
 
-        private async Task<AssignmentViewModel> ProcessAssignmentToViewModel(Assignment assignment)
+        private async Task<AssignmentDetailsViewModel> ProcessAssignmentToViewModel(Assignment assignment)
         {
             var user = await this.userManager.GetUserAsync(this.User);
-            var viewModel = this.mapper.Map<AssignmentViewModel>(assignment);
+            var viewModel = this.mapper.Map<AssignmentDetailsViewModel>(assignment);
 
             viewModel.HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id);
             viewModel.Bids = viewModel.Bids.OrderBy(x => x.Price).ThenByDescending(x => x.TimePlaced).ToList();

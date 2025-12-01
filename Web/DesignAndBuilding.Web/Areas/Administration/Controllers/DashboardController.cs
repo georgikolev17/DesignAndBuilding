@@ -57,7 +57,7 @@
         {
             var buildings = await this.buildingsService.GetAllBuildings();
 
-            var viewModel = buildings.Select(x => new MyBuildingsViewModel()
+            var viewModel = buildings.Select(x => new BuildingSummaryViewModel()
             {
                 Id = x.Id,
                 BuildingType = x.BuildingType,

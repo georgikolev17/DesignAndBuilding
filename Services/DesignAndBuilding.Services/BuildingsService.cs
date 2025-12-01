@@ -73,11 +73,11 @@
             return buildings;
         }
 
-        public IEnumerable<MyBuildingsViewModel> GetAllBuildingsOfCurrentUserById(string id)
+        public IEnumerable<BuildingSummaryViewModel> GetAllBuildingsOfCurrentUserById(string id)
         {
             var buildings = this.buildingsRepository.All()
                 .Where(x => x.ArchitectId == id)
-                .ProjectTo<MyBuildingsViewModel>(this.mapper)
+                .ProjectTo<BuildingSummaryViewModel>(this.mapper)
                 .ToList();
 
             return buildings;

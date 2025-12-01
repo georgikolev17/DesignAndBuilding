@@ -12,7 +12,6 @@
     using DesignAndBuilding.Services.Messaging;
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
-    using DesignAndBuilding.Web.ViewModels.Building;
     using DesignAndBuilding.Web.ViewModels.Notification;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -44,7 +43,7 @@
             {
                 var assignmentsList = this.assignmentsService.GetAllAssignmentsForUserType(user.UserType);
 
-                var assignments = this.mapper.Map<List<BuildingDetailsAssignmentViewModel>>(
+                var assignments = this.mapper.Map<List<AssignmentListViewModel>>(
                     assignmentsList,
                     opt => opt.Items["UserId"] = user.Id
                 );
@@ -81,7 +80,7 @@
 
             var assignmentsList = this.assignmentsService.GetAllAssignmentsForUserType(user.UserType);
 
-            var assignments = this.mapper.Map<List<BuildingDetailsAssignmentViewModel>>(
+            var assignments = this.mapper.Map<List<AssignmentListViewModel>>(
                 assignmentsList,
                 opt => opt.Items["UserId"] = user.Id
             );

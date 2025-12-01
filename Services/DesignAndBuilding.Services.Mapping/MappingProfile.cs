@@ -3,6 +3,7 @@
     using AutoMapper;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Web.ViewModels.Assignment;
+    using DesignAndBuilding.Web.ViewModels.Bid;
     using DesignAndBuilding.Web.ViewModels.Building;
     using DesignAndBuilding.Web.ViewModels.Notification;
     using System.Linq;
@@ -12,27 +13,27 @@
 
         public MappingProfile()
         {
-            this.CreateMap<Notification, NotificationViewModel>();
-
-            this.CreateMap<Building, MyBuildingsViewModel>();
-
-            this.CreateMap<Building, BuildingDetailsViewModel>();
-
-            this.CreateMap<Building, AssignmentBuildingViewModel>()
+            this.CreateMap<Notification, NotificationViewModel>()
                 .ReverseMap();
 
-            this.CreateMap<Bid, AssignmentBidViewModel>()
+            this.CreateMap<Building, BuildingSummaryViewModel>()
+                .ReverseMap();
+
+            this.CreateMap<Building, BuildingDetailsViewModel>()
+                .ReverseMap();
+
+            this.CreateMap<Bid, BidListViewModel>()
                 .ForMember(x => x.UserFullName, y => y.MapFrom(i => i.Designer.FullNameWithTitle))
                 .ForMember(x => x.PhoneNumber, y => y.MapFrom(i => i.Designer.PhoneNumber))
                 .ForMember(x => x.Email, y => y.MapFrom(i => i.Designer.Email))
                 .ReverseMap();
 
-            this.CreateMap<Assignment, AssignmentViewModel>()
+            this.CreateMap<Assignment, AssignmentDetailsViewModel>()
                 .ForMember(x => x.AssignmentId, y => y.MapFrom(i => i.Id))
                 .ReverseMap();
 
-            this.CreateMap<Assignment, BuildingDetailsAssignmentViewModel>()
-                .ForMember(dest => dest.BuildingName, opt => opt.MapFrom(src 
+            this.CreateMap<Assignment, AssignmentListViewModel>()
+                .ForMember(dest => dest.BuildingName, opt => opt.MapFrom(src
                     => src.Building.Name))
                 .ForMember(dest => dest.ArchitectName, opt => opt.MapFrom(src =>
                     src.Building.Architect.FullNameWithTitle))
@@ -51,7 +52,9 @@
                         .OrderBy(b => b.Price)
                         .Select(b => (decimal?)b.Price)
                         .FirstOrDefault();
-                }));    
+                }));
+
+            this.CreateMap<Assignment, AssignmentSummaryViewModel>();
 
             this.CreateMap<Building, BuildingDetailsViewModel>()
                 // AutoMapper matches Name, Id, TotalBuildUpArea, BuildingType automatically

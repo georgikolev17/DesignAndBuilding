@@ -143,7 +143,7 @@
                 .Calling(c => c.MyBuildings())
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<IEnumerable<MyBuildingsViewModel>>()
+                    .WithModelOfType<IEnumerable<BuildingSummaryViewModel>>()
                     .Passing(x => Assert.Equal(10, x.Count())));
 
         //Details

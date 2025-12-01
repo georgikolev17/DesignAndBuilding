@@ -8,63 +8,68 @@
 <div id="alert"></div>
 <div class="">
     <div class="row">
-        <div class="col-3">
-            <h3>@this.ViewData["Title"]</h3>
-            <br />
-            <p><b>Име на обекта: </b>@Model.Name</p>
-            <p><b>РЗП:</b> @Model.TotalBuildUpArea</p>
-            <p><b>Тип на обекта: </b>@Model.BuildingType.GetDisplayName()</p>
-            <div class="btn btn-primary" onclick="window.location.href='@Url.Action("create", "assignments", new { buildingId = Model.Id})'" role="button">Добави задание</div>
-            <br />
-            <br />
-        </div>
-        <div class="col-9">
-            <h3 class="text-center">Задания</h3>
-            <div class="text-center">
-                <div class="form-group" style="display: inline-block; margin-right: 10px">
-                    <input type="radio" id="all-checkbox" name="assignment-type" />
-                    <label for="all-checkbox">Всички задания</label>
-                </div>
-                <div class="form-group" style="display: inline-block; margin-right: 10px">
-                    <input type="radio" id="active-checkbox" name="assignment-type" checked />
-                    <label for="active-checkbox">Активни задания</label>
-                </div>
-                <div class="form-group" style="display:inline-block">
-                    <input type="radio" id="finished-checkbox" name="assignment-type" />
-                    <label for="finished-checkbox">Завършили задания</label>
-                </div>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">@this.ViewData["Title"]</h6>
             </div>
-            <table class="table table-hover text-center">
-                <tr class="background-cyan text-center">
-                    <th>Част</th>
-                    <th>Дата на създаване</th>
-                    <th>Крайна дата</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                @foreach (var assignment in Model.Assignments)
-                {
-                    <tr id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
-                        <td>@assignment.UserType.GetDisplayShortName()</td>
+            <div class="card-body">
+                <p><b>Име на обекта: </b>@Model.Name</p>
+                <p><b>РЗП:</b> @Model.TotalBuildUpArea</p>
+                <p><b>Тип на обекта: </b>@Model.BuildingType.GetDisplayName()</p>
+                <div class="btn btn-primary" onclick="window.location.href='@Url.Action("create", "assignments", new { buildingId = Model.Id })'" role="button">Добави задание</div>
+            </div>
+        </div>
+        <div class="card shadow mb-4 col-9">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Задания</h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="form-group" style="display: inline-block; margin-right: 10px">
+                        <input type="radio" id="all-checkbox" name="assignment-type" />
+                        <label for="all-checkbox">Всички задания</label>
+                    </div>
+                    <div class="form-group" style="display: inline-block; margin-right: 10px">
+                        <input type="radio" id="active-checkbox" name="assignment-type" checked />
+                        <label for="active-checkbox">Активни задания</label>
+                    </div>
+                    <div class="form-group" style="display:inline-block">
+                        <input type="radio" id="finished-checkbox" name="assignment-type" />
+                        <label for="finished-checkbox">Завършили задания</label>
+                    </div>
+                </div>
+                <table class="table table-hover text-center">
+                    <tr class="background-cyan text-center">
+                        <th>Част</th>
+                        <th>Дата на създаване</th>
+                        <th>Крайна дата</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    @foreach (var assignment in Model.Assignments)
+                    {
+                        <tr id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
+                            <td>@assignment.UserType.GetDisplayShortName()</td>
 
-                        <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy") г.</td>
+                            <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy") г.</td>
 
-                        <td>@assignment.EndDate.ToString(@"dd.MM.yyyy") г.</td>
+                            <td>@assignment.EndDate.ToString(@"dd.MM.yyyy") г.</td>
 
-                        <td>
-                            <button class="btn btn-secondary" onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id})'">Детайли</button>
-                        </td>
-                        @* Temporarily removed. Under revision whether this will be supported.*@
-                        @* <td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'">Детайли</button>
+                            </td>
+                            @* Temporarily removed. Under revision whether this will be supported.*@
+                            @* <td>
                             <button class="btn btn-primary" onclick="window.location.href='@Url.Action("edit", "assignments", new { id = assignment.Id})'">Редактирай</button>
                         </td> *@
-                        <td>
-                            <button class="btn btn-danger" onclick="window.location.href='@Url.Action("delete", "assignments", new { id = assignment.Id})'">Изтрий</button>
-                        </td>
-                    </tr>
-                }
-            </table>
+                            <td>
+                                <button class="btn btn-danger" onclick="window.location.href='@Url.Action("delete", "assignments", new { id = assignment.Id })'">Изтрий</button>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
         </div>
     </div>
 </div>

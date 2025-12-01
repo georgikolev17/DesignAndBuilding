@@ -49,7 +49,7 @@ namespace DesignAndBuilding.Tests.Controllers
                 .Calling(c => c.AllBuildings())
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<List<MyBuildingsViewModel>>()
+                    .WithModelOfType<List<BuildingSummaryViewModel>>()
                     .Passing(x => x.Count == 10));
 
         private static IEnumerable<ApplicationUser> Get10Users()

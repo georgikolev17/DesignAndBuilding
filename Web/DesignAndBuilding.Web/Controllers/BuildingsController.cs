@@ -2,11 +2,12 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-
+    using AutoMapper;
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
     using DesignAndBuilding.Web.ViewModels;
+    using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Building;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -18,12 +19,14 @@
         private readonly IBuildingsService buildingsService;
         private readonly IUsersService usersService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IMapper mapper;
 
-        public BuildingsController(IBuildingsService buildingsService, IUsersService usersService, UserManager<ApplicationUser> userManager)
+        public BuildingsController(IBuildingsService buildingsService, IUsersService usersService, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             this.buildingsService = buildingsService;
             this.usersService = usersService;
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         public async Task<IActionResult> Create()
@@ -93,21 +96,8 @@
                 return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само потребителя, създал проекта, може да вижда детейлите му!" });
             }
 
-            var buildingViewModel = new BuildingDetailsViewModel()
-            {
-                Id = id,
-                Name = building.Name,
-                BuildingType = building.BuildingType,
-                TotalBuildUpArea = building.TotalBuildUpArea,
-                Assignments = building.Assignments.Select(a => new BuildingDetailsAssignmentViewModel
-                {
-                    Id = a.Id,
-                    CreatedOn = a.CreatedOn,
-                    Description = a.Description.ToList(),
-                    UserType = a.UserType,
-                    EndDate = a.EndDate,
-                }).ToList(),
-            };
+            var buildingViewModel = this.mapper.Map<BuildingDetailsViewModel>(building);
+
             return this.View(buildingViewModel);
         }
 

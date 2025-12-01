@@ -3,16 +3,15 @@
     using System.Collections.Generic;
 
     using DesignAndBuilding.Data.Models;
-    using DesignAndBuilding.Web.ViewModels.Building;
 
     public class EngineerAssignmentsViewModel
     {
         public EngineerAssignmentsViewModel()
         {
-            this.Assignments = new List<BuildingDetailsAssignmentViewModel>();
+            this.Assignments = new List<AssignmentListViewModel>();
         }
 
-        public IList<BuildingDetailsAssignmentViewModel> Assignments { get; set; }
+        public IList<AssignmentListViewModel> Assignments { get; set; }
 
         public UserType UserType { get; set; }
     }

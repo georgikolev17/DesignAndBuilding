@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DesignAndBuilding.Data.Models;
+    using DesignAndBuilding.Web.ViewModels.Assignment;
 
     public class BuildingDetailsViewModel
     {
@@ -14,6 +15,6 @@
 
         public BuildingType BuildingType { get; set; }
 
-        public IList<BuildingDetailsAssignmentViewModel> Assignments { get; set; }
+        public IList<AssignmentSummaryViewModel> Assignments { get; set; }
     }
 }
