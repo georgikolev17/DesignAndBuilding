@@ -5,7 +5,7 @@
 }
 <div id="alert"></div>
 <div id="container">
-    <div>
+    @* <div>
         <div class="form-group" style="display: inline-block; margin-right: 10px">
             <input type="radio" id="all-checkbox" name="assignment-type" />
             <label for="all-checkbox">Всички задания</label>
@@ -18,49 +18,55 @@
             <input type="radio" id="finished-checkbox" name="assignment-type" />
             <label for="finished-checkbox">Завършили задания</label>
         </div>
+    </div> *@
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Задания по част: @Model.UserType.GetDisplayShortName()</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="display table table-striped table-hover" id="assignmentsTable">
+                    <thead>
+                        <tr>
+                            @*<th>№</th>*@
+                            <th>Име</th>
+                            <th>Създател</th>
+                            <th>Вашата най-добра оферта</th>
+                            <th>Най-добра оферта</th>
+                            <th>Крайна дата</th>
+                            <th>Оставащо време</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var assignment in Model.Assignments)
+                        {
+                            i++;
+                            <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button" class="@(assignment.UserPlacedBid ? string.Empty : "font-weight-bold")">
+                            @*<td>@i</td>*@
+                            <td>@assignment.BuildingName</td>
+                            <td>@assignment.ArchitectName</td>
+                            <td>@(assignment.UserBestBid != null ? assignment.UserBestBid : "-")</td>
+                            <td>@(assignment.BestBid != null ? assignment.BestBid : "-")</td>
+                            <td>@assignment.EndDate.ToString("dd.MM.yyyy г.")</td>
+                            <td>@assignment.IsActive</td>
+                            @if (assignment.UserPlacedBid && assignment.BestBid == assignment.UserBestBid)
+                            {
+                                <td>✔️</td>
+                            }
+                            else if (assignment.UserPlacedBid)
+                            {
+                                <td>❌</td>
+                            }
+                            else
+                            {
+                                <td>-</td>
+                            }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    @if (Model.Assignments.Count > 0)
-    {
-        <table class="table table-hover text-center" id="active-table">
-            <tr class="background-cyan">
-                @*<th>№</th>*@
-                <th>Име</th>
-                <th>Създател</th>
-                <th>Вашата най-добра оферта</th>
-                <th>Най-добра оферта</th>
-                <th>Крайна дата</th>
-                <th>Оставащо време</th>
-                <th></th>
-            </tr>
-            @foreach (var assignment in Model.Assignments)
-            {
-                i++;
-        <tr onclick="window.location.href='@Url.Action("details", "assignments", new { id = assignment.Id })'" role="button" class="@(assignment.UserPlacedBid ? string.Empty : "font-weight-bold")" id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
-            @*<td>@i</td>*@
-            <td>@assignment.BuildingName</td>
-            <td>@assignment.ArchitectName</td>
-            <td>@(assignment.UserBestBid != null ? assignment.UserBestBid : "-")</td>
-            <td>@(assignment.BestBid != null ? assignment.BestBid : "-")</td>
-            <td id="end-date">@assignment.EndDate.ToString("dd.MM.yyyy г. HH:mm:ss")</td>
-            <td id="time-element">@(assignment.EndDate > DateTime.Now ? (assignment.EndDate - DateTime.Now).ToString(@"dd\:hh\:mm\:ss") : "Приключило")</td>
-            @if (assignment.UserPlacedBid && assignment.BestBid == assignment.UserBestBid)
-            {
-                <td>✔️</td>
-            }
-            else if (assignment.UserPlacedBid)
-            {
-                <td>❌</td>
-            }
-            else
-            {
-                <td>-</td>
-            }
-        </tr>
-            }
-        </table>
-    }
-    else
-    {
-        <div>Няма намерени задания</div>
-    }
 </div>

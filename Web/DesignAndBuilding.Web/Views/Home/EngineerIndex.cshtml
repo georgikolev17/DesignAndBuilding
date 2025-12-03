@@ -8,33 +8,65 @@
 @section Scripts
 {
     <script>
-        setInterval(() => {
-            let timeElements = Array.from(document.querySelectorAll('#time-element'));
-            let endDates = document.querySelectorAll('#end-date');
-            for (let time of timeElements) {
-                if (time.textContent != 'Приключило') {
-                    let [date, month, years, hms] = endDates[timeElements.indexOf(time)].textContent.split('.');
-                    month = Number(month);
-                    month--;
-                    date = Number(date);
-                    let year = years.substr(0, 4);
-                    let [hours, minutes, seconds] = hms.split(':');
-                    let endDate = new Date(year, month, date, hours, minutes, seconds);
-                    let now = new Date();
-                    let timeLeft = endDate - now;
-                    if (timeLeft < 0) {
-                        time.textContent = 'Приключило';
-                        time.parentElement.id = 'finished';
-                        time.parentElement.style.display = 'none';
-                    } else {
-                        var daysRemaining = ('00' + Math.floor(timeLeft / (1000 * 60 * 60 * 24))).slice(-2);
-                        var hoursRemaining = ('00' + Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
-                        var minutesRemaining = ('00' + Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
-                        var secondsRemaining = ('00' + Math.floor((timeLeft % (1000 * 60)) / 1000)).slice(-2);
-                        time.textContent = `${daysRemaining}:${hoursRemaining}:${minutesRemaining}:${secondsRemaining}`;
+        $(document).ready(function() {
+            const table = $('#assignmentsTable').DataTable({
+                language: {
+                    lengthMenu: "Покажи _MENU_ записа",
+                    search: "Търси:",
+                    info: "Показани _START_ до _END_ от общо _TOTAL_ записа",
+                    infoFiltered: "(филтрирано от общо _MAX_ записа)",
+                    infoEmpty: "Няма налични записи",
+                    zeroRecords: "Няма намерени резултати",
+                    paginate: {
+                        first: "Първа",
+                        last: "Последна",
+                        next: "Следваща",
+                        previous: "Предишна"
                     }
-                }
+                },
+                columns: [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    { visible: false }, // ← hides column 5
+                    null
+                ]
+            });
+            // Find the "Show X entries" container that DataTables created
+            const wrapper = table.table().container();
+            const lengthDiv = wrapper.querySelector('.dataTables_length');
+
+            if (lengthDiv) {
+                const statusHtml = `
+                    <label class="ml-3 mb-0">
+                        <span class="mr-1">Статус:</span>
+                        <select id="statusFilter"
+                                class="form-control form-control-sm d-inline-block w-auto">
+                            <option value="all">Всички</option>
+                            <option value="true" selected>Активни</option>
+                            <option value="false">Завършили</option>
+                        </select>
+                    </label>
+                `;
+                lengthDiv.insertAdjacentHTML('beforeend', statusHtml);
             }
-        }, 1000);
+
+            // Filtering
+            $('#statusFilter').on('change', function () {
+                const val = this.value;
+
+                if (val === 'all') {
+                    table.column(5).search('').draw();
+                } else if (val === 'true') {
+                    table.column(5).search('True').draw();
+                } else {
+                    table.column(5).search('False').draw();
+                }
+            });
+
+            table.column(5).search('True').draw();
+        });
     </script>
 }

@@ -31,5 +31,7 @@
         public decimal? UserBestBid { get; set; }
 
         public decimal? BestBid { get; set; }
+
+        public bool IsActive => this.EndDate.Date >= DateTime.Now.Date;
     }
 }
