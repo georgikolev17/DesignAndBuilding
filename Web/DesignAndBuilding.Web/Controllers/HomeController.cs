@@ -78,7 +78,9 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var assignmentsList = this.assignmentsService.GetAllAssignmentsForUserType(user.UserType);
+            var assignmentsList = this.assignmentsService
+                .GetAllAssignmentsForUserType(user.UserType)
+                .Where(x => user.Bids.Any(b => b.AssignmentId == x.Id));
 
             var assignments = this.mapper.Map<List<AssignmentListViewModel>>(
                 assignmentsList,
