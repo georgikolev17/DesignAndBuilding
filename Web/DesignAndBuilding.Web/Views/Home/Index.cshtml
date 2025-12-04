@@ -20,33 +20,6 @@
             Здравейте! Пожелаваме Ви приятна работа!
         </div>
     }
-    <table id="dataTable" class="display table table-striped" style="width:100%">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>City</th>
-                <th>Age</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Alice</td>
-                <td>London</td>
-                <td>30</td>
-            </tr>
-            <tr>
-                <td>Bob</td>
-                <td>New York</td>
-                <td>25</td>
-            </tr>
-            <tr>
-                <td>Charlie</td>
-                <td>Sofia</td>
-                <td>28</td>
-            </tr>
-        </tbody>
-    </table>
-
     @if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
     {
         <div class="card p-5">
@@ -70,11 +43,3 @@
     }
 
 </div>
-
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable();
-        });
-    </script>
-}

@@ -16,51 +16,40 @@
                 </select>
                 <span asp-validation-for="Input.UserType" class="text-danger"></span>
             </div>
-            <div id="all-users-register" hidden>
-                <div class="form-group">
-                    <label asp-for="Input.Email"></label>
-                    <input asp-for="Input.Email" class="form-control" />
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="form-control" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.ConfirmPassword"></label>
-                    <input asp-for="Input.ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.PhoneNumber"></label>
-                    <input asp-for="Input.PhoneNumber" class="form-control" />
-                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="Input.RegistrationNumber"></label>
+                <input asp-for="Input.RegistrationNumber" class="form-control" />
+                <span asp-validation-for="Input.RegistrationNumber" class="text-danger"></span>
             </div>
-            <div id="person-users-register" hidden>
-                <div class="form-group">
-                    <label asp-for="Input.FirstName"></label>
-                    <input asp-for="Input.FirstName" class="form-control" />
-                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.LastName"></label>
-                    <input asp-for="Input.LastName" class="form-control" />
-                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div id="company-users-register" hidden>
-                <div class="form-group">
-                    <label asp-for="Input.CompanyName"></label>
-                    <input asp-for="Input.CompanyName" class="form-control" />
-                    <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.Bulstat"></label>
-                    <input asp-for="Input.Bulstat" class="form-control" />
-                    <span asp-validation-for="Input.Bulstat" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.FirstName"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Регистрация</button>
         </form>
@@ -69,25 +58,4 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
-    <script>
-        let companyFields = document.getElementById('company-users-register');
-        let peopleFields = document.getElementById('person-users-register');
-        let allUsersFields = document.getElementById('all-users-register');
-        let choice = document.getElementById('user-type-choice');
-        choice.addEventListener('change', onChange);
-
-        function onChange() {
-            console.log(choice.value);
-            let numberValue = Number(choice.value);
-            allUsersFields.hidden = false;
-            if (numberValue <= 5 || numberValue == 8) {
-                peopleFields.hidden = false;
-                companyFields.hidden = true;
-            } else {
-                peopleFields.hidden = true;
-                companyFields.hidden = false;
-            }
-        }
-    </script>
 }

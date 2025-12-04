@@ -57,10 +57,14 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
             [Display(Name = "Парола")]
             public string Password { get; set; }
 
+            [Required]
             [DataType(DataType.Password)]
             [Display(Name = "Потвърди паролата")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required(ErrorMessage = "Попълнете Вашия регистрацинен номер в КАБ/КИИП")]
+            public string RegistrationNumber { get; set; }
 
             [StringLength(20, ErrorMessage = "Фамилията трябва да е между 3 и 20 символа!", MinimumLength = 3)]
             [Display(Name = "Име")]
@@ -70,14 +74,8 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
             [Display(Name = "Фамилия")]
             public string LastName { get; set; }
 
-            [Display(Name = "Име на компанията")]
-            public string CompanyName { get; set; }
-
-            [Display(Name = "Булстат")]
-            public string Bulstat { get; set; }
-
             [Required]
-            [Display(Name = "Роля")]
+            [Display(Name = "Специалност")]
             public UserType UserType { get; set; }
 
             [Required]
@@ -98,7 +96,17 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email, FirstName = this.Input.FirstName, Password = Hash(this.Input.Password), LastName = this.Input.LastName, UserType = this.Input.UserType, PhoneNumber = this.Input.PhoneNumber, CompanyName = this.Input.CompanyName, Bulstat = this.Input.Bulstat };
+                var user = new ApplicationUser
+                {
+                    UserName = this.Input.Email,
+                    Email = this.Input.Email,
+                    FirstName = this.Input.FirstName,
+                    Password = Hash(this.Input.Password),
+                    LastName = this.Input.LastName,
+                    UserType = this.Input.UserType,
+                    PhoneNumber = this.Input.PhoneNumber,
+                    RegistrationNumber = this.Input.RegistrationNumber,
+                };
                 var result = await _userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
@@ -112,8 +120,8 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        // $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

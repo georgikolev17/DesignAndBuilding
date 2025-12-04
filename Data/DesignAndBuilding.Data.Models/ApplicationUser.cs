@@ -39,13 +39,12 @@ namespace DesignAndBuilding.Data.Models
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
+        [Required]
+        public string RegistrationNumber { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        public string CompanyName { get; set; }
-
-        public string Bulstat { get; set; }
 
         [Required]
         public string Password { get; set; }
