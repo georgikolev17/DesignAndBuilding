@@ -64,6 +64,7 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required(ErrorMessage = "Попълнете Вашия регистрацинен номер в КАБ/КИИП")]
+            [Display(Name = "Регистрационен номер в КАБ/КИИП")]
             public string RegistrationNumber { get; set; }
 
             [StringLength(20, ErrorMessage = "Фамилията трябва да е между 3 и 20 символа!", MinimumLength = 3)]

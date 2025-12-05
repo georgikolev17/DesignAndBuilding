@@ -101,4 +101,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="**\LICENSE" />
+		<None Remove="**\LICENSE" />
+		<Content Remove="**\LICENSE.*" />
+		<None Remove="**\LICENSE.*" />
+	</ItemGroup>
 </Project>

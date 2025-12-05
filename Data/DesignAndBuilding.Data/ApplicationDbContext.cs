@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using DesignAndBuilding.Data.Common.Models;
+    using DesignAndBuilding.Data.Configurations;
     using DesignAndBuilding.Data.Models;
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -33,6 +34,12 @@
         public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<DescriptionFile> DescriptionFiles { get; set; }
+
+        public DbSet<Conversation> Conversations { get; set; }
+
+        public DbSet<ConversationParticipant> ConversationParticipants { get; set; }
+
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -61,6 +68,7 @@
             this.ConfigureUserIdentityRelations(builder);
 
             EntityIndexesConfiguration.Configure(builder);
+            new ConversationParticipantConfiguration().Configure(builder.Entity<ConversationParticipant>());
 
             var entityTypes = builder.Model.GetEntityTypes().ToList();
 
