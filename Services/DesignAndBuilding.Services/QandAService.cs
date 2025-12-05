@@ -112,6 +112,8 @@
             return await this.questionsRepo.AllAsNoTracking()
                 .Where(q => q.AssignmentId == assignmentId)
                 .Include(q => q.Answer)
+                .ThenInclude(a => a.Architect)
+                .Include(q => q.Engineer)
                 .OrderByDescending(q => q.CreatedOn)
                 .ToListAsync();
         }

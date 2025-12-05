@@ -1,13 +1,5 @@
 ﻿namespace DesignAndBuilding.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.IO.Compression;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-
     using AutoMapper;
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
@@ -16,6 +8,7 @@
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Bid;
+    using DesignAndBuilding.Web.ViewModels.Question;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -24,6 +17,13 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR.Client;
     using Microsoft.Extensions.DependencyInjection;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.IO.Compression;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Threading.Tasks;
 
     [Authorize]
     public class AssignmentsController : Controller
@@ -33,15 +33,17 @@
         private readonly INotificationsService notificationsService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IFilesService filesService;
+        private readonly IQandAService qandAService;
         private readonly IMapper mapper;
 
-        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager, IFilesService filesService, IMapper mapper)
+        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager, IFilesService filesService, IQandAService qandAService, IMapper mapper)
         {
             this.assignmentsService = assignmentsService;
             this.bidsService = bidsService;
             this.notificationsService = notificationsService;
             this.userManager = userManager;
             this.filesService = filesService;
+            this.qandAService = qandAService;
             this.mapper = mapper;
         }
 
@@ -315,9 +317,12 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
             var viewModel = this.mapper.Map<AssignmentDetailsViewModel>(assignment);
+            var questions = (await this.qandAService.GetQuestionsForAssignmentAsync(assignment.Id)).ToList();
 
             viewModel.HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id);
             viewModel.Bids = viewModel.Bids.OrderBy(x => x.Price).ThenByDescending(x => x.TimePlaced).ToList();
+            viewModel.Questions = this.mapper.Map<List<QuestionListViewModel>>(questions);
+            
             return viewModel;
         }
     }

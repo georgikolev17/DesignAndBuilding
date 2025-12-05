@@ -6,6 +6,8 @@
     using DesignAndBuilding.Web.ViewModels.Bid;
     using DesignAndBuilding.Web.ViewModels.Building;
     using DesignAndBuilding.Web.ViewModels.Notification;
+    using DesignAndBuilding.Web.ViewModels.Question;
+    using System;
     using System.Linq;
 
     public class MappingProfile : Profile
@@ -60,6 +62,12 @@
                 // AutoMapper matches Name, Id, TotalBuildUpArea, BuildingType automatically
                 // It also automatically maps the collection 'Assignments' using the previously defined map
                 .ForMember(dest => dest.Assignments, opt => opt.MapFrom(src => src.Assignments));
+
+            this.CreateMap<AssignmentQuestion, QuestionListViewModel>()
+                .ForMember(dest => dest.EngineerName, opt => opt.MapFrom(src => src.Engineer.FullNameWithTitle))
+            .ForMember(dest => dest.AnswerText, opt => opt.MapFrom(src => src.Answer != null ? src.Answer.Text : null))
+            .ForMember(dest => dest.AnswerArchitectName, opt => opt.MapFrom(src => src.Answer != null ? src.Answer.Architect.FullNameWithTitle : null))
+            .ForMember(dest => dest.AnswerCreatedOn, opt => opt.MapFrom(src => src.Answer != null ? src.Answer.CreatedOn : (DateTime?)null));
         }
     }
 }

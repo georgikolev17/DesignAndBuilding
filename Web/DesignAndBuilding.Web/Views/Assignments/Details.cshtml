@@ -1,7 +1,7 @@
 ﻿@using DesignAndBuilding.Web.ViewModels.Assignment
 @using DesignAndBuilding.Common
 @model AssignmentDetailsViewModel
-@{ 
+@{
     int i = 0;
     this.ViewData["Title"] = "Детайли на заданието";
 }
@@ -26,30 +26,30 @@
                 @foreach (var bid in Model.Bids)
                 {
                     i++;
-                <tr>
-                    <td>@i</td>
-                    @if (Model.IsFinished && Model.HasUserCreatedAssignment)
-                    {
-                        <td>@bid.UserFullName</td>
-                        <td>@bid.PhoneNumber</td>
-                        <td>@bid.Email</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    }
-                    <td>@bid.Price лв/кв.м</td>
-                    @if (Model.IsFinished && Model.HasUserCreatedAssignment)
-                    {
-                        <td></td>
-                    }
-                    else
-                    {
-                        <td>@bid.TimePlaced</td>
-                    }
-                </tr>
+                    <tr>
+                        <td>@i</td>
+                        @if (Model.IsFinished && Model.HasUserCreatedAssignment)
+                        {
+                            <td>@bid.UserFullName</td>
+                            <td>@bid.PhoneNumber</td>
+                            <td>@bid.Email</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        }
+                        <td>@bid.Price лв/кв.м</td>
+                        @if (Model.IsFinished && Model.HasUserCreatedAssignment)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@bid.TimePlaced</td>
+                        }
+                    </tr>
                 }
             </table>
             @if (!Model.IsFinished && !Model.HasUserCreatedAssignment)
@@ -58,7 +58,7 @@
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="@Model.BidPrice"></label>
-                        <input asp-for="@Model.BidPrice" class="form-control w-25"/>
+                        <input asp-for="@Model.BidPrice" class="form-control w-25" />
                     </div>
                     <button type="submit" class="btn btn-primary">Предложи цена</button>
                 </form>
@@ -66,24 +66,211 @@
         </div>
     </div>
 </div>
+
 <hr />
-<div id="disqus_thread"></div>
+
+<!-- Q&A section -->
+<div class="container mt-4" id="qanda-section">
+    <h4 class="text-center">Въпроси и отговори</h4>
+
+    @* Show question form only for engineers (non-creators) and only while the assignment is open *@
+    @if (!Model.IsFinished && !Model.HasUserCreatedAssignment)
+    {
+        <form id="askQuestionForm" class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Задай въпрос към възложителя</h5>
+                <div class="form-group">
+                    <textarea name="text" id="questionText" class="form-control" rows="3"
+                          placeholder="Напиши своя въпрос тук..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">
+                    Изпрати въпрос
+                </button>
+            </div>
+        </form>
+    }
+
+    <div id="questionsContainer">
+        @if (Model.Questions != null && Model.Questions.Any())
+        {
+            <ul class="list-group" id="questionsList">
+                @foreach (var q in Model.Questions)
+                {
+                    <li class="list-group-item mb-2" data-question-id="@q.Id">
+                        <div>
+                            <strong>Въпрос:</strong> @q.Text<br />
+                            <small class="text-muted">
+                                Зададен от: @q.EngineerName на @q.CreatedOn.ToString("dd.MM.yyyy г. HH:mm")
+                            </small>
+                        </div>
+
+                        <div class="mt-2">
+
+                            @if (!string.IsNullOrEmpty(q.AnswerText))
+                            {
+                                <div class="p-2 bg-light border rounded">
+                                    <strong>Отговор:</strong>
+                                    <span class="answer-text">@q.AnswerText</span>
+                                    <br />
+                                    <small class="text-muted">
+                                        От: @q.AnswerArchitectName
+                                        @if (q.AnswerCreatedOn.HasValue)
+                                        {
+                                            @: на @q.AnswerCreatedOn.Value.ToString("dd.MM.yyyy г. HH:mm")
+                                        }
+                                    </small>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="p-2 bg-light border rounded">
+                                    <span class="answer-text text-muted">Все още няма отговор.</span>
+                                </div>
+
+                                @* Show answer form only for the architect *@
+                                @if (Model.HasUserCreatedAssignment && !Model.IsFinished)
+                                {
+                                    <form class="answerForm mt-2" enctype="multipart/form-data">
+                                        <textarea name="text" class="form-control answer-input" rows="2"
+                                  placeholder="Напиши отговор..."></textarea>
+                                        <button type="submit" class="btn btn-sm btn-success mt-1">
+                                            Изпрати отговор
+                                        </button>
+                                    </form>
+                                }
+                            }
+
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">Все още няма зададени въпроси.</p>
+        }
+    </div>
+</div>
+
 <script src="~/js/bids.js" asp-append-version="true"></script>
 
-<script>
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-    /*
-    var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function () { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = document.createElement('script');
-        s.src = 'https://designandbuilding.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (document.head || document.body).appendChild(s);
-    })();
-</script>
+@section Scripts {
+    <script>
+        (function () {
+            const assignmentId = @Model.AssignmentId;
+            const alertDiv = document.getElementById('alert');
+
+            // Show success/error message
+            function showAlert(message, isSuccess) {
+                alertDiv.innerHTML =
+                    `<div class="alert alert-${isSuccess ? 'success' : 'danger'}" role="alert">${message}</div>`;
+            }
+
+            // -----------------------------
+            //   ASK QUESTION (ENGINEER)
+            // -----------------------------
+            const askForm = document.getElementById("askQuestionForm");
+            if (askForm) {
+                askForm.addEventListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    const text = document.getElementById("questionText").value.trim();
+                    if (!text) {
+                        showAlert("Моля, въведете текст на въпроса.", false);
+                        return;
+                    }
+
+                    const response = await fetch('/api/qanda/ask', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ assignmentId: assignmentId, text: text })
+                    });
+
+                    if (!response.ok) {
+                        showAlert(await response.text(), false);
+                        return;
+                    }
+
+                    const result = await response.json();
+
+                    // Append the new question to the list
+                    let list = document.getElementById("questionsList");
+                    if (!list) list = createQuestionsList();
+
+                    const li = document.createElement("li");
+                    li.className = "list-group-item mb-2";
+                    li.innerHTML = `
+                        <div>
+                            <strong>Въпрос:</strong> ${result.text}<br />
+                            <small class="text-muted">Току-що зададен от вас.</small>
+                        </div>
+                        <div class="mt-2">
+                            <div class="p-2 bg-light border rounded">
+                                <strong>Отговор:</strong>
+                                <span class="answer-text text-muted">Все още няма отговор.</span>
+                            </div>
+                        </div>`;
+
+                    list.insertBefore(li, list.firstChild);
+                    askForm.reset();
+                    showAlert("Въпросът беше изпратен успешно.", true);
+                });
+            }
+
+            // Create list when first question is added
+            function createQuestionsList() {
+                const container = document.getElementById("questionsContainer");
+                container.innerHTML = "";
+                const ul = document.createElement("ul");
+                ul.className = "list-group";
+                ul.id = "questionsList";
+                container.appendChild(ul);
+                return ul;
+            }
+
+            // -----------------------------
+            //   SUBMIT ANSWER (ARCHITECT)
+            // -----------------------------
+            const questionsList = document.getElementById("questionsList");
+            if (questionsList) {
+                questionsList.addEventListener("submit", async function (e) {
+                    const form = e.target.closest(".answerForm");
+                    if (!form) return;
+
+                    e.preventDefault();
+
+                    const li = form.closest("li[data-question-id]");
+                    const questionId = parseInt(li.dataset.questionId);
+                    const answerText = form.querySelector(".answer-input").value.trim();
+
+                    if (!answerText) {
+                        showAlert("Моля, въведете текст на отговора.", false);
+                        return;
+                    }
+
+                    const response = await fetch('/api/qanda/answer', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ questionId: questionId, text: answerText })
+                    });
+
+                    if (!response.ok) {
+                        showAlert(await response.text(), false);
+                        return;
+                    }
+
+                    const result = await response.json();
+
+                    // Update the UI
+                    const answerSpan = li.querySelector(".answer-text");
+                    answerSpan.textContent = result.text;
+                    answerSpan.classList.remove("text-muted");
+
+                    form.remove();
+                    showAlert("Отговорът беше изпратен успешно.", true);
+                });
+            }
+
+        })();
+    </script>
+}

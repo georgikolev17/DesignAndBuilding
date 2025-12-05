@@ -8,8 +8,6 @@ namespace DesignAndBuilding.Web.ViewModels.Answer
     {
         public int QuestionId { get; set; }
 
-        public string ArchitectId { get; set; }
-
         public string Text { get; set; }
     }
 }

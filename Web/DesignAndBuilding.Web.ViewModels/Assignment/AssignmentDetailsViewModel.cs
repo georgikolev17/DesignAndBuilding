@@ -7,6 +7,7 @@
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Web.ViewModels.Bid;
     using DesignAndBuilding.Web.ViewModels.Building;
+    using DesignAndBuilding.Web.ViewModels.Question;
     using Microsoft.AspNetCore.Http;
 
     public class AssignmentDetailsViewModel
@@ -14,6 +15,7 @@
         public AssignmentDetailsViewModel()
         {
             this.Bids = new HashSet<BidListViewModel>();
+            this.Questions = new HashSet<QuestionListViewModel>();
         }
 
         [Required]
@@ -31,6 +33,8 @@
         public virtual BuildingSummaryViewModel Building { get; set; }
 
         public virtual ICollection<BidListViewModel> Bids { get; set; }
+
+        public virtual ICollection<QuestionListViewModel> Questions { get; set; }
 
         [Display(Name = "Цена лв/кв.м.")]
         public decimal BidPrice { get; set; }
