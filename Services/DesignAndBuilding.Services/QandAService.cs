@@ -1,16 +1,17 @@
 ﻿namespace DesignAndBuilding.Services
 {
-    using DesignAndBuilding.Data.Common.Models;
-    using DesignAndBuilding.Data.Common.Repositories;
-    using DesignAndBuilding.Data.Models;
-    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
-    internal class QandAService : IQandAService
+    using DesignAndBuilding.Data.Common.Models;
+    using DesignAndBuilding.Data.Common.Repositories;
+    using DesignAndBuilding.Data.Models;
+    using Microsoft.EntityFrameworkCore;
+
+    public class QandAService : IQandAService
     {
         private readonly IDeletableEntityRepository<AssignmentQuestion> questionsRepo;
         private readonly IDeletableEntityRepository<AssignmentAnswer> answersRepo;

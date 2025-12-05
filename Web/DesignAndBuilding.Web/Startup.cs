@@ -104,6 +104,7 @@
             services.AddTransient<AuthenticationService>();
             services.AddTransient<IFilesService, FilesService>();
             services.AddTransient<IDescriptionFilesService, DescriptionFilesService>();
+            services.AddTransient<IQandAService, QandAService>();
 
             // Auto Mapper Configurations
             services.AddSingleton(provider => new MapperConfiguration(mc =>
