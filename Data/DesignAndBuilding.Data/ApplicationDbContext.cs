@@ -41,6 +41,10 @@
 
         public DbSet<ChatMessage> ChatMessages { get; set; }
 
+        public DbSet<AssignmentQuestion> AssignmentQuestions { get; set; }
+
+        public DbSet<AssignmentAnswer> AssignmentAnswers { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -69,6 +73,7 @@
 
             EntityIndexesConfiguration.Configure(builder);
             new ConversationParticipantConfiguration().Configure(builder.Entity<ConversationParticipant>());
+            new AssignmentQuestionConfiguration().Configure(builder.Entity<AssignmentQuestion>());
 
             var entityTypes = builder.Model.GetEntityTypes().ToList();
 
