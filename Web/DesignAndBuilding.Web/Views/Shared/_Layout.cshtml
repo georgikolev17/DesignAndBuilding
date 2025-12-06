@@ -17,99 +17,100 @@
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" /> *@
     @* <link href="https://cdn.datatables.net/2.3.5/css/dataTables.bootstrap5.css" rel="stylesheet" /> *@
     <link href="~/sbadmin2/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <script src="~/lib/signalr/dist/browser/signalr.min.js" asp-append-version="true"></script>
 </head>
 <body id="page-top">
     <div id="wrapper">
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">BuildNet</div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Начало</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            @if (user != null && (user.UserType == UserType.Architect))
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="create">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Създай обект</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="mybuildings">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Моите обекти</span>
-                    </a>
-                </li>
-            }
-            @if (user != null && user.UserType != UserType.Architect &&  !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="home" asp-action="mybids">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Моите оферти</span>
-                    </a>
-                </li>
-            }
-            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="administration" asp-controller="dashboard" asp-action="allbuildings">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Всички обекти</span>
-                    </a>
-                </li>
-            }
-            @if (user != null)
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="home" asp-action="notifications">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Известия</span>
-                    </a>
-                </li>
-            }
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-        </ul>
-
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
             <div id="content">
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
+                <nav class="navbar navbar-expand-lg navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Brand -->
+                    <a class="navbar-brand d-flex align-items-center justify-content-center" href="/">
+                        <div class="sidebar-brand-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3">BuildNet</div>
+                    </a>
+
+                    <!-- Burger button for collapsing topbar menu -->
+                    <button class="navbar-toggler" type="button"
+                            data-toggle="collapse" data-target="#topbarNavbar"
+                            aria-controls="topbarNavbar" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                     </button>
-                    <ul class="navbar-nav ml-auto">
-                        <partial name="_LoginPartial" />
-                    </ul>
+
+                    <!-- Collapsible content -->
+                    <div class="collapse navbar-collapse bg-white" id="topbarNavbar">
+                        <!-- Left side -->
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-fw fa-home"></i>
+                                    <span>Начало</span>
+                                </a>
+                            </li>
+
+                            @* Architect *@
+                            @if (user != null && (user.UserType == UserType.Architect))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="create">
+                                        <i class="fas fa-fw fa-chart-area"></i>
+                                        <span>Създай обект</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="buildings" asp-action="mybuildings">
+                                        <i class="fas fa-fw fa-chart-area"></i>
+                                        <span>Моите обекти</span>
+                                    </a>
+                                </li>
+                            }
+
+                            @* Non-architect, non-admin *@
+                            @if (user != null && user.UserType != UserType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="home" asp-action="mybids">
+                                        <i class="fas fa-fw fa-briefcase"></i>
+                                        <span>Моите оферти</span>
+                                    </a>
+                                </li>
+                            }
+
+                            @* Admin *@
+                            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="administration" asp-controller="dashboard" asp-action="allbuildings">
+                                        <i class="fas fa-fw fa-chart-area"></i>
+                                        <span>Всички обекти</span>
+                                    </a>
+                                </li>
+                            }
+
+                            @* Notifications *@
+                            @if (user != null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="home" asp-action="notifications">
+                                        <i class="fas fa-fw fa-bell "></i>
+                                        <span>Известия</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+
+                        <!-- Right side (login / user menu) -->
+                        <ul class="navbar-nav ml-auto">
+                            <partial name="_LoginPartial" />
+                        </ul>
+                    </div>
                 </nav>
+
                 
 
                 <div class="container-fluid">
@@ -120,13 +121,13 @@
                 </div>
             </div>
 
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </div>
+            <footer class="bg-white py-2 border-top">
+                <div class="container text-center small">
+                    &copy; @DateTime.Now.Year - @GlobalConstants.SystemName -
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </div>
             </footer>
+
         </div>
     </div>
 
