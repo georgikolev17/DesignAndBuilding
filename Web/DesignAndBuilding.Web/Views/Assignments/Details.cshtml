@@ -27,9 +27,9 @@
                     <p><b>Краен срок: </b>@Model.EndDate.ToString("dd.MM.yyyy г. HH:mm")</p>
                     <p><b>Дата на създаване: </b>@Model.CreatedOn.ToString("dd.MM.yyyy г.")</p>
                 </div>
-                <hr class="m-2"/>
                 @if (!Model.IsFinished && !Model.HasUserCreatedAssignment)
                 {
+                    <hr class="m-2"/>
                     <div class="card border-left-primary shadow w-100 mt-3">
                         <div class="card-body py-1 ">
                             <form method="post" class="mb-0">
