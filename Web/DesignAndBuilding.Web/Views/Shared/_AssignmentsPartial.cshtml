@@ -5,21 +5,7 @@
 }
 <div id="alert"></div>
 <div id="container">
-    @* <div>
-        <div class="form-group" style="display: inline-block; margin-right: 10px">
-            <input type="radio" id="all-checkbox" name="assignment-type" />
-            <label for="all-checkbox">Всички задания</label>
-        </div>
-        <div class="form-group" style="display: inline-block; margin-right: 10px">
-            <input type="radio" id="active-checkbox" name="assignment-type" checked />
-            <label for="active-checkbox">Активни задания</label>
-        </div>
-        <div class="form-group" style="display:inline-block">
-            <input type="radio" id="finished-checkbox" name="assignment-type" />
-            <label for="finished-checkbox">Завършили задания</label>
-        </div>
-    </div> *@
-    <div class="card shadow mb-4">
+    <div class="card shadow mb-0">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Задания по част: @Model.UserType.GetDisplayShortName()</h6>
         </div>

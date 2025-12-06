@@ -7,63 +7,96 @@
 }
 <div id="alert"></div>
 <div class="container align-center">
-    <div class="row h-100 d-flex justify-content-around">
-        <div class="col-3 border background-cyan p-3 rounded">
-            <h4>Обект</h4>
-            <p><b>Име: </b>@Model.Building.Name</p>
-            <p><b>РЗП:</b> @Model.Building.TotalBuildUpArea</p>
-            <p><b>Тип: </b>@Model.Building.BuildingType.GetDisplayName()</p>
-            <h4>Задание</h4>
-            <p><b>Описание: </b><a href="/assignments/download/@Model.AssignmentId">Изтегли</a></p>
-            <p><b>Част: </b>@Model.UserType.GetDisplayShortName()</p>
+    <div class="row">
+        <div class="card shadow mb-1 w-30 align-self-start">
+            <div class="card-header py-3">
+                <h5 class="m-0 font-weight-bold text-primary">Обект</h5>
+            </div>
+            <div class="card-body">
+                <p><b>Име: </b>@Model.Building.Name</p>
+                <p><b>РЗП:</b> @Model.Building.TotalBuildUpArea</p>
+                <p><b>Тип: </b>@Model.Building.BuildingType.GetDisplayName()</p>
+                <h6 class="text-primary font-weight-bold mb-3">Задание</h6>
 
-            <p><b>Краен срок: </b>@Model.EndDate.ToString("dd.MM.yyyy г. HH:mm")</p>
-            <p><b>Дата на създаване: </b>@Model.CreatedOn.ToString("dd.MM.yyyy г.")</p>
-        </div>
-        <div class="col-8">
-            <h4 class="text-center">Оферти</h4>
-            <table class="table table-hover text-center" id="bids">
-                @foreach (var bid in Model.Bids)
+                <div class="assignment-section">
+                    <p>
+                        <b>Описание: </b>
+                        <a href="/assignments/download/@Model.AssignmentId">Изтегли</a>
+                    </p>
+                    <p><b>Част: </b>@Model.UserType.GetDisplayShortName()</p>
+                    <p><b>Краен срок: </b>@Model.EndDate.ToString("dd.MM.yyyy г. HH:mm")</p>
+                    <p><b>Дата на създаване: </b>@Model.CreatedOn.ToString("dd.MM.yyyy г.")</p>
+                </div>
+                <hr class="m-2"/>
+                @if (!Model.IsFinished && !Model.HasUserCreatedAssignment)
                 {
-                    i++;
-                    <tr>
-                        <td>@i</td>
-                        @if (Model.IsFinished && Model.HasUserCreatedAssignment)
-                        {
-                            <td>@bid.UserFullName</td>
-                            <td>@bid.PhoneNumber</td>
-                            <td>@bid.Email</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        }
-                        <td>@bid.Price лв/кв.м</td>
-                        @if (Model.IsFinished && Model.HasUserCreatedAssignment)
-                        {
-                            <td></td>
-                        }
-                        else
-                        {
-                            <td>@bid.TimePlaced</td>
-                        }
-                    </tr>
-                }
-            </table>
-            @if (!Model.IsFinished && !Model.HasUserCreatedAssignment)
-            {
-                <form method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="@Model.BidPrice"></label>
-                        <input asp-for="@Model.BidPrice" class="form-control w-25" />
+                    <div class="card border-left-primary shadow w-100 mt-3">
+                        <div class="card-body py-1 ">
+                            <form method="post" class="mb-0">
+                                <div asp-validation-summary="All" class="text-danger mb-2"></div>
+
+                                <div class="form-inline">
+                                    <label asp-for="@Model.BidPrice" class="mr-2"></label>
+                                    <input asp-for="@Model.BidPrice" class="form-control w-25" />
+                                </div>
+
+                                <button type="submit" class="btn btn-primary m-1">Предложи цена</button>
+                            </form>
+                        </div>
+
                     </div>
-                    <button type="submit" class="btn btn-primary">Предложи цена</button>
-                </form>
-            }
+                }
+            </div>
         </div>
+        <div class="ml-3 w-65 mb-1">
+            <div class="card shadow">
+
+                <!-- Card Header -->
+                <div class="card-header py-3 text-center">
+                    <h4 class="m-0 font-weight-bold text-primary">Оферти</h4>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body">
+
+                    <table class="table table-hover text-center mb-4" id="bids">
+                        @foreach (var bid in Model.Bids)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+
+                                @if (Model.IsFinished && Model.HasUserCreatedAssignment)
+                                {
+                                    <td>@bid.UserFullName</td>
+                                    <td>@bid.PhoneNumber</td>
+                                    <td>@bid.Email</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                }
+
+                                <td>@bid.Price лв/кв.м</td>
+
+                                @if (Model.IsFinished && Model.HasUserCreatedAssignment)
+                                {
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td>@bid.TimePlaced</td>
+                                }
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
     </div>
 </div>
 
