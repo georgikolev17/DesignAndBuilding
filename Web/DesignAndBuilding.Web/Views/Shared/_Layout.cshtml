@@ -20,11 +20,11 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <script src="~/lib/signalr/dist/browser/signalr.min.js" asp-append-version="true"></script>
 </head>
-<body id="page-top">
-    <div id="wrapper">
-        <div id="content-wrapper" class="d-flex flex-column">
+<body id="page-top" class="d-flex flex-column min-vh-100 m-0">
+    <div id="wrapper" class="flex-grow-1">
+        <div id="content-wrapper" class="d-flex flex-column min-vh-100">
             <!-- Main Content -->
-            <div id="content">
+            <div id="content" class="flex-grow-1">
                 <nav class="navbar navbar-expand-lg navbar-light bg-white topbar mb-4 static-top shadow">
                     <!-- Brand -->
                     <a class="navbar-brand d-flex align-items-center justify-content-center" href="/">
@@ -111,8 +111,6 @@
                     </div>
                 </nav>
 
-                
-
                 <div class="container-fluid">
                     <partial name="_CookieConsentPartial" />
                     <main role="main" class="pb-3">
@@ -121,15 +119,23 @@
                 </div>
             </div>
 
-            <footer class="bg-white py-2 border-top">
+            @* <footer class="bg-white py-2 border-top sticky-footer">
                 <div class="container text-center small">
                     &copy; @DateTime.Now.Year - @GlobalConstants.SystemName -
                     <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </div>
-            </footer>
+            </footer> *@
 
         </div>
     </div>
+
+    <footer class="bg-white py-2 border-top mt-auto">
+        <div class="container text-center small">
+            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName -
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Политика за поверителност</a> |
+            <a asp-area="" asp-controller="Home" asp-action="Cookies">Политика за бисквитките</a>
+        </div>
+    </footer>
 
     <!-- jQuery -->
     <script src="~/sbadmin2/vendor/jquery/jquery.min.js"></script>
