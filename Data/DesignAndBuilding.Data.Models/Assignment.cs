@@ -34,5 +34,8 @@
         public virtual ICollection<Bid> Bids { get; set; }
 
         public virtual ICollection<DescriptionFile> Description { get; set; }
+
+        [MaxLength(1500)]
+        public string? DescriptionText { get; set; }
     }
 }
