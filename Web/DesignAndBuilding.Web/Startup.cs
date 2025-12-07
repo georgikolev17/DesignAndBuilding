@@ -79,10 +79,12 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.Configure<SmtpOptions>(this.configuration.GetSection("Smtp"));
+            services.Configure<BrevoOptions>(this.configuration.GetSection("Brevo"));
+            services.AddTransient<IEmailSender, BrevoEmailSender>();
 
-            // TODO: set IEmailSender implementation
-            services.AddTransient<IEmailSender, SmtpEmailSender>();
+            services.AddSingleton<IEmailQueue, EmailQueue>();
+            services.AddHostedService<EmailSendingBackgroundService>();
+
 
             services.AddSingleton<IAmazonS3>(sp => {
                 var s3cfg = new Amazon.S3.AmazonS3Config
@@ -105,6 +107,7 @@
             services.AddTransient<IFilesService, FilesService>();
             services.AddTransient<IDescriptionFilesService, DescriptionFilesService>();
             services.AddTransient<IQandAService, QandAService>();
+            services.AddTransient<IEmailsService, EmailsService>();
 
             // Auto Mapper Configurations
             services.AddSingleton(provider => new MapperConfiguration(mc =>

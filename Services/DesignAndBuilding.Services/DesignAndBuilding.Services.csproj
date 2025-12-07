@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\Data\DesignAndBuilding.Data.Models\DesignAndBuilding.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\DesignAndBuilding.Data\DesignAndBuilding.Data.csproj" />
     <ProjectReference Include="..\..\Web\DesignAndBuilding.Web.ViewModels\DesignAndBuilding.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\DesignAndBuilding.Services.Messaging\DesignAndBuilding.Services.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

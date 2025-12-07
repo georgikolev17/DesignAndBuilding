@@ -9,6 +9,7 @@
     using DesignAndBuilding.Data.Common.Repositories;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services.DTOs;
+    using DesignAndBuilding.Web.ViewModels.Assignment;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
 
@@ -29,22 +30,21 @@
         {
         }
 
-        public async Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType userType, int buildingId, UserType creatorType, string textDescription)
+        public async Task<Assignment> CreateAssignmentAsync(AssignmentInputModel inputAssignment)
         {
             var assignment = new Assignment()
             {
-                BuildingId = buildingId,
-                EndDate = endDate,
-                UserType = userType,
-                AssignmentType = creatorType == UserType.Architect ? AssignmentType.DesignAsignment : AssignmentType.InvestmentAssignment,
-                DescriptionText = textDescription,
+                BuildingId = inputAssignment.BuildingId,
+                EndDate = inputAssignment.EndDate,
+                UserType = inputAssignment.UserType,
+                DescriptionText = inputAssignment.DescriptionText,
             };
 
             await this.assignmentsRepository.AddAsync(assignment);
             await this.assignmentsRepository.SaveChangesAsync();
 
             var descriptionDtos = new List<NewDescriptionFileDto>();
-            foreach (var desc in description)
+            foreach (var desc in inputAssignment.Description)
             {
                 using var stream = new MemoryStream();
                 desc.CopyTo(stream);
@@ -52,6 +52,12 @@
             }
 
             await this.filesService.AddDescriptionFilesAsync(descriptionDtos);
+
+            var newAssignment = await this.assignmentsRepository.All()
+                .Include(x => x.Building)
+                .FirstOrDefaultAsync(x => x.Id == assignment.Id);
+
+            return newAssignment;
         }
 
         // WARNING: This functionality does not work now. Decide whether to support it.
@@ -92,7 +98,7 @@
         {
             var assignments = this.assignmentsRepository
                 .All()
-                .Where(x => x.UserType == userType && x.AssignmentType == AssignmentType.DesignAsignment)
+                .Where(x => x.UserType == userType)
                 .Include(x => x.Building)
                 .ThenInclude(x => x.Architect)
                 .Include(x => x.Bids)
@@ -171,7 +177,6 @@
         public ICollection<Assignment> GetAllInvestmentAssignments()
         {
             return this.assignmentsRepository.All()
-                .Where(x => x.AssignmentType == AssignmentType.InvestmentAssignment)
                 .Include(x => x.Building)
                 .ToList();
         }

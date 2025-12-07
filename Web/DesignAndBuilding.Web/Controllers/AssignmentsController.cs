@@ -4,6 +4,7 @@
     using DesignAndBuilding.Common;
     using DesignAndBuilding.Data.Models;
     using DesignAndBuilding.Services;
+    using DesignAndBuilding.Services.Messaging;
     using DesignAndBuilding.Web.Hubs;
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
@@ -34,9 +35,11 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IFilesService filesService;
         private readonly IQandAService qandAService;
+        private readonly IUsersService usersService;
         private readonly IMapper mapper;
+        private readonly IEmailsService emailsService;
 
-        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager, IFilesService filesService, IQandAService qandAService, IMapper mapper)
+        public AssignmentsController(IAssignmentsService assignmentsService, IBidsService bidsService, INotificationsService notificationsService, UserManager<ApplicationUser> userManager, IFilesService filesService, IQandAService qandAService, IUsersService usersService, IMapper mapper, IEmailsService emailsService)
         {
             this.assignmentsService = assignmentsService;
             this.bidsService = bidsService;
@@ -44,7 +47,9 @@
             this.userManager = userManager;
             this.filesService = filesService;
             this.qandAService = qandAService;
+            this.usersService = usersService;
             this.mapper = mapper;
+            this.emailsService = emailsService;
         }
 
         public async Task<IActionResult> Create()
@@ -76,7 +81,20 @@
                 return this.View(assignment);
             }
 
-            await this.assignmentsService.CreateAssignmentAsync(assignment.Description.ToList(), assignment.EndDate, assignment.UserType, assignment.BuildingId, user.UserType, assignment.DescriptionText);
+            var createdAssignment = await this.assignmentsService.CreateAssignmentAsync(assignment);
+
+            // Notify interested users
+            var userIds = (await this.usersService.GetIdsOfUsersOfTypeAsync(assignment.UserType)).ToList();
+
+            // Prepare notification message
+            var notificationMessage = MessageTemplates.NewAssignmentCreated(createdAssignment.Building.Name, createdAssignment.UserType.GetDisplayShortName());
+
+            // Send in-app notifications
+            await this.notificationsService.AddNotificationAsync(userIds, notificationMessage);
+
+            // Send email notifications
+            await this.emailsService.SendNewAssignmentNotificationEmailAsync(createdAssignment);
+
             return this.RedirectToAction("Details", "Buildings", new { id = assignment.BuildingId });
         }
 
@@ -322,7 +340,7 @@
             viewModel.HasUserCreatedAssignment = this.assignmentsService.HasUserCreatedAssignment(user.Id, assignment.Id);
             viewModel.Bids = viewModel.Bids.OrderBy(x => x.Price).ThenByDescending(x => x.TimePlaced).ToList();
             viewModel.Questions = this.mapper.Map<List<QuestionListViewModel>>(questions);
-            
+
             return viewModel;
         }
     }

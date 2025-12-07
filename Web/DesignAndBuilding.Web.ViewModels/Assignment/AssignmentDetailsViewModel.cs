@@ -40,6 +40,7 @@
 
         public virtual ICollection<QuestionListViewModel> Questions { get; set; }
 
+        [Required(ErrorMessage = "Въведете цена, за да може да предложите нова оферта")]
         [Display(Name = "Цена лв/кв.м.")]
         public decimal BidPrice { get; set; }
 
