@@ -76,7 +76,7 @@
                 return this.View(assignment);
             }
 
-            await this.assignmentsService.CreateAssignmentAsync(assignment.Description.ToList(), assignment.EndDate, assignment.UserType, assignment.BuildingId, user.UserType);
+            await this.assignmentsService.CreateAssignmentAsync(assignment.Description.ToList(), assignment.EndDate, assignment.UserType, assignment.BuildingId, user.UserType, assignment.DescriptionText);
             return this.RedirectToAction("Details", "Buildings", new { id = assignment.BuildingId });
         }
 

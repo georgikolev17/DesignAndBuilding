@@ -27,6 +27,10 @@
         [Required]
         public UserType UserType { get; set; }
 
+        public string ArchitectName { get; set; }
+
+        public string DescriptionText { get; set; }
+
         [Required]
         public DateTime CreatedOn { get; set; }
 

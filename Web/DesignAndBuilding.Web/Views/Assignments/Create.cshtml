@@ -37,10 +37,17 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="@Model.DescriptionText"></label>
+                <textarea placeholder="Ако желаете, опишете заданието и с текст" asp-for="@Model.DescriptionText" class="form-control"></textarea>
+                <span asp-validation-for="@Model.DescriptionText" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="EndDate"></label>
-                <input asp-for="EndDate" class="form-control" />
+                <input asp-for="EndDate" type="date" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
+
             <div class="text-center">
                 <button type="submit" class="btn btn-primary mt-3">Създай</button>
             </div>
@@ -61,7 +68,8 @@
         autoProcessQueue: false, // don’t upload immediately
         addRemoveLinks: true,
         dictRemoveFile: "Премахни файл",
-        previewsContainer: ".dropzone-previews"
+        previewsContainer: ".dropzone-previews",
+        acceptedFiles: ".pdf,.doc,.docx,.jpg,.jpeg,.png,.dwg"
     });
 
     // Add file to hidden input on Dropzone add

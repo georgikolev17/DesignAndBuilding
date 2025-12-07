@@ -32,6 +32,7 @@
 
             this.CreateMap<Assignment, AssignmentDetailsViewModel>()
                 .ForMember(x => x.AssignmentId, y => y.MapFrom(i => i.Id))
+                .ForMember(x => x.ArchitectName, y => y.MapFrom(i => i.Building.Architect.FullNameWithTitle))
                 .ReverseMap();
 
             this.CreateMap<Assignment, AssignmentListViewModel>()

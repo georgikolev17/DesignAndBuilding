@@ -13,6 +13,10 @@
         [Display(Name = "Описание")]
         public IList<IFormFile> Description { get; set; }
 
+        [MaxLength(1500, ErrorMessage = "Дължината на текстовото описание не може да надхвърля 1500 символа")]
+        [Display(Name = "Текстово описание")]
+        public string? DescriptionText { get; set; }
+
         [Required]
         [Display(Name = "Крайна дата")]
         public DateTime EndDate { get; set; }

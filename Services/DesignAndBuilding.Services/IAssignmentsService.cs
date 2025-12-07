@@ -13,7 +13,7 @@
     {
         ICollection<Assignment> GetAllInvestmentAssignments();
 
-        Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType UserType, int buildingId, UserType creatorType);
+        Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType UserType, int buildingId, UserType creatorType, string textDescription);
 
         Task<Assignment> GetAssignmentById(int id);
 

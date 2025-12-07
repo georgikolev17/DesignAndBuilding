@@ -4,11 +4,20 @@
 @{
     int i = 0;
     this.ViewData["Title"] = "Детайли на заданието";
+
+    const int maxLen = 150;
+    var fullText = Model.DescriptionText ?? "Няма";
+    var shortText = fullText;
+
+    if (fullText.Length > maxLen)
+    {
+        shortText = fullText.Substring(0, maxLen) + "...";
+    }
 }
 <div id="alert"></div>
-<div class="container align-center">
-    <div class="row">
-        <div class="card shadow mb-1 w-30 align-self-start">
+<div class="container-fluid">
+    <div class="row w-100 m-0">
+        <div class="card shadow mb-1 w-40 align-self-start">
             <div class="card-header py-3">
                 <h5 class="m-0 font-weight-bold text-primary">Обект</h5>
             </div>
@@ -16,6 +25,7 @@
                 <p><b>Име: </b>@Model.Building.Name</p>
                 <p><b>РЗП:</b> @Model.Building.TotalBuildUpArea</p>
                 <p><b>Тип: </b>@Model.Building.BuildingType.GetDisplayName()</p>
+                <p><b>Създател: </b>@Model.ArchitectName</p>
                 <h6 class="text-primary font-weight-bold mb-3">Задание</h6>
 
                 <div class="assignment-section">
@@ -26,6 +36,17 @@
                     <p><b>Част: </b>@Model.UserType.GetDisplayShortName()</p>
                     <p><b>Краен срок: </b>@Model.EndDate.ToString("dd.MM.yyyy г. HH:mm")</p>
                     <p><b>Дата на създаване: </b>@Model.CreatedOn.ToString("dd.MM.yyyy г.")</p>
+                    <p>
+                        <b>Текстово описание: </b>
+                        @shortText
+
+                        @if (fullText.Length > maxLen)
+                        {
+                            <a href="#" data-toggle="modal" data-target="#descriptionModal">
+                                Прочети още
+                            </a>
+                        }
+                    </p>
                 </div>
                 @if (!Model.IsFinished && !Model.HasUserCreatedAssignment)
                 {
@@ -48,7 +69,7 @@
                 }
             </div>
         </div>
-        <div class="ml-3 w-65 mb-1">
+        <div class="ml-3 w-55 mb-1">
             <div class="card shadow">
 
                 <!-- Card Header -->
@@ -184,7 +205,7 @@
         }
     </div>
 </div>
-
+<partial name="_DescriptionModal" model="@Model.DescriptionText">
 <script src="~/js/bids.js" asp-append-version="true"></script>
 
 @section Scripts {

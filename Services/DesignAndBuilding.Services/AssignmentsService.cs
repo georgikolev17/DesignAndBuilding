@@ -29,7 +29,7 @@
         {
         }
 
-        public async Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType userType, int buildingId, UserType creatorType)
+        public async Task CreateAssignmentAsync(List<IFormFile> description, DateTime endDate, UserType userType, int buildingId, UserType creatorType, string textDescription)
         {
             var assignment = new Assignment()
             {
@@ -37,6 +37,7 @@
                 EndDate = endDate,
                 UserType = userType,
                 AssignmentType = creatorType == UserType.Architect ? AssignmentType.DesignAsignment : AssignmentType.InvestmentAssignment,
+                DescriptionText = textDescription,
             };
 
             await this.assignmentsRepository.AddAsync(assignment);
