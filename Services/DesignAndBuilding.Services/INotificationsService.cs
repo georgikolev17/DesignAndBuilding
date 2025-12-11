@@ -10,7 +10,11 @@
     {
         IEnumerable<NotificationViewModel> GetNotificationsForUser(string userId);
 
-        Task AddNotificationAsync(IEnumerable<string> userIds, string message);
+        Task AddNotificationAsync(IEnumerable<string> userIds, string message, int assignmentId);
+
+        Task CreateNewAssignmentNotifications(Assignment assignment);
+
+        Task CreateNewBidNotifications(Assignment assignment, string userId, decimal bidPrice);
 
         Task<bool> DeleteNotification(int notificationId, string userId);
 

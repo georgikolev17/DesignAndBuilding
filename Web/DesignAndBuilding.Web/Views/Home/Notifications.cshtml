@@ -1,62 +1,119 @@
 ﻿@model DesignAndBuilding.Web.ViewModels.Notification.AllNotificationsViewModel
-@{ 
+
+@{
     this.ViewData["Title"] = "Известия";
 }
-<div id="alert"></div>
-<div>
-    @if (Model.Notifications.Count() != 0)
+
+<div class="my-4 px-3">
+    <div id="alert"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">@this.ViewData["Title"]</h3>
+        <span id="notif-count" class="badge badge-primary badge-pill">
+            @Model.Notifications.Count()
+        </span>
+    </div>
+
+    @if (Model.Notifications.Any())
     {
-<table class="table table-hover text-center">
-    @foreach (var notification in Model.Notifications)
-    {
-        if (notification.IsRead)
-        {
-            <tr id="@notification.Id">
-                <td>@notification.Message</td>
-                <td>@notification.CreatedOn.ToString("dd.MM.yyyy")</td>
-                <td>
-                    <button class="btn btn-danger" onclick="remove(@notification.Id)">Изтрий</button>
-                </td>
-            </tr>
-        }
-        else
-        {
-            <tr class="font-weight-bold" id="@notification.Id">
-                <td>@notification.Message</td>
-                <td>@notification.CreatedOn.ToString("dd.MM.yyyy")</td>
-                <td>
-                    <button class="btn btn-primary" onclick="markAsRead(@notification.Id)" id="btn-@notification.Id">Прочетено</button>
-                    <button class="btn btn-danger" onclick="remove(@notification.Id)">Изтрий</button>
-                </td>
-            </tr>
-        }
-    }
-</table>
+        <div class="table-responsive notifications-table-wrapper">
+            <table class="table table-hover table-sm mb-0 text-center align-middle w-100">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="text-left">Съобщение</th>
+                        <th style="width: 140px;">Дата</th>
+                        <th style="width: 60px;">Изтрий</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var notification in Model.Notifications)
+                    {
+                        var url = Url.Action("Details", "Assignments", new { id = notification.AssignmentId });
+
+                        <tr id="notif-@notification.Id"
+                            onclick="markAsRead(@notification.Id, '@url')"
+                            style="cursor: pointer;"
+                            class="@(notification.IsRead ? "" : "font-weight-bold")">
+
+                            <td class="text-left">@notification.Message</td>
+                            <td>@notification.CreatedOn.ToString("dd.MM.yyyy")</td>
+
+                            <td onclick="event.stopPropagation();">
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="remove(@notification.Id)"
+                                        aria-label="Изтрий">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
     else
     {
-        <p class="text-center">Нямате нови известия!</p>
+        <div id="no-notifs" class="text-center text-muted">
+            Нямате нови известия!
+        </div>
     }
+
+    @* This will be shown when we delete the last notification *@
+    <div id="no-notifs-empty"
+         class="text-center text-muted d-none">
+        Нямате нови известия!
+    </div>
 </div>
 
 @section Scripts
 {
-    
     <script>
-        function markAsRead(id) {
-            $.get(`/api/notifications/markasread`, { notificationId: id, userId: '@Model.UserId' }, (result) => {
-                if (result) {
-                    $(`#${id}`).removeClass('font-weight-bold');
-                    $(`#btn-${id}`).remove();
+        // Mark as read, then redirect to assignment details
+        function markAsRead(id, url) {
+            $.get(`/api/notifications/markasread`,
+                { notificationId: id, userId: '@Model.UserId' },
+                function (result) {
+                    if (result) {
+                        $(`#notif-${id}`).removeClass('font-weight-bold');
+                    }
+
+                    // Redirect after server responds
+                    window.location.href = url;
                 }
-            })
+            ).fail(function () {
+                // If markAsRead fails, still redirect
+                window.location.href = url;
+            });
         }
+
+        // Delete notification
         function remove(id) {
-            $.get(`/api/notifications/delete`, { notificationId: id, userId: '@Model.UserId' }, (result) => {
-                if (result) {
-                    $(`#${id}`).remove();
+            $.get(`/api/notifications/delete`,
+                { notificationId: id, userId: '@Model.UserId' },
+                function (result) {
+                    if (result) {
+                        $(`#notif-${id}`).fadeOut(200, function () {
+                            $(this).remove();
+
+                            // Decrease notification count
+                            var $count = $('#notif-count');
+                            var current = parseInt($count.text()) || 0;
+                            if (current > 0) {
+                                current--;
+                                $count.text(current);
+                            }
+
+                            // If no notifications left, hide table and show "no notifications" message
+                            if (current === 0) {
+                                $('.notifications-table-wrapper').remove();
+                                $('#no-notifs').addClass('d-none'); // in case initial "else" wasn't shown
+                                $('#no-notifs-empty').removeClass('d-none');
+                            }
+                        });
+                    }
                 }
-            })
+            );
         }
     </script>
 }

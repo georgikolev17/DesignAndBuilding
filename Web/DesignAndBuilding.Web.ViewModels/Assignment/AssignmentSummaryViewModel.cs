@@ -15,5 +15,7 @@
         public DateTime CreatedOn { get; set; }
 
         public DateTime EndDate { get; set; }
+
+        public bool IsFinished => DateTime.UtcNow.Date > this.EndDate.Date;
     }
 }

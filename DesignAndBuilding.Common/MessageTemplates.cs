@@ -7,7 +7,10 @@ namespace DesignAndBuilding.Common
     public static class MessageTemplates
     {
         public static string NewBidSubmitted(string buildingName, string discipline, decimal bidPrice) =>
-            $"Нова оферта е подадена за обект: {buildingName}, част: {discipline} с цена {bidPrice} лв/кв.м., в който Вие също имате участие.";
+            $"Нова оферта е подадена за обект: {buildingName}, част: {discipline} - цена: {bidPrice} лв/кв.м., в който Вие също имате участие.";
+
+        public static string YouSubmittedNewBid(string buildingName, string discipline, decimal bidPrice) =>
+            $"Вие подадохте нова оферта за обект: {buildingName}, част: {discipline} - цена: {bidPrice} лв/кв.м.";
 
         public static string NewQuestionSubmitted(string buildingName, string discipline) =>
             $"Нов въпрос е зададен относно Вашето задание по част: {discipline}, обект: : {buildingName}.";

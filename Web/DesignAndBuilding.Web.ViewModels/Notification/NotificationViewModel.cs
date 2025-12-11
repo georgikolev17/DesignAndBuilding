@@ -18,5 +18,7 @@
 
         [Required]
         public bool IsRead { get; set; }
+
+        public int AssignmentId { get; set; }
     }
 }

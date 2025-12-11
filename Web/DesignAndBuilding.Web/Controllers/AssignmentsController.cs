@@ -73,24 +73,19 @@
             // Check if current user is architect or investor
             if (user.UserType != UserType.Architect)
             {
-                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти и инвеститори могат да създават задания" });
+                return this.View("Error", new ErrorViewModel() { ErrorMessage = "Само архитекти могат да създават задания" });
             }
 
-            if (!this.ModelState.IsValid || assignment.EndDate < DateTime.UtcNow)
+            if (!this.ModelState.IsValid || assignment.EndDate.Date < DateTime.UtcNow.Date)
             {
+                this.ModelState.AddModelError(string.Empty, "Невалидни данни. Моля, опитайте отново.");
                 return this.View(assignment);
             }
 
             var createdAssignment = await this.assignmentsService.CreateAssignmentAsync(assignment);
 
-            // Notify interested users
-            var userIds = (await this.usersService.GetIdsOfUsersOfTypeAsync(assignment.UserType)).ToList();
-
-            // Prepare notification message
-            var notificationMessage = MessageTemplates.NewAssignmentCreated(createdAssignment.Building.Name, createdAssignment.UserType.GetDisplayShortName());
-
             // Send in-app notifications
-            await this.notificationsService.AddNotificationAsync(userIds, notificationMessage);
+            await this.notificationsService.CreateNewAssignmentNotifications(createdAssignment);
 
             // Send email notifications
             await this.emailsService.SendNewAssignmentNotificationEmailAsync(createdAssignment);
@@ -139,25 +134,13 @@
 
             await this.bidsService.CreateBidAsync(user.Id, bidViewModel.Id, bidViewModel.BidPrice);
 
-            var usersToSendNotification = this.assignmentsService.GetAllUsersBidInAssignment(assignment.Id);
+            await this.notificationsService.CreateNewBidNotifications(assignment, user.Id, bidViewModel.BidPrice);
 
-            // Assignment creator should also recieve notification
-            usersToSendNotification.Add(assignment.Building.ArchitectId);
-
-            // User who placed bid will recieve another notification
-            usersToSendNotification.Remove(user.Id);
-            var userPlacedBid = new List<string>() { user.Id };
-            await this.notificationsService.AddNotificationAsync(userPlacedBid, $"Вие наддадохте с {bidViewModel.BidPrice} лв. за {assignment.Building.Name}!");
-
-            // All other users placed bids for this assignment will recieve this notification
-            await this.notificationsService.AddNotificationAsync(usersToSendNotification, $"Има ново наддаване в {assignment.Building.Name} - {bidViewModel.BidPrice} лв.");
-
+            /* Creating live notification via SignalR - currently not working
             var strId = bidViewModel.Id.ToString();
-
-            // Retrieve the access token for the authenticated user
-            var cookie = this.Request.Cookies[".AspNetCore.Identity.Application"];
-            System.Net.Cookie cook = new System.Net.Cookie(".AspNetCore.Identity.Application", cookie, "/bidshub") { Domain = this.Request.Host.Host };
-            var connection = new HubConnectionBuilder()
+             var cookie = this.Request.Cookies[".AspNetCore.Identity.Application"];
+             System.Net.Cookie cook = new System.Net.Cookie(".AspNetCore.Identity.Application", cookie, "/bidshub") { Domain = this.Request.Host.Host };
+             var connection = new HubConnectionBuilder()
                 .AddMessagePackProtocol()
                 .WithUrl($"https://{this.Request.Host}/bidshub", options =>
                 {
@@ -166,16 +149,17 @@
                     {
                         CookieContainer = new System.Net.CookieContainer(),
                         UseCookies = true,
-                    };*/
+                    };
                     options.Headers[".AspNetCore.Identity.Application"] = cookie;
                     options.Cookies.Add(cook);
                 })
                 .WithAutomaticReconnect()
                 .Build();
-            await connection.StartAsync();
-            await connection.InvokeAsync("NewBid", strId, user.Id, bidViewModel.BidPrice);
-            await connection.DisposeAsync();
-            // return this.Ok();
+             await connection.StartAsync();
+             await connection.InvokeAsync("NewBid", strId, user.Id, bidViewModel.BidPrice);
+             await connection.DisposeAsync();
+              return this.Ok();
+             */
 
             return this.Redirect($"/assignments/details/{bidViewModel.Id}");
         }
@@ -230,7 +214,7 @@
 
             if (assignment == null)
             {
-                return this.NotFound();
+                return this.NotFound($"No assignment with id = {id} was found");
             }
 
             if (!this.ModelState.IsValid || viewModel.EndDate < DateTime.Now)

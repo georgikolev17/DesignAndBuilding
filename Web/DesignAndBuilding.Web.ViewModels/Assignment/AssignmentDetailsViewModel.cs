@@ -44,7 +44,7 @@
         [Display(Name = "Цена лв/кв.м.")]
         public decimal BidPrice { get; set; }
 
-        public bool IsFinished { get; set; }
+        public bool IsFinished => DateTime.UtcNow.Date > this.EndDate.Date;
 
         public bool HasUserCreatedAssignment { get; set; }
     }

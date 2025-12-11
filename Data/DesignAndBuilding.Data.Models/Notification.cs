@@ -10,7 +10,6 @@
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
         public string Message { get; set; }
 
         [Required]
@@ -22,6 +21,10 @@
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+
+        public int AssignmentId { get; set; }
+
+        public virtual Assignment Assignment { get; set; }
 
         // Deletable Entity
         public bool IsDeleted { get; set; }

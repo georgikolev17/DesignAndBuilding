@@ -138,7 +138,6 @@
             return new Notification()
             {
                 UserId = userId,
-                IsRead = false,
             };
         }
     }

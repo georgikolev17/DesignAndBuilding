@@ -49,7 +49,7 @@
                     </tr>
                     @foreach (var assignment in Model.Assignments)
                     {
-                        <tr id="@(assignment.EndDate > DateTime.Now ? "active" : "finished")">
+                        <tr id="@(!assignment.IsFinished ? "active" : "finished")">
                             <td>@assignment.UserType.GetDisplayShortName()</td>
 
                             <td>@assignment.CreatedOn.ToString(@"dd.MM.yyyy") г.</td>
