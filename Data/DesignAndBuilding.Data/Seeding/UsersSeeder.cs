@@ -55,6 +55,7 @@
                     UserType = UserType.ElectroEngineer,
                     PhoneNumber = phoneNumber,
                     Password = password,
+                    RegistrationNumber = $"EE-{i + 1000}",
                 };
 
                 if (dbContext.Users.Any(x => x.Email == email))
@@ -79,6 +80,7 @@
                 UserType = UserType.Architect,
                 PhoneNumber = "0899111111",
                 Password = "123456",
+                RegistrationNumber = "AR-1000",
             };
 
             if (dbContext.Users.Any(x => x.Email == "architect@abv.bg"))
