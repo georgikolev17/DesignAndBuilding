@@ -12,6 +12,8 @@
     using DesignAndBuilding.Services.Messaging;
     using DesignAndBuilding.Web.ViewModels;
     using DesignAndBuilding.Web.ViewModels.Assignment;
+    using DesignAndBuilding.Web.ViewModels.Home;
+    using DesignAndBuilding.Web.ViewModels.News;
     using DesignAndBuilding.Web.ViewModels.Notification;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -24,46 +26,64 @@
         private readonly IAssignmentsService assignmentsService;
         private readonly IUsersService usersService;
         private readonly INotificationsService notificationsService;
+        private readonly INewsService newsService;
         private readonly IMapper mapper;
 
-        public HomeController(UserManager<ApplicationUser> userManager, IAssignmentsService assignmentsService, IUsersService usersService, INotificationsService notificationsService, IMapper mapper)
+        public HomeController(UserManager<ApplicationUser> userManager, IAssignmentsService assignmentsService, IUsersService usersService, INotificationsService notificationsService, INewsService newsService, IMapper mapper)
         {
             this.userManager = userManager;
             this.assignmentsService = assignmentsService;
             this.usersService = usersService;
             this.notificationsService = notificationsService;
+            this.newsService = newsService;
             this.mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            var user = await this.userManager.GetUserAsync(this.User);
+            // Fetch active news for the home page
+            var activeNews = await this.newsService.GetActiveNewsAsync();
+            var newsViewModels = this.mapper.Map<List<NewsListViewModel>>(activeNews);
 
-            if (user != null && user.UserType != UserType.Architect && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            var homeViewModel = new HomeIndexViewModel
             {
-                var assignmentsList = this.assignmentsService.GetAllAssignmentsForUserType(user.UserType);
+                News = newsViewModels,
+            };
 
-                var assignments = this.mapper.Map<List<AssignmentListViewModel>>(
-                    assignmentsList,
-                    opt => opt.Items["UserId"] = user.Id
-                );
-
-                var assignmentsViewModel = new EngineerAssignmentsViewModel
-                {
-                    Assignments = assignments,
-                    UserType = user.UserType,
-                };
-
-                return this.View("EngineerIndex", assignmentsViewModel);
-            }
-
-            return this.View();
+            return this.View(homeViewModel);
         }
 
         [Authorize]
         public IActionResult Privacy()
         {
             return this.View();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> AvailableAssignments()
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            // Only engineers (non-architects, non-admins) can access this
+            if (user == null || user.UserType == UserType.Architect || this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.RedirectToAction(nameof(Index));
+            }
+
+            var assignmentsList = this.assignmentsService.GetAllAssignmentsForUserType(user.UserType);
+
+            var assignments = this.mapper.Map<List<AssignmentListViewModel>>(
+                assignmentsList,
+                opt => opt.Items["UserId"] = user.Id
+            );
+
+            var assignmentsViewModel = new EngineerAssignmentsViewModel
+            {
+                Assignments = assignments,
+                UserType = user.UserType,
+            };
+
+            return this.View(assignmentsViewModel);
         }
 
         public IActionResult Cookies()

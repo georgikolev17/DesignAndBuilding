@@ -108,6 +108,7 @@
             services.AddTransient<IDescriptionFilesService, DescriptionFilesService>();
             services.AddTransient<IQandAService, QandAService>();
             services.AddTransient<IEmailsService, EmailsService>();
+            services.AddTransient<INewsService, NewsService>();
 
             // Auto Mapper Configurations
             services.AddSingleton(provider => new MapperConfiguration(mc =>

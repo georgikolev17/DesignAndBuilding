@@ -1,0 +1,66 @@
+@model DesignAndBuilding.Web.ViewModels.News.NewsViewModel
+
+@{
+    this.ViewData["Title"] = "Изтриване на новина";
+}
+
+<div class="container-fluid">
+    <h1 class="text-danger">@this.ViewData["Title"]</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="alert alert-danger">
+                <h4>
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    Сигурни ли сте, че искате да изтриете тази новина?
+                </h4>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h5 class="m-0">Детайли на новината</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Title)</dt>
+                        <dd class="col-sm-9">@Model.Title</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Content)</dt>
+                        <dd class="col-sm-9">@Model.Content</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.IsActive)</dt>
+                        <dd class="col-sm-9">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge badge-success">Активна</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">Неактивна</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedOn)</dt>
+                        <dd class="col-sm-9">@Model.CreatedOn.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                        @if (Model.ModifiedOn.HasValue)
+                        {
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModifiedOn)</dt>
+                            <dd class="col-sm-9">@Model.ModifiedOn.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+                        }
+                    </dl>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Изтрий новината
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Отказ
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

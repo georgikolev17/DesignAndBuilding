@@ -5,6 +5,7 @@
     using DesignAndBuilding.Web.ViewModels.Assignment;
     using DesignAndBuilding.Web.ViewModels.Bid;
     using DesignAndBuilding.Web.ViewModels.Building;
+    using DesignAndBuilding.Web.ViewModels.News;
     using DesignAndBuilding.Web.ViewModels.Notification;
     using DesignAndBuilding.Web.ViewModels.Question;
     using System;
@@ -69,6 +70,14 @@
             .ForMember(dest => dest.AnswerText, opt => opt.MapFrom(src => src.Answer != null ? src.Answer.Text : null))
             .ForMember(dest => dest.AnswerArchitectName, opt => opt.MapFrom(src => src.Answer != null ? src.Answer.Architect.FullNameWithTitle : null))
             .ForMember(dest => dest.AnswerCreatedOn, opt => opt.MapFrom(src => src.Answer != null ? src.Answer.CreatedOn : (DateTime?)null));
+
+            this.CreateMap<News, NewsViewModel>()
+                .ReverseMap();
+
+            this.CreateMap<News, NewsListViewModel>()
+                .ReverseMap();
+
+            this.CreateMap<NewsInputModel, News>();
         }
     }
 }

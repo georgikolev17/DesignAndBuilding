@@ -1,85 +1,283 @@
 ﻿@using DesignAndBuilding.Common
 @using DesignAndBuilding.Data.Models
 @using Microsoft.AspNetCore.Identity;
+@using DesignAndBuilding.Web.ViewModels.Home
+@model HomeIndexViewModel
 @inject UserManager<ApplicationUser> userManager;
 @{
     this.ViewData["Title"] = "Начало";
     ApplicationUser user = await userManager.GetUserAsync(this.User);
 }
 <div id="alert"></div>
-<div class="text-center" id="container">
+
+@* 1. HERO SECTION with integrated navbar space *@
+<div class="jumbotron jumbotron-fluid text-white mb-5" style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); padding-top: 8rem; padding-bottom: 4rem; margin: 0;">
+    <div class="container text-center">
+        <div class="mb-3">
+            <i class="fas fa-building" style="font-size: 3.5rem;"></i>
+        </div>
+        <h1 class="display-3 font-weight-bold mb-3">BUILDNET</h1>
+        <p class="lead mb-2" style="font-size: 1.4rem;">Електронна платформа за сформиране на проектански колективи в строителството</p>
+        <p class="h5 mb-0" style="opacity: 0.9;">Аукцион с тайно наддаване в реално време</p>
+        
+        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+        {
+            <div class="mt-4">
+                <a asp-area="Administration" asp-controller="News" asp-action="Index" class="btn btn-light btn-lg shadow">
+                    <i class="fas fa-newspaper"></i> Управление на новини
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    @* Admin Welcome Message *@
     @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
     {
-        <div class="card-body text-justify col-7">
-            Добре дошли в администраторския панел на платформата. Чрез менютата <strong>Всички обекти</strong> и <strong>Admin</strong> може да следите и контролирате данните в приложението.
-        </div>
-    }
-    @if (user != null && (user.UserType == UserType.Architect))
-    {
-        <div class="h4">
-            Здравейте! Пожелаваме Ви приятна работа!
-        </div>
-    }
-    @if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-    {
-        <div class="card p-5">
-            <div class="font-weight-bold h3 p-4 card-header background-cyan">
-                ЕЛЕКТРОННА ПЛАТФОРМА ЗА СФОРМИРАНЕ НА ПРОЕКТАНСКИ КОЛЕКТИВИ В СТРОИТЕЛСТВОТО
-                <br />
-                <div class="h4">на базата на аукцион с тайно наддаване в реално време</div>
-            </div>
-            <div class="card-body text-left h6 text-justify card-body">
-                <ul>
-                    <li class="text-justify">Настоящата платформа има за цел да обедини в една обща мрежа всички участници в процеса на инвестиционото проектиране в строителството. Това са всички архитекти в България, членове на Камара на архитектите в България (КАБ) и всички инженери с пълна проектанска правоспособност (ППП) членове на Камара на инженерите в инвестиционното проектиране (КИИП).</li>
-                    <br />
-                    <li class="text-justify">Основната задача на платформата е да помогне на архитектите да сформират оптимален проектански колетив от инженери за всеки отделен проект, който им е възложен, като получат възможно най-ниската цена получена чрез аукцион с тайно наддаване в реално време. От друга всички инженери участници в инвестиционното проектиране, получават достъп до обектите, които предстои да се проектират и имат възможност да предложат своята цена.</li>
-                    <br />
-                    <li class="text-justify">
-                        По този начин всеки възложител получава най-добрата пазарна цена от наличните проектанти от съответната специалност.
-                    </li>
-                </ul>
+        <div class="alert alert-info border-left-info shadow mb-5">
+            <div class="d-flex align-items-center">
+                <div class="mr-3">
+                    <i class="fas fa-user-shield fa-2x"></i>
+                </div>
+                <div>
+                    <h5 class="font-weight-bold mb-1">Администраторски панел</h5>
+                    <p class="mb-0">Добре дошли в администраторския панел на платформата. Чрез менютата <strong>Всички обекти</strong> и <strong>Admin</strong> може да следите и контролирате данните в приложението.</p>
+                </div>
             </div>
         </div>
+    }
+
+    @* 2. NEWS SECTION *@
+    @if (Model.News != null && Model.News.Any())
+    {
+        <div class="mb-5">
+            <div class="text-center mb-4">
+                <h2 class="h3 font-weight-bold">
+                    <span class="badge badge-primary badge-pill px-4 py-2" style="font-size: 1rem;">
+                        <i class="fas fa-newspaper"></i> АКТУАЛНИ НОВИНИ
+                    </span>
+                </h2>
+            </div>
+            
+            <div class="row">
+                @{ 
+                    int newsIndex = 0;
+                    var newsCount = Model.News.Count();
+                }
+                @foreach (var news in Model.News.Take(3))
+                {
+                    newsIndex++;
+                    var colClass = newsIndex == 1 && newsCount == 1 ? "col-lg-12" : 
+                                  newsIndex == 1 && newsCount > 1 ? "col-lg-6" : 
+                                  "col-lg-6";
+                    
+                    <div class="@colClass mb-4">
+                        <div class="card h-100 border-0 shadow news-card-modern" style="border-left: 4px solid #4e73df !important;">
+                            <div class="card-body p-4">
+                                @if (newsIndex == 1 && newsCount > 1)
+                                {
+                                    <span class="badge badge-danger mb-2">
+                                        <i class="fas fa-star"></i> ВАЖНО
+                                    </span>
+                                }
+                                <h5 class="card-title font-weight-bold text-dark mb-3">@news.Title</h5>
+                                <p class="text-muted small mb-3">
+                                    <i class="far fa-calendar-alt"></i> @news.CreatedOn.ToString("dd.MM.yyyy") | 
+                                    <i class="far fa-clock"></i> @news.CreatedOn.ToString("HH:mm")
+                                </p>
+                                <p class="card-text text-justify" style="white-space: pre-line; line-height: 1.7;">
+                                    @if (newsIndex != 1 && news.Content.Length > 200)
+                                    {
+                                        @(news.Content.Substring(0, 200) + "...")
+                                    }
+                                    else
+                                    {
+                                        @news.Content
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+            @if (newsCount > 3)
+            {
+                <div class="text-center mt-3">
+                    <p class="text-muted">
+                        <i class="fas fa-info-circle"></i> Показани са последните 3 новини от общо @newsCount
+                    </p>
+                </div>
+            }
+        </div>
+    }
+
+    @* 3. PLATFORM FEATURES *@
+    <div class="mb-5">
+        <div class="text-center mb-4">
+            <h2 class="h3 font-weight-bold">
+                <span class="badge badge-success badge-pill px-4 py-2" style="font-size: 1rem;">
+                    <i class="fas fa-info-circle"></i> ЗА ПЛАТФОРМАТА
+                </span>
+            </h2>
+        </div>
+        
+        <div class="row text-center">
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                        <h5 class="font-weight-bold mb-3">Обединена мрежа</h5>
+                        <p class="text-muted text-justify">Настоящата платформа има за цел да обедини в една обща мрежа всички участници в процеса на инвестиционото проектиране в строителството - архитекти от КАБ и инженери с ППП от КИИП.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-gavel fa-2x"></i>
+                        </div>
+                        <h5 class="font-weight-bold mb-3">Аукцион в реално време</h5>
+                        <p class="text-muted text-justify">Основната задача е да помогне на архитектите да сформират оптимален проектански колектив, като получат възможно най-ниската цена чрез аукцион с тайно наддаване в реално време.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-handshake fa-2x"></i>
+                        </div>
+                        <h5 class="font-weight-bold mb-3">Най-добра пазарна цена</h5>
+                        <p class="text-muted text-justify">Инженерите получават достъп до обектите, които предстои да се проектират и могат да предложат своята цена. По този начин всеки възложител получава най-добрата пазарна цена.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* 4. TUTORIAL VIDEOS *@
+    <div class="mb-5">
+        <div class="text-center mb-4">
+            <h2 class="h3 font-weight-bold">
+                <span class="badge badge-info badge-pill px-4 py-2" style="font-size: 1rem;">
+                    <i class="fas fa-graduation-cap"></i> РЪКОВОДСТВА
+                </span>
+            </h2>
+            <p class="text-muted">Научете как да използвате платформата</p>
+        </div>
+        
         <div class="row">
             <div class="col-lg-6 mb-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Ръководство за архитекти</h6>
+                <div class="card shadow border-0 h-100 tutorial-card">
+                    <div class="card-header text-white py-3" style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);">
+                        <h5 class="m-0 font-weight-bold">
+                            <i class="fas fa-user-tie"></i> Ръководство за архитекти
+                        </h5>
                     </div>
-                    <div class="card-body">
-                        <div class="video-container text-center">
-                            <iframe width="560" height="315" u
+                    <div class="card-body p-0">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item"
                                     src="https://www.youtube.com/embed/V5wpfcjnOrk"
-                                    title="Video"
+                                    title="Ръководство за архитекти"
                                     frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowfullscreen>
                             </iframe>
                         </div>
+                    </div>
+                    <div class="card-footer bg-white text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> Как да създавате и управлявате обекти
+                        </small>
                     </div>
                 </div>
             </div>
-        
+            
             <div class="col-lg-6 mb-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Ръководство за инженери</h6>
+                <div class="card shadow border-0 h-100 tutorial-card">
+                    <div class="card-header bg-info text-white py-3">
+                        <h5 class="m-0 font-weight-bold">
+                            <i class="fas fa-hard-hat"></i> Ръководство за инженери
+                        </h5>
                     </div>
-                    <div class="card-body">
-                        <div class="video-container text-center">
-                            <iframe width="560" height="315" u
+                    <div class="card-body p-0">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item"
                                     src="https://www.youtube.com/embed/WzsyvWpm8vk"
-                                    title="Video"
+                                    title="Ръководство за инженери"
                                     frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowfullscreen>
                             </iframe>
                         </div>
-
+                    </div>
+                    <div class="card-footer bg-white text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> Как да преглеждате задания и подавате оферти
+                        </small>
                     </div>
                 </div>
             </div>
         </div>
-    }
-
+    </div>
 </div>
+
+<style>
+    /* News Cards */
+    .news-card-modern {
+        transition: all 0.3s ease;
+    }
+    
+    .news-card-modern:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+    
+    .feature-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .feature-card:hover .feature-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    /* Tutorial Cards */
+    .tutorial-card {
+        transition: all 0.3s ease;
+    }
+    
+    .tutorial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Alert Borders */
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+    
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+</style>
+
+
+
+

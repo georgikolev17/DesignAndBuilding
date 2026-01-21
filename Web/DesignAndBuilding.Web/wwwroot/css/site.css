@@ -1,9 +1,4 @@
-﻿.topbar .nav-link,
-.topbar .nav-link span,
-/*.topbar .navbar-text {
-    color: #858796 !important;*/ /* darker gray / near black */
-/*}*/
-body {
+﻿body {
     color: #3D3E45 !important;
 }
 
@@ -39,5 +34,9 @@ nav.navbar.topbar {
 
 .w-40 {
     width: 40% !important;
+}
+
+nav.navbar.topbar.navbar-transparent .nav-link i[class*="fa-"] {
+    color: white !important;
 }
 

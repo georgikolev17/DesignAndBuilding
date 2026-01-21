@@ -1,0 +1,77 @@
+@model DesignAndBuilding.Web.ViewModels.News.NewsListViewModel[]
+
+@{
+    this.ViewData["Title"] = "Управление на новини";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>@this.ViewData["Title"]</h1>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus"></i> Създай нова новина
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (Model.Length == 0)
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Няма добавени новини. Създайте първата новина.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="background-cyan">
+                            <tr>
+                                <th>Заглавие</th>
+                                <th>Дата на създаване</th>
+                                <th>Статус</th>
+                                <th style="width: 250px;">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var news in Model)
+                            {
+                                <tr>
+                                    <td>@news.Title</td>
+                                    <td>@news.CreatedOn.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>
+                                        @if (news.IsActive)
+                                        {
+                                            <span class="badge badge-success">Активна</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">Неактивна</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@news.Id" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i> Редактирай
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@news.Id" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> Изтрий
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
