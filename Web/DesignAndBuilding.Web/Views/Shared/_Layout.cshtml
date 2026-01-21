@@ -58,12 +58,7 @@
                 var isHomePage = ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && 
                                  ViewContext.RouteData.Values["action"]?.ToString() == "Index";
             }
-            
-            @* Colored background strip for non-home pages *@
-            @if (!isHomePage)
-            {
-                <div style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); height: 70px; position: absolute; top: 0; left: 0; right: 0; z-index: 1;"></div>
-            }
+            <div style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); height: 70px; position: absolute; top: 0; left: 0; right: 0; z-index: 1;"></div>
                 
             <nav class="navbar navbar-expand-lg navbar-transparent topbar mb-0 static-top" 
                  style="@(isHomePage ? "position: absolute; top: 0; left: 0; right: 0; z-index: 1030;" : "position: relative; z-index: 1030;")">
