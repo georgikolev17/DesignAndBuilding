@@ -111,4 +111,8 @@
 		<Content Remove="**\LICENSE.*" />
 		<None Remove="**\LICENSE.*" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Areas\Identity\Data\" />
+	</ItemGroup>
 </Project>

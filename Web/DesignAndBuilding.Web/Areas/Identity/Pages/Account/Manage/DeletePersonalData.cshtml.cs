@@ -1,6 +1,7 @@
 ﻿namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account.Manage
 {
     using System;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
 
@@ -33,6 +34,7 @@
         {
             [Required]
             [DataType(DataType.Password)]
+            [DisplayName("Парола")]
             public string Password { get; set; }
         }
 
