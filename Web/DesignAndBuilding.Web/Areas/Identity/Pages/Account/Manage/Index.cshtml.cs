@@ -31,8 +31,14 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
+        public bool CanChangeUserType { get; set; }
+
         public class InputModel
         {
+            [Required]
+            [Display(Name = "Специалност")]
+            public UserType UserType { get; set; }
+
             [Phone]
             [Display(Name = "Телефон")]
             public string PhoneNumber { get; set; }
@@ -44,9 +50,11 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            CanChangeUserType = user.UserType == UserType.Other;
 
             Input = new InputModel
             {
+                UserType = user.UserType,
                 PhoneNumber = phoneNumber
             };
         }
@@ -83,13 +91,38 @@ namespace DesignAndBuilding.Web.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Неочаквана грешка при опит за промяна на телефонния номер.";
                     return RedirectToPage();
                 }
             }
 
+            // Handle UserType change
+            if (Input.UserType != user.UserType)
+            {
+                if (user.UserType == UserType.Other)
+                {
+                    user.UserType = Input.UserType;
+                    var updateResult = await _userManager.UpdateAsync(user);
+                    if (!updateResult.Succeeded)
+                    {
+                        StatusMessage = "Неочаквана грешка при опит за промяна на специалността.";
+                        return RedirectToPage();
+                    }
+                    StatusMessage = "Вашият профил е актуализиран успешно. Специалността е променена и вече не може да бъде редактирана.";
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Специалността не може да бъде променена след като е зададена.");
+                    await LoadAsync(user);
+                    return Page();
+                }
+            }
+            else
+            {
+                StatusMessage = "Вашият профил е актуализиран успешно.";
+            }
+
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }
     }

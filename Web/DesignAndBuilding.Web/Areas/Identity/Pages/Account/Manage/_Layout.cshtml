@@ -9,17 +9,31 @@
     }
 }
 
-<h1>Управление на акаунта</h1>
+<link rel="stylesheet" href="~/css/identity-manage.css" asp-append-version="true" />
 
-<div>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
-        </div>
-        <div class="col-md-9">
-            @RenderBody()
-        </div>
+<!-- Breadcrumb Navigation -->
+<nav aria-label="breadcrumb" class="breadcrumb-identity">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Начало</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Управление на акаунта</li>
+    </ol>
+</nav>
+
+<!-- Page Header -->
+<div class="card page-header-card shadow-sm mb-4">
+    <div class="card-body py-3">
+        <h1 class="h3 mb-1"><i class="fas fa-user-cog mr-2"></i>Управление на акаунта</h1>
+        <p class="mb-0 text-white-50">Управлявайте настройките и информацията за вашия профил</p>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <partial name="_ManageNav" />
+    </div>
+    <div class="col-md-9">
+        @RenderBody()
     </div>
 </div>
 

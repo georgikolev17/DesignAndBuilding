@@ -5,20 +5,32 @@
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3>@ViewData["Title"]</h3>
-
-<div class="row">
-    <div class="col-md-6">
-        <p>Вашият акаунт съдържа лични данни, които сте ни предоставили. Тази страница ви позволява да изтеглите или изтриете тези данни.</p>
-        <p>
-            <strong>Изтриването на тези данни ще премахне трайно вашия акаунт и това не може да бъде възстановено.</strong>
-        </p>
-        <form id="download-data" asp-page="DownloadPersonalData" method="post" class="form-group">
-            <button class="btn btn-primary" type="submit">Изтегли</button>
-        </form>
-        <p>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-secondary">Изтрий</a>
-        </p>
+<div class="card shadow-sm identity-form-card">
+    <div class="card-header bg-gradient-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-id-card mr-2"></i>@ViewData["Title"]</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle mr-2"></i>
+            <strong>Информация:</strong> Вашият акаунт съдържа лични данни, които сте ни предоставили. Тази страница ви позволява да изтеглите или изтриете тези данни.
+        </div>
+        
+        <div class="alert alert-warning" role="alert">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            <strong>Внимание:</strong> Изтриването на тези данни ще премахне трайно вашия акаунт и това не може да бъде възстановено.
+        </div>
+        
+        <div class="d-flex flex-column flex-md-row mt-4">
+            <form id="download-data" asp-page="DownloadPersonalData" method="post" class="mr-md-3 mb-3 mb-md-0">
+                <button class="btn btn-primary btn-lg btn-identity btn-block" type="submit">
+                    <i class="fas fa-download mr-2"></i>Изтегли
+                </button>
+            </form>
+            
+            <a id="delete" asp-page="DeletePersonalData" class="btn btn-secondary btn-lg btn-identity btn-block">
+                <i class="fas fa-trash-alt mr-2"></i>Изтрий
+            </a>
+        </div>
     </div>
 </div>
 

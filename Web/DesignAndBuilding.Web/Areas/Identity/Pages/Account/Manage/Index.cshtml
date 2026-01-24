@@ -1,26 +1,78 @@
 ﻿@page
+@using DesignAndBuilding.Common
+@using DesignAndBuilding.Data.Models
 @model IndexModel
 @{
     ViewData["Title"] = "Профил";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show alert-animated" role="alert">
+        <i class="fas fa-check-circle mr-2"></i>@Model.StatusMessage
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="card shadow-sm identity-form-card">
+    <div class="card-header bg-gradient-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-user mr-2"></i>@ViewData["Title"]</h5>
+    </div>
+    <div class="card-body">
         <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            
             <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" disabled />
+                <label asp-for="Username" class="font-weight-bold">
+                    <i class="fas fa-user-circle form-label-icon"></i>Потребителско име
+                </label>
+                <input asp-for="Username" class="form-control form-control-lg" disabled />
             </div>
+            
             <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <label class="font-weight-bold">
+                    <i class="fas fa-briefcase form-label-icon"></i>Специалност
+                </label>
+                @if (Model.CanChangeUserType)
+                {
+                    <select asp-for="Input.UserType" asp-items="Html.GetEnumSelectList<UserType>()" 
+                            class="form-control form-control-lg">
+                        <option value="">-- Изберете специалност --</option>
+                    </select>
+                    <small class="form-text text-muted">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        След избор на специалност, полето не може да бъде променяно.
+                    </small>
+                }
+                else
+                {
+                    <input type="text" value="@Model.Input.UserType.GetDisplayName()" 
+                           class="form-control form-control-lg" disabled />
+                    <input type="hidden" asp-for="Input.UserType" />
+                    <small class="form-text text-muted">
+                        <i class="fas fa-lock mr-1"></i>
+                        Специалността не може да бъде променена.
+                    </small>
+                }
+                <span asp-validation-for="Input.UserType" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber" class="font-weight-bold">
+                    <i class="fas fa-phone form-label-icon"></i>Телефон
+                </label>
+                <input asp-for="Input.PhoneNumber" class="form-control form-control-lg" placeholder="Въведете телефонен номер" />
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Запази промените</button>
+            
+            <div class="form-group mb-0 mt-4">
+                <button id="update-profile-button" type="submit" class="btn btn-primary btn-lg btn-identity">
+                    <i class="fas fa-save mr-2"></i>Запази промените
+                </button>
+            </div>
         </form>
     </div>
 </div>

@@ -5,35 +5,37 @@
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
 
-<h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-info alert-dismissible fade show alert-animated" role="alert">
+        <i class="fas fa-info-circle mr-2"></i>@Model.StatusMessage
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="card shadow-sm identity-form-card">
+    <div class="card-header bg-gradient-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-envelope mr-2"></i>@ViewData["Title"]</h5>
+    </div>
+    <div class="card-body">
         <form id="email-form" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            @* <div class="form-group">
-                <label asp-for="Email"></label>
-                @if (Model.IsEmailConfirmed)
-                {
-                    <div class="input-group">
-                        <input asp-for="Email" class="form-control" disabled />
-                        <div class="input-group-append">
-                            <span class="input-group-text text-success font-weight-bold">✓</span>
-                        </div>
-                    </div>
-                }
-                 else
-                {
-                    <input asp-for="Email" class="form-control" disabled />
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Изпрати имейл за потвърждение</button>
-                }
-            </div> *@
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+            
             <div class="form-group">
-                <label asp-for="Input.NewEmail"></label>
-                <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" />
+                <label asp-for="Input.NewEmail" class="font-weight-bold">
+                    <i class="fas fa-envelope-open form-label-icon"></i>Нов имейл
+                </label>
+                <input asp-for="Input.NewEmail" class="form-control form-control-lg" autocomplete="email" aria-required="true" placeholder="Въведете нов имейл адрес" />
                 <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
             </div>
-            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary">Промени имейл</button>
+            
+            <div class="form-group mb-0 mt-4">
+                <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary btn-lg btn-identity">
+                    <i class="fas fa-sync-alt mr-2"></i>Промени имейл
+                </button>
+            </div>
         </form>
     </div>
 </div>

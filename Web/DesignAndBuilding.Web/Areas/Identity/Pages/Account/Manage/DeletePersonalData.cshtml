@@ -5,27 +5,51 @@
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3>@ViewData["Title"]</h3>
+<div class="card shadow identity-form-card border-danger">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-exclamation-triangle mr-2"></i>@ViewData["Title"]</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-danger" role="alert">
+            <h5 class="alert-heading">
+                <i class="fas fa-skull-crossbones mr-2"></i>Критично предупреждение!
+            </h5>
+            <hr>
+            <p class="mb-0">
+                <strong>Изтриването на тези данни ще премахне трайно вашия акаунт и това не може да бъде възстановено.</strong>
+            </p>
+            <p class="mb-0 mt-2">
+                Моля, обмислете внимателно това действие преди да продължите.
+            </p>
+        </div>
 
-<div class="alert alert-warning" role="alert">
-    <p>
-        <strong>Изтриването на тези данни ще премахне трайно вашия акаунт и това не може да бъде възстановено.</strong>
-    </p>
-</div>
-
-<div>
-    <form id="delete-user" method="post" class="form-group">
-        <div asp-validation-summary="All" class="text-danger"></div>
-        @if (Model.RequirePassword)
-        {
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+        <form id="delete-user" method="post" class="mt-4">
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+            
+            @if (Model.RequirePassword)
+            {
+                <div class="form-group">
+                    <label asp-for="Input.Password" class="font-weight-bold">
+                        <i class="fas fa-lock form-label-icon"></i>Потвърдете с вашата парола
+                    </label>
+                    <input asp-for="Input.Password" class="form-control form-control-lg" autocomplete="current-password" aria-required="true" placeholder="Въведете парола за потвърждение" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+            }
+            
+            <div class="form-group mb-0 mt-4">
+                <button class="btn btn-danger btn-lg btn-block btn-identity" type="submit">
+                    <i class="fas fa-trash-alt mr-2"></i>Изтрий данните и затвори акаунта ми
+                </button>
             </div>
-        }
-        <button class="btn btn-danger" type="submit">Изтрий данните и затвори акаунта ми</button>
-    </form>
+        </form>
+        
+        <div class="text-center mt-3">
+            <a asp-page="./PersonalData" class="btn btn-link">
+                <i class="fas fa-arrow-left mr-1"></i>Назад към лични данни
+            </a>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

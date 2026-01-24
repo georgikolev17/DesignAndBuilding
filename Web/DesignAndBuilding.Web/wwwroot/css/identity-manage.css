@@ -1,0 +1,87 @@
+/* Identity Manage Pages - Minimal Custom Styling */
+/* Using Bootstrap 4 and SB Admin 2 theme for consistency */
+
+/* Navigation hover effects */
+.manage-nav .nav-link {
+    transition: all 0.2s ease-in-out;
+    border-left: 3px solid transparent;
+}
+
+.manage-nav .nav-link:hover {
+    background-color: rgba(78, 115, 223, 0.1);
+    border-left-color: #4e73df;
+    transform: translateX(2px);
+}
+
+.manage-nav .nav-link.active {
+    border-left-color: #4e73df;
+    background-color: rgba(78, 115, 223, 0.15);
+    font-weight: 600;
+}
+
+/* Status message animations */
+.alert-animated {
+    animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form card styling */
+.identity-form-card {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.identity-form-card:hover {
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Icon spacing in labels */
+.form-label-icon {
+    width: 20px;
+    text-align: center;
+    margin-right: 8px;
+    color: #4e73df;
+}
+
+/* Button enhancements */
+.btn-identity {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-identity:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Breadcrumb styling */
+.breadcrumb-identity {
+    background-color: transparent;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-identity .breadcrumb-item a {
+    color: #4e73df;
+    text-decoration: none;
+}
+
+.breadcrumb-identity .breadcrumb-item a:hover {
+    color: #224abe;
+    text-decoration: underline;
+}
+
+/* Page header styling */
+.page-header-card {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    color: white;
+    border: none;
+}
